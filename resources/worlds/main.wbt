@@ -1,0 +1,97 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/mercedes_benz/MercedesBenzSprinter.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Asphalt.proto"
+
+WorldInfo {
+  title "main"
+  contactProperties [
+    ContactProperties {
+      softCFM 1e-05
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.5773287996712398 -0.5773307378521497 0.5773912678602419 4.188775175968083
+  position -0.09690852658026738 0.01728122123322784 22.539455893766533
+}
+TexturedBackground {
+  texture "noon_sunny_empty"
+}
+TexturedBackgroundLight {
+  texture "noon_sunny_empty"
+}
+MercedesBenzSprinter {
+  hidden position_0_0 3.0865645248435896e-11
+  hidden position2_0_0 -2.8171186435392032e-08
+  hidden position_0_1 -3.133941295366621e-11
+  hidden position2_0_1 -2.817130894541856e-08
+  hidden position_0_2 0.07631161620391266
+  hidden position_0_3 0.07631155926320206
+  hidden rotation_1 1.543281336113777e-11 0.9999993997805583 -0.001095645254169999 2.9802322387695313e-08
+  hidden rotation_2 1.5669696780709934e-11 -0.9999993812185833 0.0011124578422017739 2.9802322387695313e-08
+  hidden rotation_3 0 -1 0 0.0763116162039108
+  hidden rotation_4 0 1 0 0.07631155926320418
+  translation -1.2557011023089714e-05 1.9809203863995661 0.3632532235727568
+  rotation 0.0010214136994545254 0.0010214198892274026 -0.999998956707188 1.5707910541479235
+  color 0.427451 0.0470588 0.0784314
+  sensorsSlotFront [
+    Camera {
+      translation -0.05 0.01 0.01
+      children [
+        Transform {
+          rotation 0 0 -0.9999999999999999 1.5707953071795862
+          scale 0.001 0.001 0.001
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 0
+              }
+              geometry Mesh {
+                url [
+                  "../models/ZED2/ZED2.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "camera_front"
+      model "ZED 2"
+    }
+  ]
+  sensorsSlotRear [
+    Camera {
+      translation -0.0065 -0.008 0.365
+      children [
+        Transform {
+          rotation 0 0 -0.9999999999999999 1.5707953071795862
+          scale 0.001 0.001 0.001
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 0
+              }
+              geometry Mesh {
+                url [
+                  "../models/ZED2/ZED2.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "camera_rear"
+      model "ZED 2"
+    }
+  ]
+}
+Floor {
+  name "Ground"
+  appearance Asphalt {
+    IBLStrength 10
+  }
+}

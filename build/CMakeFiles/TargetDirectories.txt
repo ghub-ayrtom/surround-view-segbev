@@ -1,0 +1,9 @@
+/home/ayrtom/Computer Vision/dev/surround-view-segbev/build/CMakeFiles/uninstall.dir
+/home/ayrtom/Computer Vision/dev/surround-view-segbev/build/CMakeFiles/surround-view-segbev_uninstall.dir
+/home/ayrtom/Computer Vision/dev/surround-view-segbev/build/CMakeFiles/test.dir
+/home/ayrtom/Computer Vision/dev/surround-view-segbev/build/CMakeFiles/edit_cache.dir
+/home/ayrtom/Computer Vision/dev/surround-view-segbev/build/CMakeFiles/rebuild_cache.dir
+/home/ayrtom/Computer Vision/dev/surround-view-segbev/build/CMakeFiles/list_install_components.dir
+/home/ayrtom/Computer Vision/dev/surround-view-segbev/build/CMakeFiles/install.dir
+/home/ayrtom/Computer Vision/dev/surround-view-segbev/build/CMakeFiles/install/local.dir
+/home/ayrtom/Computer Vision/dev/surround-view-segbev/build/CMakeFiles/install/strip.dir
