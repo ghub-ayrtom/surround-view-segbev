@@ -4,8 +4,12 @@ simulationViewPerspectives: 000000ff00000001000000020000016c000004a0010000000201
 sceneTreePerspectives: 000000ff00000001000000030000001c0000038f000000fa0100000002010000000201
 maximizedDockId: -1
 centralWidgetVisible: 1
+renderingMode: PLAIN
 orthographicViewHeight: 1
 textFiles: -1
+globalOptionalRendering: CameraFrustums
 renderingDevicePerspectives: Mercedes-Benz Sprinter:camera;1;1;0;0
 renderingDevicePerspectives: Mercedes-Benz Sprinter:camera_front;0;1;0;0
 renderingDevicePerspectives: Mercedes-Benz Sprinter:camera_rear;0;1;0;0
+renderingDevicePerspectives: ego_vehicle:camera_front;0;0.586973;0;0
+renderingDevicePerspectives: ego_vehicle:camera_rear;0;0.586973;0;0

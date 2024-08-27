@@ -15,8 +15,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.5773287996712398 -0.5773307378521497 0.5773912678602419 4.188775175968083
-  position -0.09690852658026738 0.01728122123322784 22.539455893766533
+  orientation 0.5775935556021339 0.5780092598667983 -0.5764468579453971 2.095055676117916
+  position -0.001345392141259616 -0.06434267458478793 33.05902793960644
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -25,19 +25,22 @@ TexturedBackgroundLight {
   texture "noon_sunny_empty"
 }
 MercedesBenzSprinter {
-  hidden position_0_0 3.0865645248435896e-11
-  hidden position2_0_0 -2.8171186435392032e-08
-  hidden position_0_1 -3.133941295366621e-11
-  hidden position2_0_1 -2.817130894541856e-08
-  hidden position_0_2 0.07631161620391266
-  hidden position_0_3 0.07631155926320206
-  hidden rotation_1 1.543281336113777e-11 0.9999993997805583 -0.001095645254169999 2.9802322387695313e-08
-  hidden rotation_2 1.5669696780709934e-11 -0.9999993812185833 0.0011124578422017739 2.9802322387695313e-08
-  hidden rotation_3 0 -1 0 0.0763116162039108
-  hidden rotation_4 0 1 0 0.07631155926320418
-  translation -1.2557011023089714e-05 1.9809203863995661 0.3632532235727568
-  rotation 0.0010214136994545254 0.0010214198892274026 -0.999998956707188 1.5707910541479235
+  hidden position_0_0 1.538866159732486e-11
+  hidden position2_0_0 7.38889128895322e-06
+  hidden position_0_1 -1.5626697521812034e-11
+  hidden position2_0_1 7.388878774076626e-06
+  hidden position_0_2 -9.652217247513306e-05
+  hidden position_0_3 -9.652222571521207e-05
+  hidden rotation_1 -7.694330798645744e-12 -0.9999999999978313 -2.082675329142862e-06 7.38887266642274e-06
+  hidden rotation_2 -7.813348760888544e-12 0.9999999999977637 2.114894289040333e-06 7.38887266642274e-06
+  hidden rotation_3 0 0.9999999999999999 0 9.652217243558267e-05
+  hidden rotation_4 0 -1 0 9.652222764641e-05
+  translation -1.2558221822918094e-05 1.9811427537394195 0.3632532157392137
+  rotation 0.0010214062740610084 0.0010214124637838316 -0.9999989567223568 1.5707910541953272
   color 0.427451 0.0470588 0.0784314
+  name "ego_vehicle"
+  controller "<extern>"
+  supervisor TRUE
   sensorsSlotFront [
     Camera {
       translation -0.05 0.01 0.01
@@ -61,6 +64,16 @@ MercedesBenzSprinter {
       ]
       name "camera_front"
       model "ZED 2"
+      fieldOfView 1.91986
+      width 1305
+      height 640
+      lens Lens {
+        radialCoefficients 0.075 0.1
+        tangentialCoefficients 0.0025 0.005
+      }
+      focus Focus {
+        focalLength 528
+      }
     }
   ]
   sensorsSlotRear [
@@ -86,6 +99,16 @@ MercedesBenzSprinter {
       ]
       name "camera_rear"
       model "ZED 2"
+      fieldOfView 1.91986
+      width 1305
+      height 640
+      lens Lens {
+        radialCoefficients 0.075 0.1
+        tangentialCoefficients 0.0025 0.005
+      }
+      focus Focus {
+        focalLength 528
+      }
     }
   ]
 }
