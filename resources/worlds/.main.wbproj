@@ -7,9 +7,12 @@ centralWidgetVisible: 1
 renderingMode: PLAIN
 orthographicViewHeight: 1
 textFiles: -1
-globalOptionalRendering: CameraFrustums
 renderingDevicePerspectives: Mercedes-Benz Sprinter:camera;1;1;0;0
 renderingDevicePerspectives: Mercedes-Benz Sprinter:camera_front;0;1;0;0
 renderingDevicePerspectives: Mercedes-Benz Sprinter:camera_rear;0;1;0;0
-renderingDevicePerspectives: ego_vehicle:camera_front;0;0.586973;0;0
-renderingDevicePerspectives: ego_vehicle:camera_rear;0;0.586973;0;0
+renderingDevicePerspectives: ego_vehicle:camera_front;0;0.45364;0;0
+renderingDevicePerspectives: ego_vehicle:camera_front_left;0;0.45364;0;0
+renderingDevicePerspectives: ego_vehicle:camera_front_right;0;0.45364;0;0
+renderingDevicePerspectives: ego_vehicle:camera_rear;0;0.45364;0;0
+renderingDevicePerspectives: ego_vehicle:camera_rear_left;0;0.45364;0;0
+renderingDevicePerspectives: ego_vehicle:camera_rear_right;0;0.45364;0;0
