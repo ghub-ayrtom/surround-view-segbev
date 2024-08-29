@@ -11,14 +11,14 @@ from webots_ros2_driver.webots_controller import WebotsController
 from webots_ros2_driver.webots_launcher import WebotsLauncher
 
 
-PACKAGE_NAME = 'surround-view-segbev'
+PACKAGE_NAME = 'surround_view_segbev'
 USE_SIM_TIME = True
 
 package_dir = get_package_share_directory(PACKAGE_NAME)
 
 
 def get_ros2_nodes():
-    robot_urdf = os.path.join(package_dir, os.path.join(package_dir, pathlib.Path(os.path.join(package_dir, 'resources/descriptions', 'EgoVehicle.urdf'))))
+    robot_urdf = os.path.join(package_dir, os.path.join(package_dir, pathlib.Path(os.path.join(package_dir, 'resource/descriptions', 'EgoVehicle.urdf'))))
 
     with open(robot_urdf, 'r') as urdf:
         robot_description = urdf.read()
@@ -30,6 +30,14 @@ def get_ros2_nodes():
         output='screen',
         parameters=[{'use_sim_time': USE_SIM_TIME, 'robot_description': robot_description}],
         arguments=[robot_urdf],
+    )
+
+    surround_view_node = Node(
+        package=PACKAGE_NAME,
+        executable='surround_view_node',
+        name='surround_view_node',
+        output='screen' ,
+        parameters=[{'use_sim_time': USE_SIM_TIME}]
     )
 
     static_transforms = [
@@ -50,13 +58,14 @@ def get_ros2_nodes():
 
     return [
         robot_state_publisher_node,
+        surround_view_node,
     ] + static_transform_nodes
 
 
 def generate_launch_description():
     world = LaunchConfiguration('world')
-    webots = WebotsLauncher(world=PathJoinSubstitution([package_dir, 'resources/worlds', world]), ros2_supervisor=True, stream=True)
-    robot_description_path = os.path.join(package_dir, pathlib.Path(os.path.join(package_dir, 'resources/descriptions', 'EgoVehicle.urdf')))
+    webots = WebotsLauncher(world=PathJoinSubstitution([package_dir, 'resource/worlds', world]), ros2_supervisor=True, stream=True)
+    robot_description_path = os.path.join(package_dir, pathlib.Path(os.path.join(package_dir, 'resource/descriptions', 'EgoVehicle.urdf')))
 
     vehicle_driver = WebotsController(
         robot_name='ego_vehicle',

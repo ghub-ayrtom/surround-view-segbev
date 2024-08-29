@@ -1,0 +1,1257 @@
+<?xml version="1.0"?>
+<robot name="/home/ayrtom/Computer Vision/dev/FQW_ws/src/surround-view-segbev/resources/descriptions/EgoVehicle.urdf" xmlns:xacro="http://ros.org/wiki/xacro">
+  <link name="base_link">
+    <visual>
+      <origin xyz="1.69 0 0.52" rpy="0 0 0"/>
+      <geometry>
+        <box size="6.6 2 1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="1.69 0 0.52" rpy="0 0 0"/>
+      <geometry>
+        <box size="6.6 2 1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.67 0 1.64" rpy="0 0 0"/>
+      <geometry>
+        <box size="4.5 1.95 1.3"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.67 0 1.64" rpy="0 0 0"/>
+      <geometry>
+        <box size="4.5 1.95 1.3"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="3.60031 0 1.09128" rpy="0 0.55 0"/>
+      <geometry>
+        <box size="2.5 1.88 1.3"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="3.60031 0 1.09128" rpy="0 0.55 0"/>
+      <geometry>
+        <box size="2.5 1.88 1.3"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="backwards_lights">
+  </link>
+  <joint name="base_link_backwards_lights_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="backwards_lights"/>
+    <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+  </joint>
+  <link name="rear_lights">
+  </link>
+  <joint name="base_link_rear_lights_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rear_lights"/>
+    <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+  </joint>
+  <link name="brake_lights">
+  </link>
+  <joint name="base_link_brake_lights_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="brake_lights"/>
+    <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+  </joint>
+  <link name="antifog_lights">
+  </link>
+  <joint name="base_link_antifog_lights_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="antifog_lights"/>
+    <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+  </joint>
+  <link name="left_indicators">
+  </link>
+  <joint name="base_link_left_indicators_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="left_indicators"/>
+    <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+  </joint>
+  <link name="right_indicators">
+  </link>
+  <joint name="base_link_right_indicators_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="right_indicators"/>
+    <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+  </joint>
+  <link name="front_lights">
+  </link>
+  <joint name="base_link_front_lights_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_lights"/>
+    <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+  </joint>
+  <link name="camera_rear_right">
+  </link>
+  <joint name="base_link_camera_rear_right_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_rear_right"/>
+    <origin xyz="4.427145 -1.02606 0.77" rpy="-1.570796 0 -3.754982"/>
+  </joint>
+  <link name="Eye screw 2">
+    <visual>
+      <origin xyz="-0.00045 0 0" rpy="3.141593 1.570793 3.141593"/>
+      <geometry>
+        <cylinder radius="0.003" length="0.0009"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.00045 0 0" rpy="3.141593 1.570793 3.141593"/>
+      <geometry>
+        <cylinder radius="0.003" length="0.0009"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.005 0 0" rpy="3.141593 1.570793 3.141593"/>
+      <geometry>
+        <cylinder radius="0.0018" length="0.01"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.005 0 0" rpy="3.141593 1.570793 3.141593"/>
+      <geometry>
+        <cylinder radius="0.0018" length="0.01"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="camera_rear_right_Eye screw 2_joint" type="fixed">
+    <parent link="camera_rear_right"/>
+    <child link="Eye screw 2"/>
+    <origin xyz="-0.122 0 -0.0038" rpy="3.141593 -1.047193 3.141593"/>
+  </joint>
+  <link name="torus">
+    <visual>
+      <origin xyz="0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.004057 0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.004057 0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.003637 0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.003637 0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.00297 0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.00297 0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0021 0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.0021 0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.001087 0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.001087 0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0.0042 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0.0042 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.001087 0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.001087 0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0021 0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.0021 0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.00297 0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.00297 0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.003637 0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.003637 0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.004057 0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.004057 0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.004057 -0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.004057 -0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.003637 -0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.003637 -0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.00297 -0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.00297 -0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0021 -0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.0021 -0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.001087 -0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.001087 -0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 -0.0042 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.0042 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.001087 -0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.001087 -0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0021 -0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.0021 -0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.00297 -0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.00297 -0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.003637 -0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.003637 -0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.004057 -0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.004057 -0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Eye screw 2_torus_joint" type="fixed">
+    <parent link="Eye screw 2"/>
+    <child link="torus"/>
+    <origin xyz="-0.0054 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance">
+  </link>
+  <joint name="torus_appearance_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_0">
+  </link>
+  <joint name="torus_appearance_0_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_0"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_1">
+  </link>
+  <joint name="torus_appearance_1_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_1"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_2">
+  </link>
+  <joint name="torus_appearance_2_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_2"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_3">
+  </link>
+  <joint name="torus_appearance_3_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_3"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_4">
+  </link>
+  <joint name="torus_appearance_4_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_4"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_5">
+  </link>
+  <joint name="torus_appearance_5_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_5"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_6">
+  </link>
+  <joint name="torus_appearance_6_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_6"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_7">
+  </link>
+  <joint name="torus_appearance_7_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_7"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_8">
+  </link>
+  <joint name="torus_appearance_8_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_8"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_9">
+  </link>
+  <joint name="torus_appearance_9_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_9"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_10">
+  </link>
+  <joint name="torus_appearance_10_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_10"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_11">
+  </link>
+  <joint name="torus_appearance_11_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_11"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_12">
+  </link>
+  <joint name="torus_appearance_12_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_12"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_13">
+  </link>
+  <joint name="torus_appearance_13_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_13"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_14">
+  </link>
+  <joint name="torus_appearance_14_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_14"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_15">
+  </link>
+  <joint name="torus_appearance_15_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_15"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_16">
+  </link>
+  <joint name="torus_appearance_16_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_16"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_17">
+  </link>
+  <joint name="torus_appearance_17_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_17"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_18">
+  </link>
+  <joint name="torus_appearance_18_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_18"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_19">
+  </link>
+  <joint name="torus_appearance_19_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_19"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_20">
+  </link>
+  <joint name="torus_appearance_20_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_20"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_21">
+  </link>
+  <joint name="torus_appearance_21_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_21"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_22">
+  </link>
+  <joint name="torus_appearance_22_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_22"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_23">
+  </link>
+  <joint name="torus_appearance_23_joint" type="fixed">
+    <parent link="torus"/>
+    <child link="appearance_23"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="camera_rear_right_depth">
+  </link>
+  <joint name="camera_rear_right_camera_rear_right_depth_joint" type="fixed">
+    <parent link="camera_rear_right"/>
+    <child link="camera_rear_right_depth"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="camera_rear">
+  </link>
+  <joint name="base_link_camera_rear_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_rear"/>
+    <origin xyz="-1.634499 0.008001 0.617" rpy="-1.570796 0 1.570704"/>
+  </joint>
+  <link name="camera_rear_depth">
+  </link>
+  <joint name="camera_rear_camera_rear_depth_joint" type="fixed">
+    <parent link="camera_rear"/>
+    <child link="camera_rear_depth"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="camera_rear_left">
+  </link>
+  <joint name="base_link_camera_rear_left_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_rear_left"/>
+    <origin xyz="4.415817 1.043041 0.77" rpy="-1.570796 0 0.613204"/>
+  </joint>
+  <link name="Eye screw 1">
+    <visual>
+      <origin xyz="-0.00045 0 0" rpy="3.141593 1.570793 3.141593"/>
+      <geometry>
+        <cylinder radius="0.003" length="0.0009"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.00045 0 0" rpy="3.141593 1.570793 3.141593"/>
+      <geometry>
+        <cylinder radius="0.003" length="0.0009"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.005 0 0" rpy="3.141593 1.570793 3.141593"/>
+      <geometry>
+        <cylinder radius="0.0018" length="0.01"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.005 0 0" rpy="3.141593 1.570793 3.141593"/>
+      <geometry>
+        <cylinder radius="0.0018" length="0.01"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="camera_rear_left_Eye screw 1_joint" type="fixed">
+    <parent link="camera_rear_left"/>
+    <child link="Eye screw 1"/>
+    <origin xyz="-0.122 0 -0.0038" rpy="3.141593 -1.047193 3.141593"/>
+  </joint>
+  <link name="torus_24">
+    <visual>
+      <origin xyz="0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.004057 0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.004057 0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.003637 0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.003637 0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.00297 0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.00297 0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0021 0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.0021 0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.001087 0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.001087 0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0.0042 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0.0042 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.001087 0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.001087 0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0021 0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.0021 0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.00297 0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.00297 0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.003637 0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.003637 0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.004057 0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.004057 0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.004057 -0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.004057 -0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.003637 -0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.003637 -0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.00297 -0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.00297 -0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0021 -0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.0021 -0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.001087 -0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.001087 -0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 -0.0042 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.0042 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.001087 -0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.001087 -0.004057 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0021 -0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.0021 -0.003637 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.00297 -0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.00297 -0.00297 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.003637 -0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.003637 -0.0021 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.004057 -0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.004057 -0.001087 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.0042 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0012"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Eye screw 1_torus_24_joint" type="fixed">
+    <parent link="Eye screw 1"/>
+    <child link="torus_24"/>
+    <origin xyz="-0.0054 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_25">
+  </link>
+  <joint name="torus_24_appearance_25_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_25"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_26">
+  </link>
+  <joint name="torus_24_appearance_26_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_26"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_27">
+  </link>
+  <joint name="torus_24_appearance_27_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_27"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_28">
+  </link>
+  <joint name="torus_24_appearance_28_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_28"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_29">
+  </link>
+  <joint name="torus_24_appearance_29_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_29"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_30">
+  </link>
+  <joint name="torus_24_appearance_30_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_30"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_31">
+  </link>
+  <joint name="torus_24_appearance_31_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_31"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_32">
+  </link>
+  <joint name="torus_24_appearance_32_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_32"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_33">
+  </link>
+  <joint name="torus_24_appearance_33_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_33"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_34">
+  </link>
+  <joint name="torus_24_appearance_34_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_34"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_35">
+  </link>
+  <joint name="torus_24_appearance_35_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_35"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_36">
+  </link>
+  <joint name="torus_24_appearance_36_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_36"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_37">
+  </link>
+  <joint name="torus_24_appearance_37_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_37"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_38">
+  </link>
+  <joint name="torus_24_appearance_38_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_38"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_39">
+  </link>
+  <joint name="torus_24_appearance_39_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_39"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_40">
+  </link>
+  <joint name="torus_24_appearance_40_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_40"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_41">
+  </link>
+  <joint name="torus_24_appearance_41_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_41"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_42">
+  </link>
+  <joint name="torus_24_appearance_42_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_42"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_43">
+  </link>
+  <joint name="torus_24_appearance_43_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_43"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_44">
+  </link>
+  <joint name="torus_24_appearance_44_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_44"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_45">
+  </link>
+  <joint name="torus_24_appearance_45_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_45"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_46">
+  </link>
+  <joint name="torus_24_appearance_46_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_46"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_47">
+  </link>
+  <joint name="torus_24_appearance_47_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_47"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_48">
+  </link>
+  <joint name="torus_24_appearance_48_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_48"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="appearance_49">
+  </link>
+  <joint name="torus_24_appearance_49_joint" type="fixed">
+    <parent link="torus_24"/>
+    <child link="appearance_49"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="camera_rear_left_depth">
+  </link>
+  <joint name="camera_rear_left_camera_rear_left_depth_joint" type="fixed">
+    <parent link="camera_rear_left"/>
+    <child link="camera_rear_left_depth"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="camera_front_right">
+  </link>
+  <joint name="base_link_camera_front_right_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_front_right"/>
+    <origin xyz="3.93773 -0.974 0.9125" rpy="-1.570796 0 -3.120796"/>
+  </joint>
+  <link name="camera_front_right_depth">
+  </link>
+  <joint name="camera_front_right_camera_front_right_depth_joint" type="fixed">
+    <parent link="camera_front_right"/>
+    <child link="camera_front_right_depth"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="camera_front">
+  </link>
+  <joint name="base_link_camera_front_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_front"/>
+    <origin xyz="4.12 0.01 1.64" rpy="-1.570796 0 -1.570796"/>
+  </joint>
+  <link name="camera_front_depth">
+  </link>
+  <joint name="camera_front_camera_front_depth_joint" type="fixed">
+    <parent link="camera_front"/>
+    <child link="camera_front_depth"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="camera_front_left">
+  </link>
+  <joint name="base_link_camera_front_left_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_front_left"/>
+    <origin xyz="3.93794 0.99 0.9125" rpy="-1.570796 0 -0.020796"/>
+  </joint>
+  <link name="camera_front_left_depth">
+  </link>
+  <joint name="camera_front_left_camera_front_left_depth_joint" type="fixed">
+    <parent link="camera_front_left"/>
+    <child link="camera_front_left_depth"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="engine_speaker">
+  </link>
+  <joint name="base_link_engine_speaker_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="engine_speaker"/>
+    <origin xyz="4.325 0 0" rpy="0 0 0"/>
+  </joint>
+  <joint name="right_rear_sensor" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear right wheel"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 -0.85 0" rpy="0 0 0"/>
+  </joint>
+  <link name="rear right wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.570796 0 0"/>
+      <geometry>
+        <cylinder radius="0.4" length="0.3"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.570796 0 0"/>
+      <geometry>
+        <cylinder radius="0.4" length="0.3"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="slot_rear right wheel_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rear right wheel"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <joint name="left_rear_sensor" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear left wheel"/>
+    <axis xyz="0 -1 0"/>
+    <origin xyz="0 0.85 0" rpy="0 0 3.14159"/>
+  </joint>
+  <link name="rear left wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.570796 0 0"/>
+      <geometry>
+        <cylinder radius="0.4" length="0.3"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.570796 0 0"/>
+      <geometry>
+        <cylinder radius="0.4" length="0.3"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="slot_50_rear left wheel_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rear left wheel"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+</robot>

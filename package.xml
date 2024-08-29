@@ -1,18 +1,12 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>surround-view-segbev</name>
-  <version>0.0.0</version>
+  <name>surround_view_segbev</name>
+  <version>0.0.1</version>
   <description>Segmented local map for self-driving vehicles path planning based on a two-dimensional (2D) surround view system</description>
   <maintainer email="molchanovlive@gmail.com">Molchanov Artyom</maintainer>
   <license>No license</license>
-
-  <buildtool_depend>ament_cmake</buildtool_depend>
-
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
-
   <export>
-    <build_type>ament_cmake</build_type>
+    <build_type>ament_python</build_type>
   </export>
 </package>
