@@ -176,7 +176,7 @@ MercedesBenzSprinter {
   ]
   sensorsSlotRear [
     Camera {
-      translation -6.03572 -1.0436 0.58
+      translation -6.03572 -1.0436 0.575
       rotation 0 0 -1 0.9575
       children [
         RangeFinder {
@@ -300,7 +300,7 @@ MercedesBenzSprinter {
       }
     }
     Camera {
-      translation -6.04724 1.0255 0.58
+      translation -6.04724 1.0255 0.575
       rotation 0 0 0.9999999999999999 0.9575
       children [
         RangeFinder {
