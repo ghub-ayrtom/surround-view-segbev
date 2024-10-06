@@ -31,20 +31,21 @@ data_files += generate_data_files('share/' + PACKAGE_NAME + '/resource/', 'resou
 
 
 setup(
-    name=PACKAGE_NAME,
-    version='0.0.1',
-    packages=[PACKAGE_NAME],
-    data_files=data_files,
-    install_requires=['setuptools'],
-    zip_safe=True,
-    maintainer='Molchanov Artyom',
-    maintainer_email='molchanovlive@gmail.com',
-    description='Segmented local map for self-driving vehicles path planning based on a two-dimensional (2D) surround view system',
-    license='No license',
-    tests_require=['pytest'],
+    name=PACKAGE_NAME, 
+    version='0.0.1', 
+    packages=[PACKAGE_NAME], 
+    data_files=data_files, 
+    install_requires=['setuptools'], 
+    zip_safe=True, 
+    maintainer='Molchanov Artyom', 
+    maintainer_email='molchanovlive@gmail.com', 
+    description='Segmented local map for self-driving vehicles path planning based on a two-dimensional (2D) surround view system', 
+    license='No license', 
+    tests_require=['pytest'], 
     entry_points={
         'console_scripts': [
-            'surround_view_node = surround_view_segbev.surround_view_node:main'
-        ],
-    },
+            'chessboards_controller_node = surround_view_segbev.chessboards_controller_node:main', 
+            'surround_view_node = surround_view_segbev.surround_view_node:main', 
+        ], 
+    }, 
 )

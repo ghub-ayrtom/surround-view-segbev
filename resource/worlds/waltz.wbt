@@ -2,9 +2,9 @@
 
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/mercedes_benz/MercedesBenzSprinter.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Asphalt.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/mercedes_benz/MercedesBenzSprinter.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/tools/protos/EyeScrew.proto"
 
 WorldInfo {
@@ -15,8 +15,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5775881715114509 0.5780037161710369 -0.5764578113119209 2.095057019251025
-  position -0.007034177733723728 -0.3613806752302682 186.19030575878193
+  orientation -0.5775768439061363 -0.577965437467735 0.5765075389586478 4.188086533838477
+  position -0.00540737944905878 -0.34264643261977135 177.42247771693604
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -25,8 +25,8 @@ TexturedBackgroundLight {
   texture "noon_sunny_empty"
 }
 MercedesBenzSprinter {
-  translation -1.2557860585405433e-05 1.9811073474256349 0.36325388650339496
-  rotation 0.0010216648173501078 0.001021671008430163 -0.999998956194131 1.5707910547845452
+  translation 0.099987443956493 1.9807774906870028 0.3632532235624179
+  rotation 0.0010214136955839196 0.0010214198852862779 -0.9999989567071959 1.570791054217043
   color 0.427451 0.0470588 0.0784314
   name "ego_vehicle"
   controller "<extern>"
@@ -38,15 +38,11 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_front_left_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
-          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.0425
@@ -59,7 +55,7 @@ MercedesBenzSprinter {
               }
               geometry Mesh {
                 url [
-                  "../models/ZED2/ZED2.stl"
+                  "../models/ZED_2/ZED_2.stl"
                 ]
               }
             }
@@ -67,15 +63,16 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_front_left"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.35 0.65
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.01 -0.01
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
     }
     Camera {
@@ -83,15 +80,11 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_front_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
-          }
         }
         Transform {
           translation -0.21 -2.14118e-07 -0.042
@@ -104,7 +97,7 @@ MercedesBenzSprinter {
               }
               geometry Mesh {
                 url [
-                  "../models/ZED2/ZED2.stl"
+                  "../models/ZED_2/ZED_2.stl"
                 ]
               }
             }
@@ -112,15 +105,16 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_front"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.35 0.65
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.01 -0.01
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
     }
     Camera {
@@ -129,15 +123,11 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_front_right_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
-          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.0425
@@ -150,7 +140,7 @@ MercedesBenzSprinter {
               }
               geometry Mesh {
                 url [
-                  "../models/ZED2/ZED2.stl"
+                  "../models/ZED_2/ZED_2.stl"
                 ]
               }
             }
@@ -158,15 +148,16 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_front_right"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.35 0.65
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.01 -0.01
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
     }
   ]
@@ -177,15 +168,11 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_rear_left_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
-          }
         }
         Group {
           children [
@@ -227,7 +214,7 @@ MercedesBenzSprinter {
                   }
                   geometry Mesh {
                     url [
-                      "../models/ZED2/ZED2.stl"
+                      "../models/ZED_2/ZED_2.stl"
                     ]
                   }
                 }
@@ -237,15 +224,16 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_rear_left"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.35 0.65
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.01 -0.01
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
     }
     Camera {
@@ -253,15 +241,11 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_rear_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
-          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.042
@@ -274,7 +258,7 @@ MercedesBenzSprinter {
               }
               geometry Mesh {
                 url [
-                  "../models/ZED2/ZED2.stl"
+                  "../models/ZED_2/ZED_2.stl"
                 ]
               }
             }
@@ -282,15 +266,16 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_rear"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.35 0.65
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.01 -0.01
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
     }
     Camera {
@@ -299,15 +284,11 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_rear_right_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
-          }
         }
         Group {
           children [
@@ -349,7 +330,7 @@ MercedesBenzSprinter {
                   }
                   geometry Mesh {
                     url [
-                      "../models/ZED2/ZED2.stl"
+                      "../models/ZED_2/ZED_2.stl"
                     ]
                   }
                 }
@@ -359,16 +340,83 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_rear_right"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.35 0.65
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.01 -0.01
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
+    }
+  ]
+}
+DEF chessboard_front_left Pose {
+  translation 5 -1.9675 1.2475
+  rotation -0.5773502691896258 0.5773502691896258 0.5773502691896258 -2.094395307179586
+  children [
+    CadShape {
+      url [
+        "../models/chessboard/chessboard.dae"
+      ]
+    }
+  ]
+}
+DEF chessboard_front Pose {
+  translation 0.00999631 -5 1.9925
+  rotation -3.3905013482585576e-09 0.7071062811861719 0.7071072811865696 3.14159
+  children [
+    CadShape {
+      url [
+        "../models/chessboard/chessboard.dae"
+      ]
+    }
+  ]
+}
+DEF chessboard_front_right Pose {
+  translation -5 -1.9675 1.2475
+  rotation 0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  children [
+    CadShape {
+      url [
+        "../models/chessboard/chessboard.dae"
+      ]
+    }
+  ]
+}
+DEF chessboard_rear_left Pose {
+  translation 4.7122 0.0730846 1.11
+  rotation 0.8061448911893915 -0.418407943524764 -0.418407943524764 1.78464
+  children [
+    CadShape {
+      url [
+        "../models/chessboard/chessboard.dae"
+      ]
+    }
+  ]
+}
+DEF chessboard_rear Pose {
+  translation 0.10002 5 0.982499
+  rotation 0.9999999999964972 -1.8715699999934444e-06 1.8715799999934445e-06 1.5708
+  children [
+    CadShape {
+      url [
+        "../models/chessboard/chessboard.dae"
+      ]
+    }
+  ]
+}
+DEF chessboard_rear_right Pose {
+  translation -4.7122 0.217176 1.11
+  rotation -0.8061449292872899 -0.41840790682322815 -0.41840790682322815 -1.78464
+  children [
+    CadShape {
+      url [
+        "../models/chessboard/chessboard.dae"
+      ]
     }
   ]
 }

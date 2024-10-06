@@ -4,10 +4,7 @@ import launch
 from launch.substitutions import LaunchConfiguration
 from launch import LaunchDescription
 from launch_ros.actions import Node
-import os
 from launch.substitutions.path_join_substitution import PathJoinSubstitution
-import pathlib
-from webots_ros2_driver.webots_controller import WebotsController
 from webots_ros2_driver.webots_launcher import WebotsLauncher
 
 
@@ -15,29 +12,13 @@ PACKAGE_NAME = 'surround_view_segbev'
 USE_SIM_TIME = True
 
 package_dir = get_package_share_directory(PACKAGE_NAME)
-ego_vehicle_urdf = os.path.join(package_dir, pathlib.Path(os.path.join(package_dir, 'resource/descriptions', 'EgoVehicle.urdf')))
 
 
 def get_ros2_nodes():
-    with open(ego_vehicle_urdf, 'r') as urdf:
-        ego_vehicle_description = urdf.read()
-
-    ego_vehicle_state_publisher_node = Node(
-        executable='robot_state_publisher', 
-        package='robot_state_publisher', 
-        name='robot_state_publisher', 
-        parameters=[{
-            'use_sim_time': USE_SIM_TIME, 
-            'robot_description': ego_vehicle_description, 
-        }], 
-        arguments=[ego_vehicle_urdf], 
-        output='screen', 
-    )
-
-    surround_view_node = Node(
-        executable='surround_view_node', 
+    chessboards_controller_node = Node(
+        executable='chessboards_controller_node', 
         package=PACKAGE_NAME, 
-        name='surround_view_node', 
+        name='chessboards_controller_node', 
         parameters=[{'use_sim_time': USE_SIM_TIME}], 
         output='screen', 
     )
@@ -60,8 +41,7 @@ def get_ros2_nodes():
         ))
 
     return [
-        ego_vehicle_state_publisher_node, 
-        surround_view_node, 
+        chessboards_controller_node, 
     ] + static_transform_nodes
 
 
@@ -69,20 +49,13 @@ def generate_launch_description():
     world = LaunchConfiguration('world')
     webots = WebotsLauncher(world=PathJoinSubstitution([package_dir, 'resource/worlds', world]), stream=True)
 
-    ego_vehicle_controller = WebotsController(
-        respawn=True, 
-        parameters=[{'robot_description': ego_vehicle_urdf}], 
-        robot_name='ego_vehicle', 
-    )
-
     return LaunchDescription([
         DeclareLaunchArgument(
             'world', 
-            default_value='main.wbt', 
-            description='Main simulation world', 
+            default_value='waltz.wbt', 
+            description='Cameras chessboard calibration world', 
         ), 
         webots, 
-        ego_vehicle_controller, 
         launch.actions.RegisterEventHandler(
             event_handler=launch.event_handlers.OnProcessExit(
                 target_action=webots, 

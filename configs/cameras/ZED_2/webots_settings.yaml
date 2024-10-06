@@ -1,0 +1,39 @@
+devices_name: [
+  'camera_front_left_depth', 
+  'camera_front_left', 
+
+  'camera_front_depth', 
+  'camera_front', 
+
+  'camera_front_right_depth', 
+  'camera_front_right', 
+
+  'camera_rear_left_depth', 
+  'camera_rear_left', 
+
+  'camera_rear_depth', 
+  'camera_rear', 
+
+  'camera_rear_right_depth', 
+  'camera_rear_right', 
+]
+
+use_fov_values: True
+
+horizontal_fov: 110 # Degrees
+vertical_fov: 70 #
+
+image_width: 1305 # Pixels
+
+# Recalculated if use_fov_values is True
+image_height: 640 #
+focal_length: 457 #
+
+# Brown-Conrady distortion model
+distortion_center: [0.35, 0.65] # 0.0 ≤ x, y ≤ 1.0
+radial_distortion: [0.25, -0.25] # k1, k2
+tangential_distortion: [0.01, -0.01] # p1, p2
+
+# For stereo cameras via RangeFinder node
+min_range: 0.2 # Meters
+max_range: 20 #
