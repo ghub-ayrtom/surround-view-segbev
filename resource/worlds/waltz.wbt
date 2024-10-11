@@ -15,7 +15,7 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.5775768439061363 -0.577965437467735 0.5765075389586478 4.188086533838477
+  orientation 0.5775759202081088 0.5779655789257994 -0.5765083225528684 2.0950971987635336
   position -0.00540737944905878 -0.34264643261977135 177.42247771693604
 }
 TexturedBackground {
@@ -366,7 +366,7 @@ DEF chessboard_front_left Pose {
   ]
 }
 DEF chessboard_front Pose {
-  translation 0.00999631 -5 1.9925
+  translation 0.1 -5 1.9925
   rotation -3.3905013482585576e-09 0.7071062811861719 0.7071072811865696 3.14159
   children [
     CadShape {
@@ -388,7 +388,7 @@ DEF chessboard_front_right Pose {
   ]
 }
 DEF chessboard_rear_left Pose {
-  translation 4.7122 0.0730846 1.11
+  translation 4.7122 0.0730846 1.1
   rotation 0.8061448911893915 -0.418407943524764 -0.418407943524764 1.78464
   children [
     CadShape {
@@ -410,8 +410,8 @@ DEF chessboard_rear Pose {
   ]
 }
 DEF chessboard_rear_right Pose {
-  translation -4.7122 0.217176 1.11
-  rotation -0.8061449292872899 -0.41840790682322815 -0.41840790682322815 -1.78464
+  translation -4.7122 0.217176 1.1
+  rotation 0.8061449292872898 0.41840790682322815 0.41840790682322815 1.78464
   children [
     CadShape {
       url [

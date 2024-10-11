@@ -52,7 +52,20 @@ chessboards_movement_trajectory = {
     # ],
 
     'chessboard_rear_left': [ 
-        [], 
+        ['XY', [2.2449, -1.65132]], 
+        ['Z', [-0.711475, 0.496892, 0.496892, -1.90483]], 
+        ['Z', [-0.611859, 0.559298, 0.559298, -2.04341]], 
+        ['Z', [-0.511206, 0.607729, 0.607729, -2.19645]], 
+        ['Z', [-0.611859, 0.559298, 0.559298, -2.04341]], 
+        ['Z', [-0.711475, 0.496892, 0.496892, -1.90483]], 
+        ['Z', [0.806145, -0.418408, -0.418408, 1.78464]], 
+        ['Z', [0.88983, -0.322647, -0.322647, 1.68726]], 
+        ['Z', [0.954692, -0.210433, -0.210433, 1.61715]], 
+        ['Z', [0.992641, -0.0856296, -0.0856291, 1.57819]], 
+        ['Z', [0.954692, -0.210433, -0.210433, 1.61715]], 
+        ['Z', [0.88983, -0.322647, -0.322647, 1.68726]], 
+        ['Z', [0.806145, -0.418408, -0.418408, 1.78464]], 
+        ['XY', [4.7122, 0.0730846]], 
     ],
 
     'chessboard_rear': [ 
@@ -77,7 +90,20 @@ chessboards_movement_trajectory = {
     ],
 
     'chessboard_rear_right': [ 
-        [], 
+        ['XY', [-2.25894, -1.50953]], 
+        ['Z', [-0.88983, -0.322647, -0.322647, -1.68726]], 
+        ['Z', [-0.954692, -0.210432, -0.210433, -1.61715]], 
+        ['Z', [-0.992641, -0.085628, -0.0856291, -1.57819]], 
+        ['Z', [-0.954692, -0.210432, -0.210433, -1.61715]], 
+        ['Z', [-0.88983, -0.322647, -0.322647, -1.68726]], 
+        ['Z', [0.806145, 0.418408, 0.418408, 1.78464]], 
+        ['Z', [0.711475, 0.496892, 0.496892, 1.90482]], 
+        ['Z', [0.611859, 0.559298, 0.559298, 2.0434]], 
+        ['Z', [0.511206, 0.607729, 0.607729, 2.19644]], 
+        ['Z', [0.611859, 0.559298, 0.559298, 2.0434]], 
+        ['Z', [0.711475, 0.496892, 0.496892, 1.90482]], 
+        ['Z', [0.806145, 0.418408, 0.418408, 1.78464]], 
+        ['XY', [-4.7122, 0.217176]], 
     ]
 }
 
@@ -250,24 +276,32 @@ class Chessboard:
         if len(self.trajectory) > 0:
             match self.trajectory[0][0]:
                 case 'X':
-                    if round(current_translation_value[0], 1) != self.trajectory[0][1]:
-                        # Подразумевается, что разность значений по модулю в данном случае >= CHESSBOARDS_MOVEMENT_SENSITIVITY
-                        if current_translation_value[0] < self.trajectory[0][1]:
-                            current_translation_value[0] += CHESSBOARDS_MOVEMENT_SENSITIVITY  # Движение влево
-                        else:
-                            current_translation_value[0] -= CHESSBOARDS_MOVEMENT_SENSITIVITY  # Движение вправо
+                    ctv_x = round(current_translation_value[0], 1)
+                    trajectory_x = round(self.trajectory[0][1], 1)
 
+                    if ctv_x != trajectory_x:
+                        # Подразумевается, что разность значений по модулю в данном случае >= CHESSBOARDS_MOVEMENT_SENSITIVITY
+                        if ctv_x < trajectory_x:
+                            ctv_x += CHESSBOARDS_MOVEMENT_SENSITIVITY  # Движение влево
+                        else:
+                            ctv_x -= CHESSBOARDS_MOVEMENT_SENSITIVITY  # Движение вправо
+
+                        current_translation_value[0] = ctv_x
                         return self.translation_field.setSFVec3f(current_translation_value)
                     else:
                         # Удаляем достигнутую координату из их общего списка, чтобы не перебирать её на следующей итерации
                         self.trajectory.pop(0)
                 case 'Y':
-                    if round(current_translation_value[1], 1) != self.trajectory[0][1]:
-                        if current_translation_value[1] < self.trajectory[0][1]:
-                            current_translation_value[1] += CHESSBOARDS_MOVEMENT_SENSITIVITY  # Движение вперёд
-                        else:
-                            current_translation_value[1] -= CHESSBOARDS_MOVEMENT_SENSITIVITY  # Движение назад
+                    ctv_y = round(current_translation_value[1], 1)
+                    trajectory_y = round(self.trajectory[0][1], 1)
 
+                    if ctv_y != trajectory_y:
+                        if ctv_y < trajectory_y:
+                            ctv_y += CHESSBOARDS_MOVEMENT_SENSITIVITY  # Движение вперёд
+                        else:
+                            ctv_y -= CHESSBOARDS_MOVEMENT_SENSITIVITY  # Движение назад
+
+                        current_translation_value[1] = ctv_y
                         return self.translation_field.setSFVec3f(current_translation_value)
                     else:
                         self.trajectory.pop(0)
@@ -275,6 +309,38 @@ class Chessboard:
                     current_rotation_value = self.trajectory[0][1]  # Вращение
                     self.trajectory.pop(0)
                     return self.rotation_field.setSFRotation(current_rotation_value)
+                
+                case 'XY':
+                    ctv_x = round(current_translation_value[0], 1)
+                    ctv_y = round(current_translation_value[1], 1)
+
+                    trajectory_x = round(self.trajectory[0][1][0], 1)
+                    trajectory_y = round(self.trajectory[0][1][1], 1)
+
+                    if ctv_x != trajectory_x or ctv_y != trajectory_y:
+                        if ctv_x < trajectory_x:
+                            ctv_x += CHESSBOARDS_MOVEMENT_SENSITIVITY
+                        elif ctv_x > trajectory_x:
+                            ctv_x -= CHESSBOARDS_MOVEMENT_SENSITIVITY
+
+                        # Корректировки диагонального движения, подобранные опытным путём
+                        if ctv_y < trajectory_y:
+                            if trajectory_x > 0:
+                                ctv_x += 0.05
+                            else:
+                                ctv_x -= 0.05
+                            ctv_y += 0.0525
+                        elif ctv_y > trajectory_y:
+                            if trajectory_x > 0:
+                                ctv_x -= 0.05
+                            else:
+                                ctv_x += 0.05
+                            ctv_y -= 0.0525
+
+                        current_translation_value[:2] = ctv_x, ctv_y
+                        return self.translation_field.setSFVec3f(current_translation_value)
+                    else:
+                        self.trajectory.pop(0)
 
 
 class ChessboardsControllerNode(Node):
@@ -348,11 +414,23 @@ def main(args=None):
             cr_image_color = image_bytes_to_numpy_array(node.camera_rear.device.getImage(), camera_name=node.camera_rear.device_name)
             crr_image_color = image_bytes_to_numpy_array(node.camera_rear_right.device.getImage(), camera_name=node.camera_rear_right.device_name)
 
+            # node.camera_front_left.calibrate_camera(cfl_image_color)
+            # node.chessboard_front_left.update_position()
+
             node.camera_front.calibrate_camera(cf_image_color)
             node.chessboard_front.update_position()
 
+            # node.camera_front_right.calibrate_camera(cfr_image_color)
+            # node.chessboard_front_right.update_position()
+
+            node.camera_rear_left.calibrate_camera(crl_image_color)
+            node.chessboard_rear_left.update_position()
+
             node.camera_rear.calibrate_camera(cr_image_color)
             node.chessboard_rear.update_position()
+
+            node.camera_rear_right.calibrate_camera(crr_image_color)
+            node.chessboard_rear_right.update_position()
 
             rclpy.spin_once(node, timeout_sec=0.1)
         node.destroy_node()
