@@ -15,8 +15,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5775759202081088 0.5779655789257994 -0.5765083225528684 2.0950971987635336
-  position -0.00540737944905878 -0.34264643261977135 177.42247771693604
+  orientation 0.5775751770982092 0.5779652157395038 -0.5765094311415568 2.095094748044236
+  position -0.005411467584071397 -0.3421062162360662 177.13200049867095
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -67,9 +67,9 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.35 0.65
+        center 0.45 0.55
         radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.01 -0.01
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -109,9 +109,9 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.35 0.65
+        center 0.45 0.55
         radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.01 -0.01
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -152,9 +152,9 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.35 0.65
+        center 0.45 0.55
         radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.01 -0.01
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -228,9 +228,9 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.35 0.65
+        center 0.45 0.55
         radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.01 -0.01
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -270,9 +270,9 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.35 0.65
+        center 0.45 0.55
         radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.01 -0.01
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -344,9 +344,9 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.35 0.65
+        center 0.45 0.55
         radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.01 -0.01
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -355,7 +355,7 @@ MercedesBenzSprinter {
   ]
 }
 DEF chessboard_front_left Pose {
-  translation 5 -1.9675 1.2475
+  translation 7 -1.9675 1.2475
   rotation -0.5773502691896258 0.5773502691896258 0.5773502691896258 -2.094395307179586
   children [
     CadShape {
@@ -366,7 +366,7 @@ DEF chessboard_front_left Pose {
   ]
 }
 DEF chessboard_front Pose {
-  translation 0.1 -5 1.9925
+  translation 0.1 -4 1.9925
   rotation -3.3905013482585576e-09 0.7071062811861719 0.7071072811865696 3.14159
   children [
     CadShape {
@@ -377,7 +377,7 @@ DEF chessboard_front Pose {
   ]
 }
 DEF chessboard_front_right Pose {
-  translation -5 -1.9675 1.2475
+  translation -7 -1.9675 1.2475
   rotation 0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
   children [
     CadShape {
@@ -399,7 +399,7 @@ DEF chessboard_rear_left Pose {
   ]
 }
 DEF chessboard_rear Pose {
-  translation 0.10002 5 0.982499
+  translation 0.10002 6 0.982499
   rotation 0.9999999999964972 -1.8715699999934444e-06 1.8715799999934445e-06 1.5708
   children [
     CadShape {

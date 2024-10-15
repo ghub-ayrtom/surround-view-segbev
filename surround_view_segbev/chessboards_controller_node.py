@@ -30,7 +30,11 @@ chessboards_movement_trajectory = {
     # ],
 
     'chessboard_front': [ 
-        ['Y', -3.0], 
+        ['Y', -3.25], 
+        ['X', 0.6], 
+        ['X', 0.1], 
+        ['X', -0.4], 
+        ['X', 0.1], 
         ['Z', [-0.0926917, -0.704062, -0.704063, -2.95674]], 
         ['Z', [-0.186157, -0.694746, -0.694747, -2.7735]], 
         ['Z', [-0.281085, -0.678598, -0.678599, -2.59357]], 
@@ -43,7 +47,7 @@ chessboards_movement_trajectory = {
         ['Z', [0.186157, -0.694746, -0.694747, 2.7735]], 
         ['Z', [-0.0926917, 0.704062, 0.704063, -2.95675]], 
         ['Z', [-3.3905e-09, 0.707106, 0.707107, 3.14159]], 
-        ['Y', -5.0], 
+        ['Y', -4.0], 
     ],
 
     # 'chessboard_front_right': [ 
@@ -52,24 +56,24 @@ chessboards_movement_trajectory = {
     # ],
 
     'chessboard_rear_left': [ 
-        ['XY', [2.2449, -1.65132]], 
-        ['Z', [-0.711475, 0.496892, 0.496892, -1.90483]], 
-        ['Z', [-0.611859, 0.559298, 0.559298, -2.04341]], 
-        ['Z', [-0.511206, 0.607729, 0.607729, -2.19645]], 
-        ['Z', [-0.611859, 0.559298, 0.559298, -2.04341]], 
+        ['XY', [3.08477, -1.0723]], 
+        ['XY', [2.78879, -0.66916]], 
+        ['XY', [3.07659, -1.07806]], 
+        ['XY', [3.36447, -1.48701]], 
+        ['XY', [3.07659, -1.07806]], 
         ['Z', [-0.711475, 0.496892, 0.496892, -1.90483]], 
         ['Z', [0.806145, -0.418408, -0.418408, 1.78464]], 
-        ['Z', [0.88983, -0.322647, -0.322647, 1.68726]], 
-        ['Z', [0.954692, -0.210433, -0.210433, 1.61715]], 
-        ['Z', [0.992641, -0.0856296, -0.0856291, 1.57819]], 
-        ['Z', [0.954692, -0.210433, -0.210433, 1.61715]], 
         ['Z', [0.88983, -0.322647, -0.322647, 1.68726]], 
         ['Z', [0.806145, -0.418408, -0.418408, 1.78464]], 
         ['XY', [4.7122, 0.0730846]], 
     ],
 
     'chessboard_rear': [ 
-        ['Y', 4.5], 
+        ['Y', 4.75], 
+        ['X', -0.4], 
+        ['X', 0.1], 
+        ['X', 0.6], 
+        ['X', 0.1], 
         ['Z', [-0.983106, 0.12943, 0.129426, -1.58784]], 
         ['Z', [-0.935113, 0.250564, 0.250561, -1.63784]], 
         ['Z', [-0.862856, 0.357408, 0.357405, -1.71778]], 
@@ -83,14 +87,10 @@ chessboards_movement_trajectory = {
         ['Z', [0.983106, 0.129426, 0.12943, 1.58784]], 
         ['Z', [1, -1.87157e-06, 1.87158e-06, 1.5708]], 
         ['Y', 5.0], 
-        ['X', -0.4], 
-        ['X', 0.1], 
-        ['X', 0.6], 
-        ['X', 0.1], 
     ],
 
     'chessboard_rear_right': [ 
-        ['XY', [-2.25894, -1.50953]], 
+        ['XY', [-3.07659, -0.93396]], 
         ['Z', [-0.88983, -0.322647, -0.322647, -1.68726]], 
         ['Z', [-0.954692, -0.210432, -0.210433, -1.61715]], 
         ['Z', [-0.992641, -0.085628, -0.0856291, -1.57819]], 
@@ -120,13 +120,13 @@ def get_webots_device(device_name):
 class Camera:
 
     calibration_flags = (
-        cv2.CALIB_USE_INTRINSIC_GUESS +  # Использовать заданные внутренние параметры (fx, fy, cx, cy) в качестве начальных и оптимизировать их в процессе калибровки
+        # cv2.CALIB_USE_INTRINSIC_GUESS +  # Использовать заданные внутренние параметры (fx, fy, cx, cy), а также коэффициенты радиальной и тангенциальной дисторсий в качестве начальных и оптимизировать их в процессе калибровки
         # cv2.CALIB_USE_EXTRINSIC_GUESS +  # Использовать заданные внешние параметры (rotation_vectors и translation_vectors) в качестве начальных и оптимизировать их в процессе калибровки
-        # cv2.CALIB_FIX_PRINCIPAL_POINT +  # Не изменять оптический центр линзы во время глобальной оптимизации
+        cv2.CALIB_FIX_PRINCIPAL_POINT +  # Не изменять оптический центр линзы во время глобальной оптимизации
         cv2.CALIB_FIX_ASPECT_RATIO +  # Зафиксировать соотношение сторон фокусных расстояний по осям X и Y (пиксели видеокамеры квадратные)
         # cv2.CALIB_ZERO_TANGENT_DIST +  # Обнулить коэффициенты p1 и p2 тангенциальной дисторсии и не пытаться подобрать их во время оптимизации
-        cv2.CALIB_FIX_FOCAL_LENGTH  # Зафиксировать заранее известное значение фокусного расстояния (focal length). Требуется установка флага cv2.CALIB_USE_INTRINSIC_GUESS
-        # cv2.CALIB_FIX_K1 + cv2.CALIB_FIX_K2 + cv2.CALIB_FIX_K3 + cv2.CALIB_FIX_K4 + cv2.CALIB_FIX_K5 + cv2.CALIB_FIX_K6 +  # Зафиксировать соответствующий коэффициент радиальной дисторсии и не пытаться подобрать его во время оптимизации
+        # cv2.CALIB_FIX_FOCAL_LENGTH +  # Зафиксировать заранее известное значение фокусного расстояния (focal length). Требуется установка флага cv2.CALIB_USE_INTRINSIC_GUESS
+        cv2.CALIB_FIX_K3  # Зафиксировать соответствующий коэффициент радиальной дисторсии и не пытаться подобрать его во время оптимизации
         # cv2.CALIB_RATIONAL_MODEL +  # Использовать рациональную модель калибровки, которая учитывает коэффициенты k4, k5 и k6, а также возвращает 8 или более коэффициентов радильной дисторсии
         # cv2.CALIB_THIN_PRISM_MODEL +  # Использовать модель калибровки тонкой призмы, которая учитывает коэффициенты s1, s2, s3 и s4, а также возвращает 12 или более коэффициентов призменной дисторсии
         # cv2.CALIB_FIX_S1_S2_S3_S4 +  # Зафиксировать коэффициенты призменной дисторсии и не пытаться подобрать их во время оптимизации
@@ -154,6 +154,10 @@ class Camera:
 
         focal_length = cameras_webots_settings['focal_length']
 
+        distortion_center = cameras_webots_settings['distortion_center']
+        radial_distortion = cameras_webots_settings['radial_distortion']
+        tangential_distortion = cameras_webots_settings['tangential_distortion']
+
         self.object_points_3D = []  # Список обнаруженных углов шахматной доски в 3D-пространстве (реальный мир)
         self.image_points_2D = []  # Список обнаруженных углов шахматной доски в 2D-пространстве (плоскость изображения)
 
@@ -165,16 +169,22 @@ class Camera:
 
         self.K[0][0] = focal_length  # fx
         self.K[0][1] = 0.0
-        self.K[0][2] = cameras_image_width / 2  # cx
+        self.K[0][2] = cameras_image_width * distortion_center[0]  # cx
         self.K[1][0] = 0.0
         self.K[1][1] = focal_length  # fy
-        self.K[1][2] = cameras_image_height / 2  # cy
+        self.K[1][2] = cameras_image_height * distortion_center[1]  # cy
         self.K[2][0] = 0.0
         self.K[2][1] = 0.0
         self.K[2][2] = 1.0
 
         # Вектор коэффициентов дисторсии, которая зачастую вызвана радиальными и тангенциальными искажениями из-за линзы объектива видеокамеры
         self.D = np.zeros((5, 1))
+
+        self.D[0] = radial_distortion[0]  # k1
+        self.D[1] = radial_distortion[1]  # k2
+        self.D[2] = tangential_distortion[0]  # p1
+        self.D[3] = tangential_distortion[1]  # p2
+        self.D[4] = 0.0  # k3
 
         # Векторы (ось) вращения для каждого из калибровочных изображений, длина которых - это значение угла поворота камеры по одной из трёх осей относительно мировых координат
         self.rotation_vectors = [np.zeros((1, 1, 3), dtype=np.float64) for _ in range(self.calibration_images_count)]  # Ориентация в пространстве относительно сцены
@@ -183,25 +193,33 @@ class Camera:
         self.translation_vectors = [np.zeros((1, 1, 3), dtype=np.float64) for _ in range(self.calibration_images_count)]  # Положение в пространстве относительно сцены
 
 
-    def calibrate_camera(self, calibration_image):
+    def calibrate_camera(self, calibration_image, debug=False):
         calibration_image_gray = cv2.cvtColor(calibration_image, cv2.COLOR_RGBA2GRAY)
 
         if self.calibration_images_count > 0:
             node_logger.info(f'[{self.device_name}] Searching for a chessboard pattern corners...')
 
-            found, corner = cv2.findChessboardCorners(calibration_image_gray, CHESSBOARD_PATTERN_SIZE)
+            found, corners = cv2.findChessboardCorners(calibration_image_gray, CHESSBOARD_PATTERN_SIZE)
 
             if found:
                 self.calibration_images_count -= 1
-                node_logger.info(f'[{self.device_name}] The corner was found, {self.calibration_images_count} calibration images remained\n')
+                node_logger.info(f'[{self.device_name}] The corners was found, {self.calibration_images_count} calibration images remained\n')
 
                 # 0.1 - порог точности в пикселях +/ИЛИ 30 - максимальное количество итераций
                 term_criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_COUNT, 30, 0.1)
-                # 5x5 пикселей - размер окна внутри которого будут уточняться координаты найденного угла шахматной доски с субпиксельной точностью
-                cv2.cornerSubPix(calibration_image_gray, corner, (5, 5), (-1, -1), term_criteria)  # (-1, -1) - уточнение будет производиться по всему окну поиска (без так называемой "мёртвой зоны")
+                # 5x5 пикселей - размер окна внутри которого будут уточняться координаты найденных углов шахматной доски с субпиксельной точностью
+                cv2.cornerSubPix(calibration_image_gray, corners, (5, 5), (-1, -1), term_criteria)  # (-1, -1) - уточнение будет производиться по всему окну поиска (без так называемой "мёртвой зоны")
 
                 self.object_points_3D.append(Chessboard.pattern_points_3D)
-                self.image_points_2D.append(corner.reshape(-1, 2))  # Убираем дополнительное измерение (массив), возникшее от того, что библиотека OpenCV использует трёхмерные структуры данных
+                self.image_points_2D.append(corners.reshape(-1, 2))  # Убираем дополнительное измерение (массив), возникшее от того, что библиотека OpenCV использует трёхмерные структуры данных
+
+                if debug:
+                    calibration_image = cv2.cvtColor(calibration_image, cv2.COLOR_RGBA2RGB)
+                    cv2.drawChessboardCorners(calibration_image, CHESSBOARD_PATTERN_SIZE, corners, found)
+                    cv2.imwrite(os.path.join(
+                        os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                        f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{self.device_name}/debug/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                    ), calibration_image)
         elif self.calibration_images_count == 0:
             self.calibration_images_count -= 1
             node_logger.info(f'[{self.device_name}] Calculation of camera parameters...')
@@ -214,7 +232,7 @@ class Camera:
             image_points_2D_expanded = np.expand_dims(image_points_2D_array, -2)
             object_points_3D_expanded = np.expand_dims(object_points_3D_array, -2)
 
-            _, _, _, self.rotation_vectors, self.translation_vectors = cv2.calibrateCamera(
+            _, self.K, self.D, self.rotation_vectors, self.translation_vectors = cv2.calibrateCamera(
                 object_points_3D_expanded, 
                 image_points_2D_expanded, 
                 calibration_image_gray.shape[::-1], 
@@ -225,6 +243,23 @@ class Camera:
                 Camera.calibration_flags
             )
 
+            if debug:
+                image_height, image_width = calibration_image.shape[:2]
+
+                self_K_new, roi = cv2.getOptimalNewCameraMatrix(self.K, self.D, (image_width, image_height), 1, (image_width, image_height))
+                map_x, map_y = cv2.initUndistortRectifyMap(self.K, self.D, np.eye(3), self_K_new, (image_width, image_height), cv2.CV_32FC1)
+
+                # Применяем карты преобразования для устранения искажений и создания выровненного высококачественного изображения
+                calibration_image_undistorted = cv2.remap(calibration_image, map_x, map_y, cv2.INTER_CUBIC)
+
+                x, y, w, h = roi  # Обрезаем искажённые края исправленного изображения
+                calibration_image_undistorted = calibration_image_undistorted[y:y+h, x:x+w]  #
+
+                cv2.imwrite(os.path.join(
+                    os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{self.device_name}/debug/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                ), calibration_image_undistorted)
+
             camera_parameters_file = cv2.FileStorage(os.path.join(
                 os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
                 f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
@@ -233,10 +268,20 @@ class Camera:
             camera_parameters_file.write('image_resolution', np.int32([calibration_image.shape[1], calibration_image.shape[0]]))
             camera_parameters_file.write('camera_matrix', self.K)
             camera_parameters_file.write('distortion_coefficients', self.D)
-
             camera_parameters_file.release()
 
-            node_logger.info(f'[{self.device_name}] Successfully saved on the following path (../configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml)!')
+            mean_error = 0
+
+            for i in range(len(self.object_points_3D)):
+                # Преобразуем каждую точку объекта в соответствующую ей точку на изображении
+                image_points, _ = cv2.projectPoints(self.object_points_3D[i], self.rotation_vectors[i], self.translation_vectors[i], self.K, self.D)
+                image_points = image_points.reshape(-1, 2)  # Приводим к формату N x 2 для соответствия self.image_points_2D[i]
+
+                error = cv2.norm(self.image_points_2D[i], image_points, cv2.NORM_L2) / len(image_points)  # Расчитываем абсолютную норму
+                mean_error += error
+
+            node_logger.info(f'[{self.device_name}] Successfully saved on the path "../configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml"!\n')
+            node_logger.info(f'[{self.device_name}] Re-projection Error: {mean_error / len(self.object_points_3D)}\n')
 
 
 class Chessboard:
