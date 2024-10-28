@@ -12,23 +12,23 @@ import traceback
 
 
 camera_topics = {
-    # 'camera_front_left': '/ego_vehicle/camera_front_left/image_color',
-    # 'camera_front_left_depth': '/ego_vehicle/camera_front_left_depth/image',
+    # 'camera_front_left': '/ego_vehicle/camera_front_left/image_color', 
+    # 'camera_front_left_depth': '/ego_vehicle/camera_front_left_depth/image', 
 
-    'camera_front': '/ego_vehicle/camera_front/image_color',
-    'camera_front_depth': '/ego_vehicle/camera_front_depth/image',
+    'camera_front': '/ego_vehicle/camera_front/image_color', 
+    'camera_front_depth': '/ego_vehicle/camera_front_depth/image', 
 
-    # 'camera_front_right': '/ego_vehicle/camera_front_right/image_color',
-    # 'camera_front_right_depth': '/ego_vehicle/camera_front_right_depth/image',
+    # 'camera_front_right': '/ego_vehicle/camera_front_right/image_color', 
+    # 'camera_front_right_depth': '/ego_vehicle/camera_front_right_depth/image', 
 
-    'camera_rear_left': '/ego_vehicle/camera_rear_left/image_color',
-    'camera_rear_left_depth': '/ego_vehicle/camera_rear_left_depth/image',
+    'camera_rear_left': '/ego_vehicle/camera_rear_left/image_color', 
+    'camera_rear_left_depth': '/ego_vehicle/camera_rear_left_depth/image', 
 
-    'camera_rear': '/ego_vehicle/camera_rear/image_color',
-    'camera_rear_depth': '/ego_vehicle/camera_rear_depth/image',
+    'camera_rear': '/ego_vehicle/camera_rear/image_color', 
+    'camera_rear_depth': '/ego_vehicle/camera_rear_depth/image', 
 
-    'camera_rear_right': '/ego_vehicle/camera_rear_right/image_color',
-    'camera_rear_right_depth': '/ego_vehicle/camera_rear_right_depth/image',
+    'camera_rear_right': '/ego_vehicle/camera_rear_right/image_color', 
+    'camera_rear_right_depth': '/ego_vehicle/camera_rear_right_depth/image', 
 }
 
 
@@ -70,67 +70,67 @@ class SurroundViewNode(Node):
             # case 'camera_front_left':
             #     cv2.imwrite(os.path.join(
             #         os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-            #         f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_front_left/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
+            #         f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
             #     ), image_color)
             # case 'camera_front_left_depth':
             #     cv2.imwrite(os.path.join(
             #         os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-            #         f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_front_left/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
+            #         f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name[:-6]}/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
             #     ), image_depth)
 
             case 'camera_front':
                 cv2.imwrite(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_front/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
                 ), image_color)
             case 'camera_front_depth':
                 cv2.imwrite(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_front/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name[:-6]}/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
                 ), image_depth)
 
             # case 'camera_front_right':
             #     cv2.imwrite(os.path.join(
             #         os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-            #         f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_front_right/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
+            #         f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
             #     ), image_color)
             # case 'camera_front_right_depth':
             #     cv2.imwrite(os.path.join(
             #         os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-            #         f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_front_right/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
+            #         f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name[:-6]}/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
             #     ), image_depth)
 
             case 'camera_rear_left':
                 cv2.imwrite(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_rear_left/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
                 ), image_color)
             case 'camera_rear_left_depth':
                 cv2.imwrite(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_rear_left/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name[:-6]}/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
                 ), image_depth)
 
             case 'camera_rear':
                 cv2.imwrite(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_rear/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
                 ), image_color)
             case 'camera_rear_depth':
                 cv2.imwrite(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_rear/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name[:-6]}/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
                 ), image_depth)
 
             case 'camera_rear_right':
                 cv2.imwrite(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_rear_right/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
                 ), image_color)
             case 'camera_rear_right_depth':
                 cv2.imwrite(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/camera_rear_right/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name[:-6]}/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
                 ), image_depth)
 
 
@@ -138,9 +138,9 @@ def main(args=None):
     try:
         rclpy.init(args=args)
 
-        surround_view_node = SurroundViewNode()
-        rclpy.spin(surround_view_node)
-        surround_view_node.destroy_node()
+        node = SurroundViewNode()
+        rclpy.spin(node)
+        node.destroy_node()
 
         rclpy.shutdown()
     except KeyboardInterrupt:

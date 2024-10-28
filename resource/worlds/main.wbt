@@ -15,8 +15,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5775881715114509 0.5780037161710369 -0.5764578113119209 2.095057019251025
-  position -0.007034177733723728 -0.3613806752302682 186.19030575878193
+  orientation 0.5775881701411486 0.5780037145706395 -0.5764578142895996 2.0950570189617066
+  position -0.0070351699999999795 -0.12754599999999972 61.7621
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -25,7 +25,7 @@ TexturedBackgroundLight {
   texture "noon_sunny_empty"
 }
 MercedesBenzSprinter {
-  translation -1.2557860585405433e-05 1.9811073474256349 0.36325388650339496
+  translation -1.25575e-05 1.98105 0.393254
   rotation 0.0010216648173501078 0.001021671008430163 -0.999998956194131 1.5707910547845452
   color 0.427451 0.0470588 0.0784314
   name "ego_vehicle"
@@ -38,14 +38,15 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_front_left_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
           lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
+            center 0.45 0.55
+            radialCoefficients 0.25 -0.25
+            tangentialCoefficients 0.005 -0.005
           }
         }
         Transform {
@@ -59,7 +60,7 @@ MercedesBenzSprinter {
               }
               geometry Mesh {
                 url [
-                  "../models/ZED2/ZED2.stl"
+                  "../models/ZED_2/ZED_2.stl"
                 ]
               }
             }
@@ -67,15 +68,16 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_front_left"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.45 0.55
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
     }
     Camera {
@@ -83,14 +85,15 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_front_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
           lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
+            center 0.45 0.55
+            radialCoefficients 0.25 -0.25
+            tangentialCoefficients 0.005 -0.005
           }
         }
         Transform {
@@ -104,7 +107,7 @@ MercedesBenzSprinter {
               }
               geometry Mesh {
                 url [
-                  "../models/ZED2/ZED2.stl"
+                  "../models/ZED_2/ZED_2.stl"
                 ]
               }
             }
@@ -112,15 +115,16 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_front"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.45 0.55
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
     }
     Camera {
@@ -129,14 +133,15 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_front_right_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
           lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
+            center 0.45 0.55
+            radialCoefficients 0.25 -0.25
+            tangentialCoefficients 0.005 -0.005
           }
         }
         Transform {
@@ -150,7 +155,7 @@ MercedesBenzSprinter {
               }
               geometry Mesh {
                 url [
-                  "../models/ZED2/ZED2.stl"
+                  "../models/ZED_2/ZED_2.stl"
                 ]
               }
             }
@@ -158,15 +163,16 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_front_right"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.45 0.55
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
     }
   ]
@@ -177,14 +183,15 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_rear_left_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
           lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
+            center 0.45 0.55
+            radialCoefficients 0.25 -0.25
+            tangentialCoefficients 0.005 -0.005
           }
         }
         Group {
@@ -227,7 +234,7 @@ MercedesBenzSprinter {
                   }
                   geometry Mesh {
                     url [
-                      "../models/ZED2/ZED2.stl"
+                      "../models/ZED_2/ZED_2.stl"
                     ]
                   }
                 }
@@ -237,15 +244,16 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_rear_left"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.45 0.55
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
     }
     Camera {
@@ -253,14 +261,15 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_rear_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
           lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
+            center 0.45 0.55
+            radialCoefficients 0.25 -0.25
+            tangentialCoefficients 0.005 -0.005
           }
         }
         Transform {
@@ -274,7 +283,7 @@ MercedesBenzSprinter {
               }
               geometry Mesh {
                 url [
-                  "../models/ZED2/ZED2.stl"
+                  "../models/ZED_2/ZED_2.stl"
                 ]
               }
             }
@@ -282,15 +291,16 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_rear"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.45 0.55
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
     }
     Camera {
@@ -299,14 +309,15 @@ MercedesBenzSprinter {
       children [
         RangeFinder {
           name "camera_rear_right_depth"
-          fieldOfView 1.91986
+          fieldOfView 1.9198621771937625
           width 1305
           height 640
           minRange 0.2
           maxRange 20
           lens Lens {
-            radialCoefficients 0.075 0.1
-            tangentialCoefficients 0.0025 0.005
+            center 0.45 0.55
+            radialCoefficients 0.25 -0.25
+            tangentialCoefficients 0.005 -0.005
           }
         }
         Group {
@@ -349,7 +360,7 @@ MercedesBenzSprinter {
                   }
                   geometry Mesh {
                     url [
-                      "../models/ZED2/ZED2.stl"
+                      "../models/ZED_2/ZED_2.stl"
                     ]
                   }
                 }
@@ -359,15 +370,16 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_rear_right"
-      fieldOfView 1.91986
+      fieldOfView 1.9198621771937625
       width 1305
       height 640
       lens Lens {
-        radialCoefficients 0.075 0.1
-        tangentialCoefficients 0.0025 0.005
+        center 0.45 0.55
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
-        focalLength 528
+        focalLength 457
       }
     }
   ]

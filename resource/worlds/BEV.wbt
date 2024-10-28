@@ -2,9 +2,9 @@
 
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/mercedes_benz/MercedesBenzSprinter.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Asphalt.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/mercedes_benz/MercedesBenzSprinter.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/tools/protos/EyeScrew.proto"
 
 WorldInfo {
@@ -15,8 +15,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5775703716805398 0.577960277762576 -0.5765191957649015 2.0950764678284046
-  position -0.007035167227308792 -0.12754648492405352 61.76209358148821
+  orientation 0.5774539679938767 0.5778097013347292 -0.5767866710419008 2.0951442833379765
+  position -0.007035170000001756 -0.12754600000000238 61.76210000000001
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -25,8 +25,22 @@ TexturedBackgroundLight {
   texture "noon_sunny_empty"
 }
 MercedesBenzSprinter {
-  translation 0.0999874 1.98072 0.393253
-  rotation 0.0010214136955839196 0.0010214198852862779 -0.9999989567071959 1.570791054217043
+  hidden position_0_0 3.08531573325119e-11
+  hidden position2_0_0 -5.99579444944812e-08
+  hidden position_0_1 -3.132857277110211e-11
+  hidden position2_0_1 -6.017146299377862e-08
+  hidden position_0_2 0.0013698166756410674
+  hidden position_0_3 0.0013698156635164823
+  hidden rotation_1 2.1047084447667548e-11 0.9999998794500199 -0.000491019292517029 1.4292691717483762e-07
+  hidden rotation_2 2.1414547518245803e-11 -0.9999998767302417 0.0004965274427386014 1.4292691717483762e-07
+  hidden rotation_3 0 -1 0 0.005883569744116654
+  hidden rotation_4 0 1 0 0.005883565887255666
+  hidden translation_15 -0.9562530233639753 -0.001915835832175361 0.551952235089773
+  hidden rotation_15 -0.004694192495770168 -0.9999232123930386 0.011468821840056915 1.0461008964588498
+  hidden translation_21 -0.956232904914815 0.0019155456056982878 0.5519410073356897
+  hidden rotation_21 0.004695890244547266 -0.999923175563 -0.0114713376210847 1.0461006222719378
+  translation -1.2549e-05 1.98007 0.493253
+  rotation 0.0010214104206078185 0.0010214166094848602 -0.9999989567138869 1.5707910550520034
   color 0.427451 0.0470588 0.0784314
   name "ego_vehicle"
   controller "<extern>"
@@ -43,6 +57,8 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
+          lens Lens {
+          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.0425
@@ -67,9 +83,6 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -85,6 +98,8 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
+          lens Lens {
+          }
         }
         Transform {
           translation -0.21 -2.14118e-07 -0.042
@@ -109,9 +124,6 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -128,6 +140,8 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
+          lens Lens {
+          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.0425
@@ -152,9 +166,6 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -173,6 +184,8 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
+          lens Lens {
+          }
         }
         Group {
           children [
@@ -228,9 +241,6 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -246,6 +256,8 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
+          lens Lens {
+          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.042
@@ -270,9 +282,6 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -289,6 +298,8 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
+          lens Lens {
+          }
         }
         Group {
           children [
@@ -344,9 +355,6 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -354,75 +362,20 @@ MercedesBenzSprinter {
     }
   ]
 }
-DEF chessboard_front_left Pose {
-  translation 7 -1.9675 1.2475
-  rotation -0.5773502691896258 0.5773502691896258 0.5773502691896258 -2.094395307179586
-  children [
-    CadShape {
-      url [
-        "../models/chessboard/chessboard.dae"
-      ]
-    }
-  ]
-}
-DEF chessboard_front Pose {
-  translation 0.1 -4 1.9925
-  rotation -3.3905013482585576e-09 0.7071062811861719 0.7071072811865696 3.14159
-  children [
-    CadShape {
-      url [
-        "../models/chessboard/chessboard.dae"
-      ]
-    }
-  ]
-}
-DEF chessboard_front_right Pose {
-  translation -7 -1.9675 1.2475
-  rotation 0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  children [
-    CadShape {
-      url [
-        "../models/chessboard/chessboard.dae"
-      ]
-    }
-  ]
-}
-DEF chessboard_rear_left Pose {
-  translation 4.7122 0.0730846 1.1
-  rotation 0.8061448911893915 -0.418407943524764 -0.418407943524764 1.78464
-  children [
-    CadShape {
-      url [
-        "../models/chessboard/chessboard.dae"
-      ]
-    }
-  ]
-}
-DEF chessboard_rear Pose {
-  translation 0.10002 6 0.982499
-  rotation 0.9999999999964972 -1.8715699999934444e-06 1.8715799999934445e-06 1.5708
-  children [
-    CadShape {
-      url [
-        "../models/chessboard/chessboard.dae"
-      ]
-    }
-  ]
-}
-DEF chessboard_rear_right Pose {
-  translation -4.7122 0.217176 1.1
-  rotation 0.8061449292872898 0.41840790682322815 0.41840790682322815 1.78464
-  children [
-    CadShape {
-      url [
-        "../models/chessboard/chessboard.dae"
-      ]
-    }
-  ]
-}
 Floor {
   name "Ground"
+  size 25 25
   appearance Asphalt {
     IBLStrength 10
   }
+}
+Transform {
+  scale 25 25 1
+  children [
+    CadShape {
+      url [
+        "../models/stage/stage.dae"
+      ]
+    }
+  ]
 }

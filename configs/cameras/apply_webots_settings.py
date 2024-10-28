@@ -94,11 +94,14 @@ def main(args=None):
                         found_rangefinder_name, found_camera_name = False, False
                         line_index = 0
 
+                        # Пока не достигли конца файла с описанием Webots-мира
                         while line_index != len(webots_world_description_data):
-                            line = webots_world_description_data[line_index]
+                            line = webots_world_description_data[line_index]  # Считываем из него очередную строку
 
+                            # Если в ней было найдено ключевое слово RangeFinder
                             if found_rangefinder_name:
                                 if 'fieldOfView' in line:
+                                    # Перезаписываем текущее значение на то, что было указано в конфигурационном файле webots_settings.yaml
                                     webots_world_description_data[line_index] = line.replace(line.split()[1], str(horizontal_fov))
                                 elif 'width' in line:
                                     webots_world_description_data[line_index] = line.replace(line.split()[1], str(cameras_image_width))
@@ -110,18 +113,20 @@ def main(args=None):
                                     webots_world_description_data[line_index] = line.replace(line.split()[1], str(max_range))
                                 elif 'lens' in line:
                                     lens_node_set_parameters_count = 0
-                                    indentation_level = line.count(' ')
+                                    indentation_level = line.count(' ')  # Уровень табуляции в текущей строке
 
+                                    # Пропускаем строки без интересующих нас параметров
                                     while '}' not in line:
-                                        lens_node_set_parameters_count += 1
+                                        lens_node_set_parameters_count += 1  # Считаем количество уже заданных параметров для узла линзы
                                         line_index += 1
                                         line = webots_world_description_data[line_index]
 
-                                    buffering_description_data(line_index)
+                                    buffering_description_data(line_index)  # Буферизуем все строки ниже line_index
 
                                     if lens_node_set_parameters_count > 0:
                                         line_index -= lens_node_set_parameters_count - 1
 
+                                    # Дописываем или перезаписываем параметры для узла линзы
                                     webots_world_description_data[line_index] = f'{" " * indentation_level}center {distortion_center[0]} {distortion_center[1]}\n'
                                     line_index += 1
 
@@ -131,7 +136,7 @@ def main(args=None):
                                     webots_world_description_data[line_index] = f'{" " * indentation_level}tangentialCoefficients {tangential_distortion[0]} {tangential_distortion[1]}\n'
                                     line_index += 1
 
-                                    unbuffering_description_data(line_index)
+                                    unbuffering_description_data(line_index)  # Возвращаем из буфера оставшуюся часть описания
                                 else:
                                     found_rangefinder_name = False
                             elif found_camera_name:

@@ -45,6 +45,7 @@ setup(
     entry_points={
         'console_scripts': [
             'chessboards_controller_node = surround_view_segbev.chessboards_controller_node:main', 
+            'projection_matrices_node = surround_view_segbev.projection_matrices_node:main', 
             'surround_view_node = surround_view_segbev.surround_view_node:main', 
         ], 
     }, 
