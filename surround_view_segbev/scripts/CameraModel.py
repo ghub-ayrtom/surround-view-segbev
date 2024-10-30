@@ -6,6 +6,7 @@ import time
 from controller import Supervisor
 import traceback
 import yaml
+from .PointSelectorGUI import PointSelector, display_image
 
 
 CALIBRATION_IMAGES_COUNT = 50
@@ -46,58 +47,101 @@ class CameraModel:
             node_logger.error('The Webots camera device with the specified name was not found!')
         self.device_name = webots_camera_name
 
+        self.optical_characteristics = None
+
+        self.calibrating = False
+        self.calibration_images_count = CALIBRATION_IMAGES_COUNT
+
         self.node_logger = node_logger
         self.chessboard = related_chessboard
 
-        self.calibration_images_count = CALIBRATION_IMAGES_COUNT
+        ### Параметры камеры
 
-        with open(os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-            f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/webots_settings.yaml'
-        )) as webots_settings_yaml_file:
-            try:
-                self.optical_characteristics = yaml.safe_load(webots_settings_yaml_file)
-                webots_settings_yaml_file.close()
-            except yaml.YAMLError as e:
-                self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+        self.image_shape = [0, 0, 0]
 
-        self.object_points_3D = []  # Список обнаруженных углов шахматной доски в 3D-пространстве (реальный мир)
-        self.image_points_2D = []  # Список обнаруженных углов шахматной доски в 2D-пространстве (плоскость изображения)
-
-        ### Параметры калибровки
-
-        # Матрица внутренних (intrinsics) параметров камеры, таких как: fx и fy - фокусное расстояние в пикселях по соответствующим осям, cx и cy - координаты главной точки (principal point), 
-        # которая обычно находится в центре изображения
+        # Матрица внутренних (intrinsics) параметров камеры, таких как: fx и fy - фокусное расстояние в пикселях по соответствующим осям, 
+        # cx и cy - координаты главной точки (principal point), которая обычно находится в центре изображения
         self.K = np.zeros((3, 3))
-
-        self.K[0][0] = self.optical_characteristics['focal_length']  # fx
-        self.K[0][1] = 0.0
-        self.K[0][2] = self.optical_characteristics['image_width'] * self.optical_characteristics['distortion_center'][0]  # cx
-        self.K[1][0] = 0.0
-        self.K[1][1] = self.optical_characteristics['focal_length']  # fy
-        self.K[1][2] = self.optical_characteristics['image_height'] * self.optical_characteristics['distortion_center'][1]  # cy
-        self.K[2][0] = 0.0
-        self.K[2][1] = 0.0
-        self.K[2][2] = 1.0
-
         # Вектор коэффициентов дисторсии, которая зачастую вызвана радиальными и тангенциальными искажениями из-за линзы объектива видеокамеры
         self.D = np.zeros((5, 1))
 
-        self.D[0] = self.optical_characteristics['radial_distortion'][0]  # k1
-        self.D[1] = self.optical_characteristics['radial_distortion'][1]  # k2
-        self.D[2] = self.optical_characteristics['tangential_distortion'][0]  # p1
-        self.D[3] = self.optical_characteristics['tangential_distortion'][1]  # p2
-        self.D[4] = 0.0  # k3
-
         # Векторы (ось) вращения для каждого из калибровочных изображений, длина которых - это значение угла поворота камеры по одной из трёх осей относительно мировых координат
-        self.rotation_vectors = [np.zeros((1, 1, 3), dtype=np.float64) for _ in range(self.calibration_images_count)]  # Ориентация в пространстве относительно сцены
-
+        self.rotation_vectors = [np.zeros((1, 1, 3), dtype=np.float64) for _ in range(CALIBRATION_IMAGES_COUNT)]  # Ориентация в пространстве относительно сцены
         # Векторы перемещения для каждого из калибровочных изображений, длина которых - это значение смещения камеры по одной из трёх осей относительно центра мировых координат
-        self.translation_vectors = [np.zeros((1, 1, 3), dtype=np.float64) for _ in range(self.calibration_images_count)]  # Положение в пространстве относительно сцены
+        self.translation_vectors = [np.zeros((1, 1, 3), dtype=np.float64) for _ in range(CALIBRATION_IMAGES_COUNT)]  # Положение в пространстве относительно сцены
+
+        self.load_camera_parameters()
+
+
+    def load_camera_parameters(self):
+        camera_parameters_file_path = os.path.join(
+            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+            f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
+        )
+
+        if os.path.isfile(camera_parameters_file_path):
+            try:
+                fs = cv2.FileStorage(os.path.join(
+                    os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+                    f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
+                ), cv2.FILE_STORAGE_READ)
+
+                if fs.isOpened():
+                    self.image_shape = np.array(fs.getNode('image_resolution').mat(), dtype=int).flatten()
+                    self.K = np.array(fs.getNode('camera_matrix').mat())
+                    self.D = np.array(fs.getNode('distortion_coefficients').mat())
+
+                    fs.release()
+            except Exception as e:
+                self.node_logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+        else:
+            with open(os.path.join(
+                os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+                f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/webots_settings.yaml'
+            )) as webots_settings_yaml_file:
+                try:
+                    self.optical_characteristics = yaml.safe_load(webots_settings_yaml_file)
+                    self.image_shape = (self.optical_characteristics['image_height'], self.optical_characteristics['image_width'], 4)
+                    webots_settings_yaml_file.close()
+                except yaml.YAMLError as e:
+                    self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 
 
     def calibrate_camera(self, calibration_image, debug=False):
         calibration_image_gray = cv2.cvtColor(calibration_image, cv2.COLOR_RGBA2GRAY)
+
+        if not self.calibrating:
+            self.calibrating = True
+
+            if self.optical_characteristics is None:
+                with open(os.path.join(
+                    os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+                    f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/webots_settings.yaml'
+                )) as webots_settings_yaml_file:
+                    try:
+                        self.optical_characteristics = yaml.safe_load(webots_settings_yaml_file)
+                        webots_settings_yaml_file.close()
+                    except yaml.YAMLError as e:
+                        self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+
+            self.object_points_3D = []  # Список обнаруженных углов шахматной доски в 3D-пространстве (реальный мир)
+            self.image_points_2D = []  # Список обнаруженных углов шахматной доски в 2D-пространстве (плоскость изображения)
+
+            self.K[0][0] = self.optical_characteristics['focal_length']  # fx
+            self.K[0][1] = 0.0
+            self.K[0][2] = self.optical_characteristics['image_width'] * self.optical_characteristics['distortion_center'][0]  # cx
+            self.K[1][0] = 0.0
+            self.K[1][1] = self.optical_characteristics['focal_length']  # fy
+            self.K[1][2] = self.optical_characteristics['image_height'] * self.optical_characteristics['distortion_center'][1]  # cy
+            self.K[2][0] = 0.0
+            self.K[2][1] = 0.0
+            self.K[2][2] = 1.0
+
+            self.D[0] = self.optical_characteristics['radial_distortion'][0]  # k1
+            self.D[1] = self.optical_characteristics['radial_distortion'][1]  # k2
+            self.D[2] = self.optical_characteristics['tangential_distortion'][0]  # p1
+            self.D[3] = self.optical_characteristics['tangential_distortion'][1]  # p2
+            self.D[4] = 0.0  # k3
 
         if self.calibration_images_count > 0:
             self.node_logger.info(f'[{self.device_name}] Searching for a chessboard pattern corners...')
@@ -147,17 +191,8 @@ class CameraModel:
             )
 
             if debug:
-                image_height, image_width = calibration_image.shape[:2]
-
-                self_K_new, roi = cv2.getOptimalNewCameraMatrix(self.K, self.D, (image_width, image_height), 1, (image_width, image_height))
-                map_x, map_y = cv2.initUndistortRectifyMap(self.K, self.D, np.eye(3), self_K_new, (image_width, image_height), cv2.CV_32FC1)
-
-                # Применяем карты преобразования для устранения искажений и создания выровненного высококачественного изображения
-                calibration_image_undistorted = cv2.remap(calibration_image, map_x, map_y, cv2.INTER_CUBIC)
-
-                x, y, w, h = roi  # Обрезаем искажённые края исправленного изображения
-                calibration_image_undistorted = calibration_image_undistorted[y:y+h, x:x+w]  #
-
+                calibration_image_undistorted = self.undistort(calibration_image)
+                
                 cv2.imwrite(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
                     f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{self.device_name}/debug/{time.strftime("%Y%m%d-%H%M%S")}.png'
@@ -168,7 +203,7 @@ class CameraModel:
                 f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
             ), cv2.FILE_STORAGE_WRITE)
 
-            camera_parameters_file.write('image_resolution', np.int32([calibration_image.shape[1], calibration_image.shape[0]]))
+            camera_parameters_file.write('image_resolution', np.int32([calibration_image.shape[0], calibration_image.shape[1], 4]))
             camera_parameters_file.write('camera_matrix', self.K)
             camera_parameters_file.write('distortion_coefficients', self.D)
             camera_parameters_file.release()
@@ -185,3 +220,46 @@ class CameraModel:
 
             self.node_logger.info(f'[{self.device_name}] Successfully saved on the path "../../configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml"!\n')
             self.node_logger.info(f'[{self.device_name}] Re-projection Error: {mean_error / len(self.object_points_3D)}\n')
+
+            self.calibrating = False
+
+
+    def undistort(self, image):
+        image_height, image_width = image.shape[:2]
+
+        self_K_new, roi = cv2.getOptimalNewCameraMatrix(self.K, self.D, (image_width, image_height), 1, (image_width, image_height))
+        map_x, map_y = cv2.initUndistortRectifyMap(self.K, self.D, np.eye(3), self_K_new, (image_width, image_height), cv2.CV_32FC1)
+
+        # Применяем карты преобразования для устранения искажений и создания выровненного изображения
+        image_undistorted = cv2.remap(image, map_x, map_y, cv2.INTER_LINEAR)
+
+        x, y, w, h = roi  # Обрезаем искажённые края исправленного изображения
+        image_undistorted = image_undistorted[y:y+h, x:x+w]  #
+
+        return image_undistorted
+
+
+    def get_projection_matrix(self, image):
+        image_undistorted = image  # self.undistort(image)
+
+        gui = PointSelector(cv2.cvtColor(image_undistorted, cv2.COLOR_RGBA2RGB), title=self.device_name)
+        choice = gui.loop()
+
+        dst_points = {
+            'camera_front_left': [(0, 100), (400, 100), (0, 300), (400, 300)], 
+            'camera_front': [(300, 100), (700, 100), (300, 300), (700, 300)], 
+            'camera_front_right': [(600, 100), (1000, 100), (600, 300), (1000, 300)], 
+            # 'camera_rear_left': [(0, 0), (0, 0), (0, 0), (0, 0)], 
+            'camera_rear': [(300, 200), (680, 200), (300, 360), (680, 360)], 
+            # 'camera_rear': [(0, 0), (0, 0), (0, 0), (0, 0)], 
+        }
+
+        if choice > 0:
+            src = np.float32(gui.keypoints)
+            dst = np.float32(dst_points[self.device_name])
+
+            projection_matrix = cv2.getPerspectiveTransform(src, dst)
+            image_projected = cv2.warpPerspective(image, projection_matrix, (1000, 340))
+
+            display_image("Bird's Eye View", image_projected)
+            cv2.destroyAllWindows()

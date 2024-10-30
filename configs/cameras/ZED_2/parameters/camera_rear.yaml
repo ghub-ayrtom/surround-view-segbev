@@ -1,10 +1,10 @@
 %YAML:1.0
 ---
 image_resolution: !!opencv-matrix
-   rows: 2
+   rows: 3
    cols: 1
    dt: i
-   data: [ 1305, 640 ]
+   data: [ 640, 1305, 4 ]
 camera_matrix: !!opencv-matrix
    rows: 3
    cols: 3

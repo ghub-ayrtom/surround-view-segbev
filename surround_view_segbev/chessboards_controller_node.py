@@ -1,13 +1,11 @@
-import cv2
 from configs import global_settings
 from rclpy.node import Node
 import numpy as np
-import os
 import rclpy
 from controller import Supervisor
-import time
 import traceback
 from .scripts.CameraModel import CameraModel
+from .scripts.utils import image_bytes_to_numpy_array
 
 
 CHESSBOARD_SQUARE_SIZE = 2.5  # Размеры квадрата шахматной доски в сантиметрах
@@ -16,13 +14,21 @@ CHESSBOARDS_MOVEMENT_SENSITIVITY = 0.1  # Минимальное значени�
 
 supervisor = None
 node_logger = None
-cameras_image_shape = None
 
 chessboards_movement_trajectory = {
-    # 'chessboard_front_left': [ 
-    #     [], 
-    #     ... 
-    # ],
+    'chessboard_front_left': [ 
+        ['X', 3.0], 
+        ['Z', [-0.476905, 0.621515, 0.621515, -2.25159]], 
+        ['Z', [-0.377964, 0.654654, 0.654654, -2.41886]], 
+        ['Z', [-0.476905, 0.621515, 0.621515, -2.25159]], 
+        ['Z', [0.57735, -0.57735, -0.57735, 2.0944]], 
+        ['Z', [0.677661, -0.519988, -0.519988, 1.95044]], 
+        ['Z', [0.774596, -0.447214, -0.447214, 1.82348]], 
+        ['Z', [0.677661, -0.519988, -0.519988, 1.95044]], 
+        ['Z', [0.57735, -0.57735, -0.57735, 2.0944]], 
+        ['Y', -0.9675], 
+        ['Y', -1.9675], 
+    ],
 
     'chessboard_front': [ 
         ['Y', -3.25], 
@@ -45,23 +51,32 @@ chessboards_movement_trajectory = {
         ['Y', -4.0], 
     ],
 
-    # 'chessboard_front_right': [ 
-    #     [], 
-    #     ... 
-    # ],
-
-    'chessboard_rear_left': [ 
-        ['XY', [3.08477, -1.0723]], 
-        ['XY', [2.78879, -0.66916]], 
-        ['XY', [3.07659, -1.07806]], 
-        ['XY', [3.36447, -1.48701]], 
-        ['XY', [3.07659, -1.07806]], 
-        ['Z', [-0.711475, 0.496892, 0.496892, -1.90483]], 
-        ['Z', [0.806145, -0.418408, -0.418408, 1.78464]], 
-        ['Z', [0.88983, -0.322647, -0.322647, 1.68726]], 
-        ['Z', [0.806145, -0.418408, -0.418408, 1.78464]], 
-        ['XY', [4.7122, 0.0730846]], 
+    'chessboard_front_right': [ 
+        ['X', -3.0], 
+        ['Z', [-0.677661, -0.519988, -0.519988, -1.95044]], 
+        ['Z', [-0.774596, -0.447214, -0.447214, -1.82348]], 
+        ['Z', [-0.677661, -0.519988, -0.519988, -1.95044]], 
+        ['Z', [0.57735, 0.57735, 0.57735, 2.0944]], 
+        ['Z', [0.476905, 0.621515, 0.621515, 2.25159]], 
+        ['Z', [0.377964, 0.654654, 0.654654, 2.41886]], 
+        ['Z', [0.476905, 0.621515, 0.621515, 2.25159]], 
+        ['Z', [0.57735, 0.57735, 0.57735, 2.0944]], 
+        ['Y', -2.9675], 
+        ['Y', -1.9675], 
     ],
+
+    # 'chessboard_rear_left': [ 
+    #     ['XY', [3.08477, -1.0723]], 
+    #     ['XY', [2.78879, -0.66916]], 
+    #     ['XY', [3.07659, -1.07806]], 
+    #     ['XY', [3.36447, -1.48701]], 
+    #     ['XY', [3.07659, -1.07806]], 
+    #     ['Z', [-0.711475, 0.496892, 0.496892, -1.90483]], 
+    #     ['Z', [0.806145, -0.418408, -0.418408, 1.78464]], 
+    #     ['Z', [0.88983, -0.322647, -0.322647, 1.68726]], 
+    #     ['Z', [0.806145, -0.418408, -0.418408, 1.78464]], 
+    #     ['XY', [4.7122, 0.0730846]], 
+    # ],
 
     'chessboard_rear': [ 
         ['Y', 4.75], 
@@ -84,22 +99,22 @@ chessboards_movement_trajectory = {
         ['Y', 5.0], 
     ],
 
-    'chessboard_rear_right': [ 
-        ['XY', [-3.07659, -0.93396]], 
-        ['Z', [-0.88983, -0.322647, -0.322647, -1.68726]], 
-        ['Z', [-0.954692, -0.210432, -0.210433, -1.61715]], 
-        ['Z', [-0.992641, -0.085628, -0.0856291, -1.57819]], 
-        ['Z', [-0.954692, -0.210432, -0.210433, -1.61715]], 
-        ['Z', [-0.88983, -0.322647, -0.322647, -1.68726]], 
-        ['Z', [0.806145, 0.418408, 0.418408, 1.78464]], 
-        ['Z', [0.711475, 0.496892, 0.496892, 1.90482]], 
-        ['Z', [0.611859, 0.559298, 0.559298, 2.0434]], 
-        ['Z', [0.511206, 0.607729, 0.607729, 2.19644]], 
-        ['Z', [0.611859, 0.559298, 0.559298, 2.0434]], 
-        ['Z', [0.711475, 0.496892, 0.496892, 1.90482]], 
-        ['Z', [0.806145, 0.418408, 0.418408, 1.78464]], 
-        ['XY', [-4.7122, 0.217176]], 
-    ]
+    # 'chessboard_rear_right': [ 
+    #     ['XY', [-3.07659, -0.93396]], 
+    #     ['Z', [-0.88983, -0.322647, -0.322647, -1.68726]], 
+    #     ['Z', [-0.954692, -0.210432, -0.210433, -1.61715]], 
+    #     ['Z', [-0.992641, -0.085628, -0.0856291, -1.57819]], 
+    #     ['Z', [-0.954692, -0.210432, -0.210433, -1.61715]], 
+    #     ['Z', [-0.88983, -0.322647, -0.322647, -1.68726]], 
+    #     ['Z', [0.806145, 0.418408, 0.418408, 1.78464]], 
+    #     ['Z', [0.711475, 0.496892, 0.496892, 1.90482]], 
+    #     ['Z', [0.611859, 0.559298, 0.559298, 2.0434]], 
+    #     ['Z', [0.511206, 0.607729, 0.607729, 2.19644]], 
+    #     ['Z', [0.611859, 0.559298, 0.559298, 2.0434]], 
+    #     ['Z', [0.711475, 0.496892, 0.496892, 1.90482]], 
+    #     ['Z', [0.806145, 0.418408, 0.418408, 1.78464]], 
+    #     ['XY', [-4.7122, 0.217176]], 
+    # ]
 }
 
 
@@ -218,38 +233,23 @@ class ChessboardsControllerNode(Node):
             node_logger = self._logger
 
             if supervisor:
-                # self.chessboard_front_left = Chessboard('chessboard_front_left')
+                self.chessboard_front_left = Chessboard('chessboard_front_left')
                 self.chessboard_front = Chessboard('chessboard_front')
-                # self.chessboard_front_right = Chessboard('chessboard_front_right')
+                self.chessboard_front_right = Chessboard('chessboard_front_right')
 
-                self.chessboard_rear_left = Chessboard('chessboard_rear_left')
+                # self.chessboard_rear_left = Chessboard('chessboard_rear_left')
                 self.chessboard_rear = Chessboard('chessboard_rear')
-                self.chessboard_rear_right = Chessboard('chessboard_rear_right')
+                # self.chessboard_rear_right = Chessboard('chessboard_rear_right')
 
-                # self.camera_front_left = CameraModel('camera_front_left', node_logger, related_chessboard=self.chessboard_front_left)
+                self.camera_front_left = CameraModel('camera_front_left', node_logger, related_chessboard=self.chessboard_front_left)
                 self.camera_front = CameraModel('camera_front', node_logger, related_chessboard=self.chessboard_front)
-                # self.camera_front_right = CameraModel('camera_front_right', node_logger, related_chessboard=self.chessboard_front_right)
+                self.camera_front_right = CameraModel('camera_front_right', node_logger, related_chessboard=self.chessboard_front_right)
 
-                self.camera_rear_left = CameraModel('camera_rear_left', node_logger, related_chessboard=self.chessboard_rear_left)
+                # self.camera_rear_left = CameraModel('camera_rear_left', node_logger, related_chessboard=self.chessboard_rear_left)
                 self.camera_rear = CameraModel('camera_rear', node_logger, related_chessboard=self.chessboard_rear)
-                self.camera_rear_right = CameraModel('camera_rear_right', node_logger, related_chessboard=self.chessboard_rear_right)
-
-                global cameras_image_shape
-                cameras_image_shape = (self.camera_front.optical_characteristics['image_height'], self.camera_front.optical_characteristics['image_width'], 4)
+                # self.camera_rear_right = CameraModel('camera_rear_right', node_logger, related_chessboard=self.chessboard_rear_right)
         except Exception as e:
             self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
-
-
-def image_bytes_to_numpy_array(image_bytes, image_shape, camera_name='', debug=False):
-    image_array = np.frombuffer(image_bytes, np.uint8).reshape(image_shape)
-
-    if debug:
-        cv2.imwrite(os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/debug/{time.strftime("%Y%m%d-%H%M%S")}.png'
-        ), cv2.cvtColor(image_array, cv2.COLOR_RGBA2RGB))
-
-    return image_array
 
 
 def main(args=None):
@@ -262,31 +262,31 @@ def main(args=None):
         node = ChessboardsControllerNode()
 
         while supervisor.step(global_settings.SIMULATION_TIME_STEP) != -1:
-            # cfl_image_color = image_bytes_to_numpy_array(node.camera_front_left.getImage(), cameras_image_shape, camera_name=node.camera_front_left.device_name)
-            cf_image_color = image_bytes_to_numpy_array(node.camera_front.device.getImage(), cameras_image_shape, camera_name=node.camera_front.device_name)
-            # cfr_image_color = image_bytes_to_numpy_array(node.camera_front_right.getImage(), cameras_image_shape, camera_name=node.camera_front_right.device_name)
+            cfl_image_color = image_bytes_to_numpy_array(node.camera_front_left.device.getImage(), node.camera_front_left.image_shape, camera_name=node.camera_front_left.device_name)
+            cf_image_color = image_bytes_to_numpy_array(node.camera_front.device.getImage(), node.camera_front.image_shape, camera_name=node.camera_front.device_name)
+            cfr_image_color = image_bytes_to_numpy_array(node.camera_front_right.device.getImage(), node.camera_front_right.image_shape, camera_name=node.camera_front_right.device_name)
 
-            crl_image_color = image_bytes_to_numpy_array(node.camera_rear_left.device.getImage(), cameras_image_shape, camera_name=node.camera_rear_left.device_name)
-            cr_image_color = image_bytes_to_numpy_array(node.camera_rear.device.getImage(), cameras_image_shape, camera_name=node.camera_rear.device_name)
-            crr_image_color = image_bytes_to_numpy_array(node.camera_rear_right.device.getImage(), cameras_image_shape, camera_name=node.camera_rear_right.device_name)
+            # crl_image_color = image_bytes_to_numpy_array(node.camera_rear_left.device.getImage(), node.camera_rear_left.image_shape, camera_name=node.camera_rear_left.device_name)
+            cr_image_color = image_bytes_to_numpy_array(node.camera_rear.device.getImage(), node.camera_rear.image_shape, camera_name=node.camera_rear.device_name)
+            # crr_image_color = image_bytes_to_numpy_array(node.camera_rear_right.device.getImage(), node.camera_rear_right.image_shape, camera_name=node.camera_rear_right.device_name)
 
-            # node.camera_front_left.calibrate_camera(cfl_image_color)
-            # node.chessboard_front_left.update_position()
+            node.camera_front_left.calibrate_camera(cfl_image_color, debug=True)
+            node.chessboard_front_left.update_position()
 
             node.camera_front.calibrate_camera(cf_image_color)
             node.chessboard_front.update_position()
 
-            # node.camera_front_right.calibrate_camera(cfr_image_color)
-            # node.chessboard_front_right.update_position()
+            node.camera_front_right.calibrate_camera(cfr_image_color, debug=True)
+            node.chessboard_front_right.update_position()
 
-            node.camera_rear_left.calibrate_camera(crl_image_color)
-            node.chessboard_rear_left.update_position()
+            # node.camera_rear_left.calibrate_camera(crl_image_color)
+            # node.chessboard_rear_left.update_position()
 
             node.camera_rear.calibrate_camera(cr_image_color)
             node.chessboard_rear.update_position()
 
-            node.camera_rear_right.calibrate_camera(crr_image_color)
-            node.chessboard_rear_right.update_position()
+            # node.camera_rear_right.calibrate_camera(crr_image_color)
+            # node.chessboard_rear_right.update_position()
 
             rclpy.spin_once(node, timeout_sec=0.1)
         node.destroy_node()
