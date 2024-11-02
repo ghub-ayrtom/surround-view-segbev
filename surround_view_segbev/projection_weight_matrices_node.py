@@ -5,13 +5,18 @@ import traceback
 from controller import Supervisor
 from configs import global_settings
 from .scripts.utils import image_bytes_to_numpy_array
+from .scripts.BirdsEyeView import BirdsEyeView
+from .scripts.PointSelectorGUI import display_image
+import numpy as np
+from PIL import Image
+import os
 
 
-class ProjectionMatricesNode(Node):
+class ProjectionWeightMatricesNode(Node):
 
     def __init__(self):
         try:
-            super().__init__('projection_matrices_node')
+            super().__init__('projection_weight_matrices_node')
             self._logger.info('Successfully launched!')
 
             self.camera_front_left = CameraModel('camera_front_left', self._logger)
@@ -25,12 +30,34 @@ class ProjectionMatricesNode(Node):
             self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 
 
+    def get_weight_matrix(self, images):
+        bev = BirdsEyeView(images, self._logger)
+
+        Gmat, Mmat = bev.get_weights_and_masks()
+        bev.luminance_balance()
+        bev.stitch()
+        bev.white_balance()
+        bev.add_ego_vehicle()
+
+        ret = display_image("Bird's Eye View", bev.image)
+
+        if ret > 0:
+            result_images_save_path = os.path.join(
+                os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 'resource/images/'
+            )
+
+            Image.fromarray((Gmat * 255).astype(np.uint8)).save(result_images_save_path + 'weights.png')
+            Image.fromarray(Mmat.astype(np.uint8)).save(result_images_save_path + 'masks.png')
+
+
 def main(args=None):
     try:
         rclpy.init(args=args)
 
         supervisor = Supervisor()
-        node = ProjectionMatricesNode()
+        node = ProjectionWeightMatricesNode()
+
+        images_projected = []
 
         while supervisor.step(global_settings.SIMULATION_TIME_STEP) != -1:
             cfl_image_color = image_bytes_to_numpy_array(node.camera_front_left.device.getImage(), node.camera_front_left.image_shape, camera_name=node.camera_front_left.device_name)
@@ -41,13 +68,15 @@ def main(args=None):
             cr_image_color = image_bytes_to_numpy_array(node.camera_rear.device.getImage(), node.camera_rear.image_shape, camera_name=node.camera_rear.device_name)
             # crr_image_color = image_bytes_to_numpy_array(node.camera_rear_right.device.getImage(), node.camera_rear_right.image_shape, camera_name=node.camera_rear_right.device_name)
 
-            node.camera_front_left.get_projection_matrix(cfl_image_color)
-            node.camera_front.get_projection_matrix(cf_image_color)
-            node.camera_front_right.get_projection_matrix(cfr_image_color)
+            images_projected.append(node.camera_front_left.get_projection_matrix(cfl_image_color))
+            images_projected.append(node.camera_front.get_projection_matrix(cf_image_color))
+            images_projected.append(node.camera_front_right.get_projection_matrix(cfr_image_color))
 
-            # node.camera_rear_left.get_projection_matrix(crl_image_color)
-            node.camera_rear.get_projection_matrix(cr_image_color)
-            # node.camera_rear_right.get_projection_matrix(crr_image_color)
+            # images_projected.append(node.camera_rear_left.get_projection_matrix(crl_image_color))
+            images_projected.append(node.camera_rear.get_projection_matrix(cr_image_color))
+            # images_projected.append(node.camera_rear_right.get_projection_matrix(crr_image_color))
+
+            node.get_weight_matrix(images_projected)
 
             rclpy.spin_once(node, timeout_sec=0.1)
         node.destroy_node()

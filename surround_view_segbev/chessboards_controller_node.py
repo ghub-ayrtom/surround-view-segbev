@@ -241,13 +241,13 @@ class ChessboardsControllerNode(Node):
                 self.chessboard_rear = Chessboard('chessboard_rear')
                 # self.chessboard_rear_right = Chessboard('chessboard_rear_right')
 
-                self.camera_front_left = CameraModel('camera_front_left', node_logger, related_chessboard=self.chessboard_front_left)
-                self.camera_front = CameraModel('camera_front', node_logger, related_chessboard=self.chessboard_front)
-                self.camera_front_right = CameraModel('camera_front_right', node_logger, related_chessboard=self.chessboard_front_right)
+                self.camera_front_left = CameraModel('camera_front_left', node_logger, related_chessboard=self.chessboard_front_left, load_parameters=False)
+                self.camera_front = CameraModel('camera_front', node_logger, related_chessboard=self.chessboard_front, load_parameters=False)
+                self.camera_front_right = CameraModel('camera_front_right', node_logger, related_chessboard=self.chessboard_front_right, load_parameters=False)
 
-                # self.camera_rear_left = CameraModel('camera_rear_left', node_logger, related_chessboard=self.chessboard_rear_left)
-                self.camera_rear = CameraModel('camera_rear', node_logger, related_chessboard=self.chessboard_rear)
-                # self.camera_rear_right = CameraModel('camera_rear_right', node_logger, related_chessboard=self.chessboard_rear_right)
+                # self.camera_rear_left = CameraModel('camera_rear_left', node_logger, related_chessboard=self.chessboard_rear_left, load_parameters=False)
+                self.camera_rear = CameraModel('camera_rear', node_logger, related_chessboard=self.chessboard_rear, load_parameters=False)
+                # self.camera_rear_right = CameraModel('camera_rear_right', node_logger, related_chessboard=self.chessboard_rear_right, load_parameters=False)
         except Exception as e:
             self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 
@@ -270,13 +270,13 @@ def main(args=None):
             cr_image_color = image_bytes_to_numpy_array(node.camera_rear.device.getImage(), node.camera_rear.image_shape, camera_name=node.camera_rear.device_name)
             # crr_image_color = image_bytes_to_numpy_array(node.camera_rear_right.device.getImage(), node.camera_rear_right.image_shape, camera_name=node.camera_rear_right.device_name)
 
-            node.camera_front_left.calibrate_camera(cfl_image_color, debug=True)
+            node.camera_front_left.calibrate_camera(cfl_image_color)
             node.chessboard_front_left.update_position()
 
             node.camera_front.calibrate_camera(cf_image_color)
             node.chessboard_front.update_position()
 
-            node.camera_front_right.calibrate_camera(cfr_image_color, debug=True)
+            node.camera_front_right.calibrate_camera(cfr_image_color)
             node.chessboard_front_right.update_position()
 
             # node.camera_rear_left.calibrate_camera(crl_image_color)

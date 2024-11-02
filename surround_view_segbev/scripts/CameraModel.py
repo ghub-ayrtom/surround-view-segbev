@@ -39,7 +39,7 @@ class CameraModel:
     )
 
 
-    def __init__(self, webots_camera_name, node_logger, related_chessboard=None):
+    def __init__(self, webots_camera_name, node_logger, related_chessboard=None, load_parameters=True):
         self.device = supervisor.getDevice(webots_camera_name)
         self.device.enable(int(supervisor.getBasicTimeStep()))
 
@@ -47,9 +47,10 @@ class CameraModel:
             node_logger.error('The Webots camera device with the specified name was not found!')
         self.device_name = webots_camera_name
 
-        self.optical_characteristics = None
-
+        self.load_parameters = load_parameters
         self.calibrating = False
+
+        self.optical_characteristics = None
         self.calibration_images_count = CALIBRATION_IMAGES_COUNT
 
         self.node_logger = node_logger
@@ -79,7 +80,7 @@ class CameraModel:
             f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
         )
 
-        if os.path.isfile(camera_parameters_file_path):
+        if self.load_parameters and os.path.isfile(camera_parameters_file_path):
             try:
                 fs = cv2.FileStorage(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
@@ -203,10 +204,12 @@ class CameraModel:
                 f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
             ), cv2.FILE_STORAGE_WRITE)
 
-            camera_parameters_file.write('image_resolution', np.int32([calibration_image.shape[0], calibration_image.shape[1], 4]))
-            camera_parameters_file.write('camera_matrix', self.K)
-            camera_parameters_file.write('distortion_coefficients', self.D)
-            camera_parameters_file.release()
+            if camera_parameters_file.isOpened():
+                camera_parameters_file.write('image_resolution', np.int32([calibration_image.shape[0], calibration_image.shape[1], 4]))
+                camera_parameters_file.write('camera_matrix', self.K)
+                camera_parameters_file.write('distortion_coefficients', self.D)
+
+                camera_parameters_file.release()
 
             mean_error = 0
 
@@ -239,6 +242,18 @@ class CameraModel:
         return image_undistorted
 
 
+    def flip(self, image):
+        match self.device_name:
+            case 'camera_front_left' | 'camera_rear_left':
+                return cv2.transpose(image)[::-1]
+            case 'camera_front_right' | 'camera_rear_right':
+                return np.flip(cv2.transpose(image), 1)
+            case 'camera_front':
+                return image.copy()
+            case 'camera_rear':
+                return image.copy()[::-1, ::-1, :]
+
+
     def get_projection_matrix(self, image):
         image_undistorted = image  # self.undistort(image)
 
@@ -259,7 +274,22 @@ class CameraModel:
             dst = np.float32(dst_points[self.device_name])
 
             projection_matrix = cv2.getPerspectiveTransform(src, dst)
-            image_projected = cv2.warpPerspective(image, projection_matrix, (1000, 340))
+            image_projected = cv2.warpPerspective(image_undistorted, projection_matrix, (1000, 400))
+
+            camera_parameters_file = cv2.FileStorage(os.path.join(
+                os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+                f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
+            ), cv2.FILE_STORAGE_WRITE)
+
+            if camera_parameters_file.isOpened():
+                camera_parameters_file.write('image_resolution', np.int32([image.shape[0], image.shape[1], 4]))
+                camera_parameters_file.write('camera_matrix', self.K)
+                camera_parameters_file.write('distortion_coefficients', self.D)
+                camera_parameters_file.write('projection_matrix', projection_matrix)
+
+                camera_parameters_file.release()
 
             display_image("Bird's Eye View", image_projected)
             cv2.destroyAllWindows()
+
+            return self.flip(cv2.cvtColor(image_projected, cv2.COLOR_RGBA2BGR))

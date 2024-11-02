@@ -7,7 +7,6 @@ from launch_ros.actions import Node
 import os
 from launch.substitutions.path_join_substitution import PathJoinSubstitution
 import pathlib
-from webots_ros2_driver.webots_controller import WebotsController
 from webots_ros2_driver.webots_launcher import WebotsLauncher
 
 
@@ -19,10 +18,10 @@ ego_vehicle_urdf = os.path.join(package_dir, pathlib.Path(os.path.join(package_d
 
 
 def get_ros2_nodes():
-    projection_matrices_node = Node(
-        executable='projection_matrices_node', 
+    projection_weight_matrices_node = Node(
+        executable='projection_weight_matrices_node', 
         package=PACKAGE_NAME, 
-        name='projection_matrices_node', 
+        name='projection_weight_matrices_node', 
         parameters=[{'use_sim_time': USE_SIM_TIME}], 
         output='screen', 
     )
@@ -45,7 +44,7 @@ def get_ros2_nodes():
         ))
 
     return [
-        projection_matrices_node, 
+        projection_weight_matrices_node, 
     ] + static_transform_nodes
 
 
@@ -53,20 +52,13 @@ def generate_launch_description():
     world = LaunchConfiguration('world')
     webots = WebotsLauncher(world=PathJoinSubstitution([package_dir, 'resource/worlds', world]), stream=True)
 
-    ego_vehicle_controller = WebotsController(
-        respawn=True, 
-        parameters=[{'robot_description': ego_vehicle_urdf}], 
-        robot_name='ego_vehicle', 
-    )
-
     return LaunchDescription([
         DeclareLaunchArgument(
             'world', 
             default_value='BEV.wbt', 
-            description='Projection matrices calculation world', 
+            description='Projection and weight matrices calculation world', 
         ), 
         webots, 
-        ego_vehicle_controller, 
         launch.actions.RegisterEventHandler(
             event_handler=launch.event_handlers.OnProcessExit(
                 target_action=webots, 
