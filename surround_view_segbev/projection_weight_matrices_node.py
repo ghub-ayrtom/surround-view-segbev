@@ -10,6 +10,7 @@ from .scripts.PointSelectorGUI import display_image
 import numpy as np
 from PIL import Image
 import os
+import cv2
 
 
 class ProjectionWeightMatricesNode(Node):
@@ -39,7 +40,7 @@ class ProjectionWeightMatricesNode(Node):
         bev.white_balance()
         bev.add_ego_vehicle()
 
-        ret = display_image("Bird's Eye View", bev.image)
+        ret = display_image("Bird's Eye View", cv2.cvtColor(bev.image, cv2.COLOR_BGR2RGB))
 
         if ret > 0:
             result_images_save_path = os.path.join(

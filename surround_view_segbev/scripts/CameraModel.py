@@ -1,5 +1,5 @@
 import cv2
-from configs import global_settings
+from configs import global_settings, bev_parameters
 import numpy as np
 import os
 import time
@@ -257,24 +257,15 @@ class CameraModel:
     def get_projection_matrix(self, image):
         image_undistorted = image  # self.undistort(image)
 
-        gui = PointSelector(cv2.cvtColor(image_undistorted, cv2.COLOR_RGBA2RGB), title=self.device_name)
-        choice = gui.loop()
+        # gui = PointSelector(cv2.cvtColor(image_undistorted, cv2.COLOR_RGBA2RGB), title=self.device_name)
+        # choice = gui.loop()
 
-        dst_points = {
-            'camera_front_left': [(0, 100), (400, 100), (0, 300), (400, 300)], 
-            'camera_front': [(300, 100), (700, 100), (300, 300), (700, 300)], 
-            'camera_front_right': [(600, 100), (1000, 100), (600, 300), (1000, 300)], 
-            # 'camera_rear_left': [(0, 0), (0, 0), (0, 0), (0, 0)], 
-            'camera_rear': [(300, 200), (680, 200), (300, 360), (680, 360)], 
-            # 'camera_rear': [(0, 0), (0, 0), (0, 0), (0, 0)], 
-        }
+        if True:  # choice > 0:
+            src = np.float32(bev_parameters.projection_src_points[self.device_name])  # np.float32(gui.keypoints)
+            dst = np.float32(bev_parameters.projection_dst_points[self.device_name])
 
-        if choice > 0:
-            src = np.float32(gui.keypoints)
-            dst = np.float32(dst_points[self.device_name])
-
-            projection_matrix = cv2.getPerspectiveTransform(src, dst)
-            image_projected = cv2.warpPerspective(image_undistorted, projection_matrix, (1000, 400))
+            projection_matrix, _ = cv2.findHomography(src, dst, cv2.RANSAC)  # cv2.getPerspectiveTransform(src, dst)
+            image_projected = cv2.warpPerspective(image_undistorted, projection_matrix, bev_parameters.projection_shapes[self.device_name])
 
             camera_parameters_file = cv2.FileStorage(os.path.join(
                 os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
@@ -289,7 +280,7 @@ class CameraModel:
 
                 camera_parameters_file.release()
 
-            display_image("Bird's Eye View", image_projected)
-            cv2.destroyAllWindows()
+            # display_image("Bird's Eye View", image_projected)
+            # cv2.destroyAllWindows()
 
             return self.flip(cv2.cvtColor(image_projected, cv2.COLOR_RGBA2BGR))

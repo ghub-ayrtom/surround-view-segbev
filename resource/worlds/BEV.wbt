@@ -6,6 +6,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Asphalt.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/tools/protos/EyeScrew.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/obstacles/protos/OilBarrel.proto"
 
 WorldInfo {
   contactProperties [
@@ -15,8 +16,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.5774372601830624 -0.5777931884448012 0.5768199389229439 4.188053983615129
-  position -0.007035170000001756 -0.12754600000000593 61.762100000000025
+  orientation 0.5773602107258919 0.5777390732360225 -0.5769512547234259 2.094802751083632
+  position -0.007035170000005753 -0.12754600000000593 61.76210000000005
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -25,7 +26,7 @@ TexturedBackgroundLight {
   texture "noon_sunny_empty"
 }
 MercedesBenzSprinter {
-  translation -1.25388e-05 1.97846 0.493254
+  translation -1.1276e-05 1.77846 0.492846
   rotation 0.0010216650004616936 0.0010216711903216448 -0.9999989561937582 1.5707910559799456
   color 0.427451 0.0470588 0.0784314
   name "ego_vehicle"
@@ -33,8 +34,8 @@ MercedesBenzSprinter {
   supervisor TRUE
   sensorsSlotFront [
     Camera {
-      translation -1.37206 0.99 0.4225
-      rotation 0 0 1 1.55
+      translation -3.5721 0.836 1.66828
+      rotation -0.3573701719399441 0.35765517207706493 0.862768415099985 1.71708
       children [
         RangeFinder {
           name "camera_front_left_depth"
@@ -116,8 +117,8 @@ MercedesBenzSprinter {
       }
     }
     Camera {
-      translation -1.37227 -0.974 0.4225
-      rotation 0 0 -1 1.55
+      translation -3.5721 -0.817 1.66828
+      rotation 0.3573701719399441 0.35765517207706493 -0.862768415099985 1.71708
       children [
         RangeFinder {
           name "camera_front_right_depth"
@@ -161,7 +162,7 @@ MercedesBenzSprinter {
   sensorsSlotRear [
     Camera {
       translation -6.03572 -1.0436 0.565
-      rotation 0 0 -1 0.9575
+      rotation 0 0 -1 0.9574999999999999
       children [
         RangeFinder {
           name "camera_rear_left_depth"
@@ -233,7 +234,8 @@ MercedesBenzSprinter {
       }
     }
     Camera {
-      translation 0.0145 -0.008 0.427
+      translation -0.073 -0.008 1.92955
+      rotation 0 1 0 0.785398
       children [
         RangeFinder {
           name "camera_rear_depth"
@@ -350,13 +352,13 @@ MercedesBenzSprinter {
 }
 Floor {
   name "Ground"
-  size 20 20
+  size 20 25
   appearance Asphalt {
     IBLStrength 10
   }
 }
 Transform {
-  scale 20 20 1
+  scale 20 25 1
   children [
     CadShape {
       url [
@@ -364,4 +366,28 @@ Transform {
       ]
     }
   ]
+}
+OilBarrel {
+  translation 3.11 -5.6 0.6
+  name "Oil Barrel 1"
+  height 1
+  radius 0.3
+}
+OilBarrel {
+  translation -3.15 -5.6 0.6
+  name "Oil Barrel 2"
+  height 1
+  radius 0.3
+}
+OilBarrel {
+  translation -3.15 5.62 0.6
+  name "Oil Barrel 3"
+  height 1
+  radius 0.3
+}
+OilBarrel {
+  translation 3.1 5.62 0.6
+  name "Oil Barrel 4"
+  height 1
+  radius 0.3
 }

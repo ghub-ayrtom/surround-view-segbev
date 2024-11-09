@@ -1,12 +1,13 @@
 import numpy as np
 from .utils import *
 import cv2
+from configs import bev_parameters
 
 
-xl = 400
-xr = 1000 - xl
-yt = 400
-yb = 1000 - yt
+xl = bev_parameters.vehicle_leftside_edges_x
+xr = bev_parameters.vehicle_rightside_edges_x
+yt = bev_parameters.vehicle_topside_edges_y
+yb = bev_parameters.vehicle_bottomside_edges_y
 
 
 def get_upper_part(image):
@@ -43,7 +44,7 @@ class BirdsEyeView():
         self.weights = None
         self.masks = None
 
-        self.image = np.zeros((1000, 1000, 3), np.uint8)
+        self.image = np.zeros((bev_parameters.total_height, bev_parameters.total_width, 3), np.uint8)
 
 
     def get_weights_and_masks(self):
@@ -212,4 +213,5 @@ class BirdsEyeView():
             'resource/images/ego_vehicle.png'
         ))
 
+        ego_vehicle_image = cv2.cvtColor(ego_vehicle_image, cv2.COLOR_BGR2RGB)
         np.copyto(self.central, cv2.resize(ego_vehicle_image, (xr - xl, yb - yt)))
