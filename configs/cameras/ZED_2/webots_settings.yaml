@@ -5,6 +5,9 @@ devices_name: [
   'camera_front_depth', 
   'camera_front', 
 
+  'camera_front_blind_depth', 
+  'camera_front_blind', 
+
   'camera_front_right_depth', 
   'camera_front_right', 
 

@@ -18,6 +18,9 @@ camera_topics = {
     'camera_front': '/ego_vehicle/camera_front/image_color', 
     'camera_front_depth': '/ego_vehicle/camera_front_depth/image', 
 
+    'camera_front_blind': '/ego_vehicle/camera_front_blind/image_color', 
+    'camera_front_blind_depth': '/ego_vehicle/camera_front_blind_depth/image', 
+
     # 'camera_front_right': '/ego_vehicle/camera_front_right/image_color', 
     # 'camera_front_right_depth': '/ego_vehicle/camera_front_right_depth/image', 
 
@@ -84,6 +87,17 @@ class SurroundViewNode(Node):
                     f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
                 ), image_color)
             case 'camera_front_depth':
+                cv2.imwrite(os.path.join(
+                    os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name[:-6]}/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                ), image_depth)
+
+            case 'camera_front_blind':
+                cv2.imwrite(os.path.join(
+                    os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/color/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                ), image_color)
+            case 'camera_front_blind_depth':
                 cv2.imwrite(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
                     f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name[:-6]}/depth/{time.strftime("%Y%m%d-%H%M%S")}.png'

@@ -3,9 +3,15 @@
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/mercedes_benz/MercedesBenzSprinter.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Asphalt.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/tools/protos/EyeScrew.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Sand.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/road/protos/CurvedRoadSegment.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Grass.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/trees/protos/Forest.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/RoughConcrete.proto"
+EXTERNPROTO "../protos/PlasticBarrel.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/traffic/protos/Pole.proto"
 
 WorldInfo {
   contactProperties [
@@ -15,8 +21,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5775881701411486 0.5780037145706395 -0.5764578142895996 2.0950570189617066
-  position -0.0070351699999999795 -0.12754599999999972 61.7621
+  orientation 0.5774776616734559 0.5777747763704889 -0.5767979352062463 2.094678579666947
+  position -0.2269559615539265 14.850750142222665 61.790964294652895
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -25,16 +31,16 @@ TexturedBackgroundLight {
   texture "noon_sunny_empty"
 }
 MercedesBenzSprinter {
-  translation -1.25575e-05 1.98105 0.393254
-  rotation 0.0010216648173501078 0.001021671008430163 -0.999998956194131 1.5707910547845452
+  translation -0.000107357 16.991 0.393878
+  rotation 0.0010216648173501078 0.0010216710084301633 -0.999998956194131 1.5707910547845452
   color 0.427451 0.0470588 0.0784314
   name "ego_vehicle"
   controller "<extern>"
   supervisor TRUE
   sensorsSlotFront [
     Camera {
-      translation -1.37206 0.99 0.4225
-      rotation 0 0 1 1.55
+      translation -3.5721 0.836 1.66828
+      rotation -0.3573701719399441 0.35765517207706493 0.862768415099985 1.71708
       children [
         RangeFinder {
           name "camera_front_left_depth"
@@ -43,11 +49,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            center 0.45 0.55
-            radialCoefficients 0.25 -0.25
-            tangentialCoefficients 0.005 -0.005
-          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.0425
@@ -72,9 +73,6 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -82,6 +80,7 @@ MercedesBenzSprinter {
     }
     Camera {
       translation -1.19 0.01 1.17
+      rotation 0 1 0 -5.30718e-06
       children [
         RangeFinder {
           name "camera_front_depth"
@@ -90,11 +89,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            center 0.45 0.55
-            radialCoefficients 0.25 -0.25
-            tangentialCoefficients 0.005 -0.005
-          }
         }
         Transform {
           translation -0.21 -2.14118e-07 -0.042
@@ -119,17 +113,54 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
       }
     }
     Camera {
-      translation -1.37227 -0.974 0.4225
-      rotation 0 0 -1 1.55
+      translation 0.0522 0.01 0.262
+      rotation 0 1 0 0.695
+      children [
+        RangeFinder {
+          name "camera_front_blind_depth"
+          fieldOfView 1.9198621771937625
+          width 1305
+          height 640
+          minRange 0.2
+          maxRange 20
+        }
+        Transform {
+          translation -0.21 -2.14118e-07 -0.042
+          rotation 0 0 -0.9999999999999999 1.5707953071795862
+          scale 0.001 0.001 0.001
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 0
+              }
+              geometry Mesh {
+                url [
+                  "../models/ZED_2/ZED_2.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "camera_front_blind"
+      fieldOfView 1.9198621771937625
+      width 1305
+      height 640
+      lens Lens {
+      }
+      focus Focus {
+        focalLength 457
+      }
+    }
+    Camera {
+      translation -3.5721 -0.817 1.66828
+      rotation 0.3573701719399441 0.35765517207706493 -0.862768415099985 1.71708
       children [
         RangeFinder {
           name "camera_front_right_depth"
@@ -138,11 +169,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            center 0.45 0.55
-            radialCoefficients 0.25 -0.25
-            tangentialCoefficients 0.005 -0.005
-          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.0425
@@ -167,9 +193,6 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -188,11 +211,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            center 0.45 0.55
-            radialCoefficients 0.25 -0.25
-            tangentialCoefficients 0.005 -0.005
-          }
         }
         Group {
           children [
@@ -248,16 +266,14 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
       }
     }
     Camera {
-      translation 0.0145 -0.008 0.427
+      translation -0.073 -0.008 1.92955
+      rotation 0 1 0 0.785398
       children [
         RangeFinder {
           name "camera_rear_depth"
@@ -266,11 +282,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            center 0.45 0.55
-            radialCoefficients 0.25 -0.25
-            tangentialCoefficients 0.005 -0.005
-          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.042
@@ -295,9 +306,6 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -314,11 +322,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-            center 0.45 0.55
-            radialCoefficients 0.25 -0.25
-            tangentialCoefficients 0.005 -0.005
-          }
         }
         Group {
           children [
@@ -374,9 +377,6 @@ MercedesBenzSprinter {
       width 1305
       height 640
       lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
       }
       focus Focus {
         focalLength 457
@@ -384,9 +384,1057 @@ MercedesBenzSprinter {
     }
   ]
 }
-Floor {
-  name "Ground"
-  appearance Asphalt {
-    IBLStrength 10
+Pose {
+  translation 0 20 0
+  children [
+    Floor {
+      name "Start"
+      size 20 20
+      tileSize 5 5
+      appearance Sand {
+        textureTransform TextureTransform {
+          rotation 1
+          scale 1 2
+        }
+        IBLStrength 3
+      }
+    }
+  ]
+}
+CurvedRoadSegment {
+  translation -500 10 0
+  rotation 0 0 1 -1.5707953071795862
+  name "Track"
+  width 20
+  numberOfLanes 1
+  rightBorder FALSE
+  leftBorder FALSE
+  rightBarrier TRUE
+  leftBarrier TRUE
+  curvatureRadius 500
+  totalAngle 0.5
+  startLine [
+    ""
+  ]
+  endLine [
+    ""
+  ]
+  appearance Sand {
+    textureTransform TextureTransform {
+      rotation 2
+      scale 1 2
+    }
+    IBLStrength 3
   }
+  locked FALSE
+}
+Pose {
+  translation -66.0029 -238.488 0
+  rotation 0 0 1 -0.5
+  children [
+    Floor {
+      name "Finish"
+      size 20 20
+      tileSize 5 5
+      appearance Sand {
+        textureTransform TextureTransform {
+          rotation 1
+          scale 1 2
+        }
+        IBLStrength 3
+      }
+    }
+  ]
+}
+Pose {
+  translation -2.073 -111.028 -0.01
+  children [
+    Floor {
+      name "Ground"
+      size 155 282.06
+      tileSize 5 5
+      appearance Grass {
+        IBLStrength 3
+      }
+    }
+  ]
+}
+Forest {
+  shape [
+    -50 252.057
+    0 115
+    20.35 -30.002
+    75.427 -30.002
+    75.427 252.057
+  ]
+  type "spruce"
+  maxHeight 10
+}
+Forest {
+  shape [
+    -79.57 225
+    -79.57 -30.002
+    -10 -30
+    -27.5 100
+    -75 225
+  ]
+  type "spruce"
+  maxHeight 10
+}
+Solid {
+  translation -9.5 12.51 0.5
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 1"
+}
+Solid {
+  translation -9.5 20.01 0.5
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 2"
+}
+Solid {
+  translation -9.5 27.5 0.5
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 3"
+}
+Solid {
+  translation 9.5 12.51 0.5
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 4"
+}
+Solid {
+  translation 9.5 20.01 0.5
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 5"
+}
+Solid {
+  translation 6.5 22.01 0.5
+  rotation 0 0 1 1.5708
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 6"
+}
+Solid {
+  translation 1.5 22.01 0.5
+  rotation 0 0 1 1.5708
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 7"
+}
+Solid {
+  translation -6.5 29.5 0.5
+  rotation 0 0 1 -1.5707953071795862
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 8"
+}
+Solid {
+  translation -1.5 29.5 0.5
+  rotation 0 0 1 -1.5707953071795862
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 9"
+}
+Solid {
+  translation -70.8792 -227.605 0.5
+  rotation 0 0 1 -0.5
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 10"
+}
+Solid {
+  translation -74.4086 -234.058 0.5
+  rotation 0 0 1 -0.5
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 11"
+}
+Solid {
+  translation -77.935 -240.515 0.5
+  rotation 0 0 1 -0.5
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 12"
+}
+Solid {
+  translation -76.2632 -243.704 0.5
+  rotation 0 0 1 -2.070795307179586
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 13"
+}
+Solid {
+  translation -71.876 -246.101 0.5
+  rotation 0 0 1 -2.070795307179586
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 14"
+}
+Solid {
+  translation -53.9211 -236.192 0.5
+  rotation 0 0 1 -0.5
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 15"
+}
+Solid {
+  translation -57.5169 -242.767 0.5
+  rotation 0 0 1 -0.5
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 16"
+}
+Solid {
+  translation -61.1063 -243.09 0.5
+  rotation 0 0 1 -2.070795307179586
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 17"
+}
+Solid {
+  translation -65.4866 -240.697 0.5
+  rotation 0 0 1 -2.070795307179586
+  children [
+    Shape {
+      appearance RoughConcrete {
+        IBLStrength 3
+      }
+      geometry Box {
+        size 1 5 1
+      }
+    }
+  ]
+  name "Concrete Block 18"
+}
+PlasticBarrel {
+  translation -7.26 0 -0.01
+  name "Plastic Barrel 1"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -6.38 0 -0.01
+  name "Plastic Barrel 2"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation 6.53 -9.07 -0.01
+  name "Plastic Barrel 3"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation 2.53 -15.27 -0.01
+  name "Plastic Barrel 4"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -2.73 -37.88 -0.01
+  name "Plastic Barrel 5"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation 1.85 -53.09 -0.01
+  name "Plastic Barrel 6"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation 0.97 -53.09 -0.01
+  name "Plastic Barrel 7"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -14.22 -76.43 -0.01
+  name "Plastic Barrel 8"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -13.34 -76.43 -0.01
+  name "Plastic Barrel 9"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -4.54 -87.57 -0.01
+  name "Plastic Barrel 10"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -20.35 -131.13 -0.01
+  name "Plastic Barrel 11"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -39.95 -163.71 -0.01
+  name "Plastic Barrel 12"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -23.82 -168.96 -0.01
+  name "Plastic Barrel 13"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -35.29 -187.14 -0.01
+  name "Plastic Barrel 14"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -36.17 -187.14 -0.01
+  name "Plastic Barrel 15"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -50.16 -199.97 -0.01
+  name "Plastic Barrel 16"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -39.24 -199.15 -0.01
+  name "Plastic Barrel 17"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -54.1 -214.06 -0.01
+  name "Plastic Barrel 18"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -53.22 -214.06 -0.01
+  name "Plastic Barrel 19"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -58.76 -224.45 -0.01
+  name "Plastic Barrel 20"
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+Pole {
+  translation -12.55 -15.1745 -0.02
+  rotation 0 0 1 -2.3561953071795863
+  name "Road Sign 1"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/2.1.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation -14.9765 -49.1524 -0.02
+  rotation 0 0 -1 1.8325953071795864
+  name "Road Sign 2"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/2.4.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation -20.951 -75.3382 -0.02
+  rotation 0 0 -1 1.5708
+  name "Road Sign 3"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/3.18.1.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation -40.0909 -149.204 -0.02
+  rotation 0 0 1 -2.3561953071795863
+  name "Road Sign 4"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/5.15.4.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation -43.6267 -145.671 -0.02
+  rotation 0 0 1 -2.3561953071795863
+  name "Road Sign 5"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/4.1.4.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation -67.11 -212.586 -0.02
+  rotation 0 0 1 -2.3561953071795863
+  name "Road Sign 6"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/5.15.5.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation -42.9126 -224.472 -0.02
+  rotation 0 0 1 0.523598
+  name "Road Sign 7"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/5.15.6.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation -20.2149 -169.279 -0.02
+  rotation 0 0 1 0.785394
+  name "Road Sign 8"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/5.15.4.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation -6.86035 -125.109 -0.02
+  rotation 0 0 1 0.785396
+  name "Road Sign 9"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/4.1.3.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation -2.81356 -114.126 -0.02
+  rotation 0 0 1 0.785395
+  name "Road Sign 10"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/3.18.2.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation 2.72574 -82.8473 -0.02
+  rotation 0 0 1 1.309
+  name "Road Sign 11"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/6.8.1.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation 9.19094 -41.9522 -0.02
+  rotation 0 0 1 1.5708
+  name "Road Sign 12"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/2.3.2.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
+}
+Pole {
+  translation 14.4931 -10.5272 -0.02
+  rotation 0 0 -1 -1.0472053071795866
+  name "Road Sign 13"
+  slot [
+    Transform {
+      translation -0.04 0 0
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              url [
+                "../images/Road Signs/6.3.1.png"
+              ]
+            }
+          }
+          geometry Box {
+            size 0.01 0.75 0.75
+          }
+        }
+      ]
+    }
+  ]
 }

@@ -248,7 +248,7 @@ class CameraModel:
                 return cv2.transpose(image)[::-1]
             case 'camera_front_right' | 'camera_rear_right':
                 return np.flip(cv2.transpose(image), 1)
-            case 'camera_front':
+            case 'camera_front' | 'camera_front_blind':
                 return image.copy()
             case 'camera_rear':
                 return image.copy()[::-1, ::-1, :]

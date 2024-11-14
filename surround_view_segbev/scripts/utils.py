@@ -36,10 +36,12 @@ def get_outmost_polygon_boundary(image):
     mask = get_mask(image)
     mask = cv2.dilate(mask, np.ones((2, 2), np.uint8), iterations=2)
 
+    polygon = None
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2:]
-    C = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)[0]
 
-    polygon = cv2.approxPolyDP(C, 0.009 * cv2.arcLength(C, True), True)
+    if len(contours) > 0:
+        C = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)[0]
+        polygon = cv2.approxPolyDP(C, 0.009 * cv2.arcLength(C, True), True)
 
     return polygon
 
@@ -58,13 +60,18 @@ def get_weight_mask_matrix(image_1, image_2, max_distance=5):
     image_1_polygon = get_outmost_polygon_boundary(image_1_unique_region)
     image_2_polygon = get_outmost_polygon_boundary(image_2_unique_region)
 
+    distance_to_image_1_polygon = 0.0
+    distance_to_image_2_polygon = 0.0
+
     for y, x in zip(*overlap_pixels_indices):
         xy = tuple([int(x), int(y)])
 
-        distance_to_image_2_polygon = cv2.pointPolygonTest(image_2_polygon, xy, True)
+        if (image_2_polygon is not None) and (image_2_polygon.all() is not None):
+            distance_to_image_2_polygon = cv2.pointPolygonTest(image_2_polygon, xy, True)
 
         if distance_to_image_2_polygon < max_distance:
-            distance_to_image_1_polygon = cv2.pointPolygonTest(image_1_polygon, xy, True)
+            if (image_1_polygon is not None) and (image_1_polygon.all() is not None):
+                distance_to_image_1_polygon = cv2.pointPolygonTest(image_1_polygon, xy, True)
 
             distance_to_image_2_polygon *= distance_to_image_2_polygon
             distance_to_image_1_polygon *= distance_to_image_1_polygon

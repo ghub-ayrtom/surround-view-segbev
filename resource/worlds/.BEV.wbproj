@@ -7,6 +7,8 @@ centralWidgetVisible: 1
 orthographicViewHeight: 1
 textFiles: -1
 renderingDevicePerspectives: ego_vehicle:camera_front;0;0.45364;0;0
+renderingDevicePerspectives: ego_vehicle:camera_front_blind;0;0.45364;0;0
+renderingDevicePerspectives: ego_vehicle:camera_front_blind_depth;0;0.45364;0;0
 renderingDevicePerspectives: ego_vehicle:camera_front_depth;0;0.45364;0;0
 renderingDevicePerspectives: ego_vehicle:camera_front_left;0;0.45364;0;0
 renderingDevicePerspectives: ego_vehicle:camera_front_left_depth;0;0.45364;0;0

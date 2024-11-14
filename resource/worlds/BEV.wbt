@@ -16,8 +16,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5773602107258919 0.5777390732360225 -0.5769512547234259 2.094802751083632
-  position -0.007035170000005753 -0.12754600000000593 61.76210000000005
+  orientation -0.5771991304184774 -0.5775423323353974 0.5773092916320877 4.18813669592718
+  position -0.007035170000001756 -0.12754600000001304 61.762100000000075
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -27,7 +27,7 @@ TexturedBackgroundLight {
 }
 MercedesBenzSprinter {
   translation -1.1276e-05 1.77846 0.492846
-  rotation 0.0010216650004616936 0.0010216711903216448 -0.9999989561937582 1.5707910559799456
+  rotation 0.0010216650004616936 0.0010216711903216448 -0.9999989561937582 1.5707910559799458
   color 0.427451 0.0470588 0.0784314
   name "ego_vehicle"
   controller "<extern>"
@@ -44,8 +44,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.0425
@@ -77,6 +75,7 @@ MercedesBenzSprinter {
     }
     Camera {
       translation -1.19 0.01 1.17
+      rotation 0 1 0 -5.307179586466759e-06
       children [
         RangeFinder {
           name "camera_front_depth"
@@ -85,8 +84,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-          }
         }
         Transform {
           translation -0.21 -2.14118e-07 -0.042
@@ -117,6 +114,46 @@ MercedesBenzSprinter {
       }
     }
     Camera {
+      translation 0.0522 0.01 0.262
+      rotation 0 1 0 0.6949999999999997
+      children [
+        RangeFinder {
+          name "camera_front_blind_depth"
+          fieldOfView 1.9198621771937625
+          width 1305
+          height 640
+          minRange 0.2
+          maxRange 20
+        }
+        Transform {
+          translation -0.21 -2.14118e-07 -0.042
+          rotation 0 0 -0.9999999999999999 1.5707953071795862
+          scale 0.001 0.001 0.001
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 0
+              }
+              geometry Mesh {
+                url [
+                  "../models/ZED_2/ZED_2.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "camera_front_blind"
+      fieldOfView 1.9198621771937625
+      width 1305
+      height 640
+      lens Lens {
+      }
+      focus Focus {
+        focalLength 457
+      }
+    }
+    Camera {
       translation -3.5721 -0.817 1.66828
       rotation 0.3573701719399441 0.35765517207706493 -0.862768415099985 1.71708
       children [
@@ -127,8 +164,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.0425
@@ -171,8 +206,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-          }
         }
         Group {
           children [
@@ -244,8 +277,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-          }
         }
         Transform {
           translation -0.0217 -3.05886e-08 -0.042
@@ -286,8 +317,6 @@ MercedesBenzSprinter {
           height 640
           minRange 0.2
           maxRange 20
-          lens Lens {
-          }
         }
         Group {
           children [

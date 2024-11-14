@@ -37,6 +37,7 @@ vehicle_bottomside_edges_y = total_height - vehicle_topside_edges_y
 projection_shapes = {
     'camera_front_left': (total_height, vehicle_leftside_edges_x), 
     'camera_front': (total_width, vehicle_topside_edges_y), 
+    'camera_front_blind': (total_width, vehicle_topside_edges_y), 
     'camera_front_right': (total_height, vehicle_leftside_edges_x), 
     # 'camera_rear_left': (0, 0), 
     'camera_rear': (total_width, vehicle_topside_edges_y), 
@@ -56,6 +57,13 @@ projection_src_points = {
         (937, 410), 
         (0, 531), 
         (1304, 531), 
+    ], 
+
+    'camera_front_blind': [
+        (272, 25), 
+        (1035, 25), 
+        (0, 89), 
+        (1304, 89), 
     ], 
 
     'camera_front_right': [
@@ -101,10 +109,17 @@ projection_dst_points = {
     ], 
 
     'camera_front': [
-        (far_shift_width + 110, far_shift_height), 
+        (far_shift_width + 109, far_shift_height), 
         (far_shift_width + 470, far_shift_height), 
-        (far_shift_width + 110, far_shift_height + 155), 
+        (far_shift_width + 109, far_shift_height + 155), 
         (far_shift_width + 470, far_shift_height + 155), 
+    ], 
+
+    'camera_front_blind': [
+        (far_shift_width + 109, far_shift_height), 
+        (far_shift_width + 470, far_shift_height), 
+        (far_shift_width + 109, far_shift_height + 110.5), 
+        (far_shift_width + 470, far_shift_height + 110.5), 
     ], 
 
     'camera_front_right': [

@@ -51,6 +51,27 @@ chessboards_movement_trajectory = {
         ['Y', -4.0], 
     ],
 
+    'chessboard_front_blind': [ 
+        ['Y', -3.25], 
+        ['X', 0.6], 
+        ['X', 0.1], 
+        ['X', -0.4], 
+        ['X', 0.1], 
+        ['Z', [-0.0926917, -0.704062, -0.704063, -2.95674]], 
+        ['Z', [-0.186157, -0.694746, -0.694747, -2.7735]], 
+        ['Z', [-0.281085, -0.678598, -0.678599, -2.59357]], 
+        ['Z', [-0.186157, -0.694746, -0.694747, -2.7735]], 
+        ['Z', [-0.0926917, -0.704062, -0.704063, -2.95674]], 
+        ['Z', [-3.3905e-09, 0.707106, 0.707107, 3.14159]], 
+        ['Z', [-0.0926917, 0.704062, 0.704063, -2.95675]], 
+        ['Z', [0.186157, -0.694746, -0.694747, 2.7735]], 
+        ['Z', [0.281085, -0.678598, -0.678599, 2.59357]], 
+        ['Z', [0.186157, -0.694746, -0.694747, 2.7735]], 
+        ['Z', [-0.0926917, 0.704062, 0.704063, -2.95675]], 
+        ['Z', [-3.3905e-09, 0.707106, 0.707107, 3.14159]], 
+        ['Y', -4.0], 
+    ],
+
     'chessboard_front_right': [ 
         ['X', -3.0], 
         ['Z', [-0.677661, -0.519988, -0.519988, -1.95044]], 
@@ -235,6 +256,7 @@ class ChessboardsControllerNode(Node):
             if supervisor:
                 self.chessboard_front_left = Chessboard('chessboard_front_left')
                 self.chessboard_front = Chessboard('chessboard_front')
+                self.chessboard_front_blind = Chessboard('chessboard_front_blind')
                 self.chessboard_front_right = Chessboard('chessboard_front_right')
 
                 # self.chessboard_rear_left = Chessboard('chessboard_rear_left')
@@ -243,6 +265,7 @@ class ChessboardsControllerNode(Node):
 
                 self.camera_front_left = CameraModel('camera_front_left', node_logger, related_chessboard=self.chessboard_front_left, load_parameters=False)
                 self.camera_front = CameraModel('camera_front', node_logger, related_chessboard=self.chessboard_front, load_parameters=False)
+                self.camera_front_blind = CameraModel('camera_front_blind', node_logger, related_chessboard=self.chessboard_front_blind, load_parameters=False)
                 self.camera_front_right = CameraModel('camera_front_right', node_logger, related_chessboard=self.chessboard_front_right, load_parameters=False)
 
                 # self.camera_rear_left = CameraModel('camera_rear_left', node_logger, related_chessboard=self.chessboard_rear_left, load_parameters=False)
@@ -264,6 +287,7 @@ def main(args=None):
         while supervisor.step(global_settings.SIMULATION_TIME_STEP) != -1:
             cfl_image_color = image_bytes_to_numpy_array(node.camera_front_left.device.getImage(), node.camera_front_left.image_shape, camera_name=node.camera_front_left.device_name)
             cf_image_color = image_bytes_to_numpy_array(node.camera_front.device.getImage(), node.camera_front.image_shape, camera_name=node.camera_front.device_name)
+            cfb_image_color = image_bytes_to_numpy_array(node.camera_front_blind.device.getImage(), node.camera_front_blind.image_shape, camera_name=node.camera_front_blind.device_name)
             cfr_image_color = image_bytes_to_numpy_array(node.camera_front_right.device.getImage(), node.camera_front_right.image_shape, camera_name=node.camera_front_right.device_name)
 
             # crl_image_color = image_bytes_to_numpy_array(node.camera_rear_left.device.getImage(), node.camera_rear_left.image_shape, camera_name=node.camera_rear_left.device_name)
@@ -275,6 +299,9 @@ def main(args=None):
 
             node.camera_front.calibrate_camera(cf_image_color)
             node.chessboard_front.update_position()
+
+            node.camera_front_blind.calibrate_camera(cfb_image_color)
+            node.chessboard_front_blind.update_position()
 
             node.camera_front_right.calibrate_camera(cfr_image_color)
             node.chessboard_front_right.update_position()

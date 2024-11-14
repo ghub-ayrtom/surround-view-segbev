@@ -35,10 +35,10 @@ MercedesBenzSprinter {
   hidden rotation_2 -7.856838407197545e-12 0.9999999710939536 0.00024044145185318398 6.664001874625056e-08
   hidden rotation_3 0 0.9999999999999999 0 0.00011349772251931514
   hidden rotation_4 0 -0.9999999999999999 0 0.00011349777338516787
-  hidden translation_15 -0.951000630686298 -0.0017981189983862222 0.5609649462396564
-  hidden rotation_15 -0.018682093490394836 0.9994032078386927 0.02905524986206655 -1.0465039168830739
-  hidden translation_21 -0.9510363609259568 0.0019359430098329078 0.5608564875654831
-  hidden rotation_21 -0.02301394782697329 0.9987987404615746 0.0432600769508054 -1.0470970087227665
+  hidden translation_17 -0.951000630686298 -0.0017981189983862222 0.5609649462396564
+  hidden rotation_17 -0.018682093490394836 0.9994032078386927 0.02905524986206655 -1.0465039168830739
+  hidden translation_23 -0.9510363609259568 0.0019359430098329078 0.5608564875654831
+  hidden rotation_23 -0.02301394782697329 0.9987987404615746 0.0432600769508054 -1.0470970087227665
   translation 0.09998739972230822 1.9807673360519888 0.36325389284134746
   rotation 0.0010216645561230858 0.0010216707472434816 -0.9999989561946648 1.570791054741876
   color 0.427451 0.0470588 0.0784314
@@ -47,8 +47,8 @@ MercedesBenzSprinter {
   supervisor TRUE
   sensorsSlotFront [
     Camera {
-      translation -1.37206 0.99 0.4225
-      rotation 0 0 1 1.55
+      translation -3.5721 0.836 1.66828
+      rotation -0.3573701719399441 0.35765517207706493 0.862768415099985 1.71708
       children [
         RangeFinder {
           name "camera_front_left_depth"
@@ -91,6 +91,7 @@ MercedesBenzSprinter {
     }
     Camera {
       translation -1.19 0.01 1.17
+      rotation 0 1 0 -5.30718e-06
       children [
         RangeFinder {
           name "camera_front_depth"
@@ -132,8 +133,51 @@ MercedesBenzSprinter {
       }
     }
     Camera {
-      translation -1.37227 -0.974 0.4225
-      rotation 0 0 -1 1.55
+      translation 0.0522 0.01 0.262
+      rotation 0 1 0 0.695
+      children [
+        RangeFinder {
+          name "camera_front_blind_depth"
+          fieldOfView 1.9198621771937625
+          width 1305
+          height 640
+          minRange 0.2
+          maxRange 20
+        }
+        Transform {
+          translation -0.21 -2.14118e-07 -0.042
+          rotation 0 0 -0.9999999999999999 1.5707953071795862
+          scale 0.001 0.001 0.001
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 0
+              }
+              geometry Mesh {
+                url [
+                  "../models/ZED_2/ZED_2.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "camera_front_blind"
+      fieldOfView 1.9198621771937625
+      width 1305
+      height 640
+      lens Lens {
+        center 0.45 0.55
+        radialCoefficients 0.25 -0.25
+        tangentialCoefficients 0.005 -0.005
+      }
+      focus Focus {
+        focalLength 457
+      }
+    }
+    Camera {
+      translation -3.5721 -0.817 1.66828
+      rotation 0.3573701719399441 0.35765517207706493 -0.862768415099985 1.71708
       children [
         RangeFinder {
           name "camera_front_right_depth"
@@ -251,7 +295,8 @@ MercedesBenzSprinter {
       }
     }
     Camera {
-      translation 0.0145 -0.008 0.427
+      translation -0.073 -0.008 1.92955
+      rotation 0 1 0 0.785398
       children [
         RangeFinder {
           name "camera_rear_depth"
