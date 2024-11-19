@@ -8,7 +8,6 @@ from .scripts.utils import image_bytes_to_numpy_array
 from .scripts.BirdsEyeView import BirdsEyeView
 from .scripts.PointSelectorGUI import display_image
 import numpy as np
-from PIL import Image
 import os
 import cv2
 
@@ -33,7 +32,7 @@ class ProjectionWeightMatricesNode(Node):
 
 
     def get_weight_matrix(self, images):
-        bev = BirdsEyeView(images, self._logger)
+        bev = BirdsEyeView(self._logger, images=images)
 
         Gmat, Mmat = bev.get_weights_and_masks()
         # bev.luminance_balance()
@@ -44,12 +43,15 @@ class ProjectionWeightMatricesNode(Node):
         ret = display_image("Bird's Eye View", cv2.cvtColor(bev.image, cv2.COLOR_BGR2RGB))
 
         if ret > 0:
-            result_images_save_path = os.path.join(
-                os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 'resource/images/'
+            result_files_save_path = os.path.join(
+                os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 'configs/BEV/'
             )
 
-            Image.fromarray((Gmat * 255).astype(np.uint8)).save(result_images_save_path + 'weights.png')
-            Image.fromarray(Mmat.astype(np.uint8)).save(result_images_save_path + 'masks.png')
+            np.save(result_files_save_path + 'weights.npy', Gmat)
+            np.save(result_files_save_path + 'masks.npy', Mmat)
+
+            bev.frames.clear()
+            cv2.destroyAllWindows()
 
 
 def main(args=None):
@@ -59,7 +61,7 @@ def main(args=None):
         supervisor = Supervisor()
         node = ProjectionWeightMatricesNode()
 
-        images_projected = []
+        images_projected = {}
 
         while supervisor.step(global_settings.SIMULATION_TIME_STEP) != -1:
             cfl_image_color = image_bytes_to_numpy_array(node.camera_front_left.device.getImage(), node.camera_front_left.image_shape, camera_name=node.camera_front_left.device_name)
@@ -71,14 +73,14 @@ def main(args=None):
             cr_image_color = image_bytes_to_numpy_array(node.camera_rear.device.getImage(), node.camera_rear.image_shape, camera_name=node.camera_rear.device_name)
             # crr_image_color = image_bytes_to_numpy_array(node.camera_rear_right.device.getImage(), node.camera_rear_right.image_shape, camera_name=node.camera_rear_right.device_name)
 
-            images_projected.append(node.camera_front_left.get_projection_matrix(cfl_image_color))
-            images_projected.append(node.camera_front.get_projection_matrix(cf_image_color))
-            images_projected.append(node.camera_front_blind.get_projection_matrix(cfb_image_color))
-            images_projected.append(node.camera_front_right.get_projection_matrix(cfr_image_color))
+            images_projected[node.camera_front_left.device_name] = node.camera_front_left.get_projection_matrix(cfl_image_color, gotten=False)
+            images_projected[node.camera_front.device_name] = node.camera_front.get_projection_matrix(cf_image_color, gotten=False)
+            images_projected[node.camera_front_blind.device_name] = node.camera_front_blind.get_projection_matrix(cfb_image_color, gotten=False)
+            images_projected[node.camera_front_right.device_name] = node.camera_front_right.get_projection_matrix(cfr_image_color, gotten=False)
 
-            # images_projected.append(node.camera_rear_left.get_projection_matrix(crl_image_color))
-            images_projected.append(node.camera_rear.get_projection_matrix(cr_image_color))
-            # images_projected.append(node.camera_rear_right.get_projection_matrix(crr_image_color))
+            # images_projected[node.camera_rear_left.device_name] = node.camera_rear_left.get_projection_matrix(crl_image_color, gotten=False)
+            images_projected[node.camera_rear.device_name] = node.camera_rear.get_projection_matrix(cr_image_color, gotten=False)
+            # images_projected[node.camera_rear_right.device_name] = node.camera_rear_right.get_projection_matrix(crr_image_color, gotten=False)
 
             node.get_weight_matrix(images_projected)
 

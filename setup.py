@@ -44,6 +44,7 @@ setup(
     tests_require=['pytest'], 
     entry_points={
         'console_scripts': [
+            'ackermann_keyboard_teleop_node = surround_view_segbev.ackermann_keyboard_teleop_node:main', 
             'chessboards_controller_node = surround_view_segbev.chessboards_controller_node:main', 
             'projection_weight_matrices_node = surround_view_segbev.projection_weight_matrices_node:main', 
             'surround_view_node = surround_view_segbev.surround_view_node:main', 

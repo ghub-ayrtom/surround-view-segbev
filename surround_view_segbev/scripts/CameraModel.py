@@ -1,5 +1,6 @@
 import cv2
-from configs import global_settings, bev_parameters
+from configs import global_settings
+from configs.BEV import bev_parameters
 import numpy as np
 import os
 import time
@@ -9,10 +10,11 @@ import yaml
 from .PointSelectorGUI import PointSelector, display_image
 
 
+if os.getenv('USING_EXTERN_CONTROLLER') is None:
+    supervisor = Supervisor()
+
 CALIBRATION_IMAGES_COUNT = 50
 CHESSBOARD_PATTERN_SIZE = (7, 7)  # Размерность внутренних пересечений (паттерна) шахматной доски
-
-supervisor = Supervisor()
 
 
 class CameraModel:
@@ -40,11 +42,14 @@ class CameraModel:
 
 
     def __init__(self, webots_camera_name, node_logger, related_chessboard=None, load_parameters=True):
-        self.device = supervisor.getDevice(webots_camera_name)
-        self.device.enable(int(supervisor.getBasicTimeStep()))
+        if os.getenv('USING_EXTERN_CONTROLLER') is None:
+            self.device = supervisor.getDevice(webots_camera_name)
 
-        if self.device is None:
-            node_logger.error('The Webots camera device with the specified name was not found!')
+            if self.device is None:
+                node_logger.error('The Webots camera device with the specified name was not found!')
+            else:
+                self.device.enable(int(supervisor.getBasicTimeStep()))
+
         self.device_name = webots_camera_name
 
         self.load_parameters = load_parameters
@@ -56,6 +61,8 @@ class CameraModel:
         self.node_logger = node_logger
         self.chessboard = related_chessboard
 
+        self.projection_matrix_received = False
+
         ### Параметры камеры
 
         self.image_shape = [0, 0, 0]
@@ -65,6 +72,8 @@ class CameraModel:
         self.K = np.zeros((3, 3))
         # Вектор коэффициентов дисторсии, которая зачастую вызвана радиальными и тангенциальными искажениями из-за линзы объектива видеокамеры
         self.D = np.zeros((5, 1))
+
+        self.projection_matrix = np.zeros((3, 3))
 
         # Векторы (ось) вращения для каждого из калибровочных изображений, длина которых - это значение угла поворота камеры по одной из трёх осей относительно мировых координат
         self.rotation_vectors = [np.zeros((1, 1, 3), dtype=np.float64) for _ in range(CALIBRATION_IMAGES_COUNT)]  # Ориентация в пространстве относительно сцены
@@ -91,6 +100,7 @@ class CameraModel:
                     self.image_shape = np.array(fs.getNode('image_resolution').mat(), dtype=int).flatten()
                     self.K = np.array(fs.getNode('camera_matrix').mat())
                     self.D = np.array(fs.getNode('distortion_coefficients').mat())
+                    self.projection_matrix = np.array(fs.getNode('projection_matrix').mat())
 
                     fs.release()
             except Exception as e:
@@ -254,33 +264,35 @@ class CameraModel:
                 return image.copy()[::-1, ::-1, :]
 
 
-    def get_projection_matrix(self, image):
+    def get_projection_matrix(self, image, gotten=True):
         image_undistorted = image  # self.undistort(image)
 
-        # gui = PointSelector(cv2.cvtColor(image_undistorted, cv2.COLOR_RGBA2RGB), title=self.device_name)
-        # choice = gui.loop()
+        if not gotten:
+            # gui = PointSelector(cv2.cvtColor(image_undistorted, cv2.COLOR_RGBA2RGB), title=self.device_name)
+            # choice = gui.loop()
 
-        if True:  # choice > 0:
-            src = np.float32(bev_parameters.projection_src_points[self.device_name])  # np.float32(gui.keypoints)
-            dst = np.float32(bev_parameters.projection_dst_points[self.device_name])
+            if True:  # choice > 0:
+                src = np.float32(bev_parameters.projection_src_points[self.device_name])  # np.float32(gui.keypoints)
+                dst = np.float32(bev_parameters.projection_dst_points[self.device_name])
 
-            projection_matrix, _ = cv2.findHomography(src, dst, cv2.RANSAC)  # cv2.getPerspectiveTransform(src, dst)
-            image_projected = cv2.warpPerspective(image_undistorted, projection_matrix, bev_parameters.projection_shapes[self.device_name])
+                self.projection_matrix, _ = cv2.findHomography(src, dst, cv2.RANSAC)  # cv2.getPerspectiveTransform(src, dst)
 
-            camera_parameters_file = cv2.FileStorage(os.path.join(
-                os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-                f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
-            ), cv2.FILE_STORAGE_WRITE)
+                camera_parameters_file = cv2.FileStorage(os.path.join(
+                    os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+                    f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
+                ), cv2.FILE_STORAGE_WRITE)
 
-            if camera_parameters_file.isOpened():
-                camera_parameters_file.write('image_resolution', np.int32([image.shape[0], image.shape[1], 4]))
-                camera_parameters_file.write('camera_matrix', self.K)
-                camera_parameters_file.write('distortion_coefficients', self.D)
-                camera_parameters_file.write('projection_matrix', projection_matrix)
+                if camera_parameters_file.isOpened():
+                    camera_parameters_file.write('image_resolution', np.int32([image.shape[0], image.shape[1], 4]))
+                    camera_parameters_file.write('camera_matrix', self.K)
+                    camera_parameters_file.write('distortion_coefficients', self.D)
+                    camera_parameters_file.write('projection_matrix', self.projection_matrix)
 
-                camera_parameters_file.release()
+                    camera_parameters_file.release()
 
-            # display_image("Bird's Eye View", image_projected)
-            # cv2.destroyAllWindows()
+        image_projected = cv2.warpPerspective(image_undistorted, self.projection_matrix, bev_parameters.projection_shapes[self.device_name])
 
-            return self.flip(cv2.cvtColor(image_projected, cv2.COLOR_RGBA2BGR))
+        # display_image("Bird's Eye View", image_projected)
+        # cv2.destroyAllWindows()
+
+        return self.flip(cv2.cvtColor(image_projected, cv2.COLOR_RGBA2BGR))

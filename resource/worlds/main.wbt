@@ -12,6 +12,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/RoughConcrete.proto"
 EXTERNPROTO "../protos/PlasticBarrel.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/traffic/protos/Pole.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/traffic/protos/GenericTrafficLight.proto"
 
 WorldInfo {
   contactProperties [
@@ -21,8 +22,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5774776616734559 0.5777747763704889 -0.5767979352062463 2.094678579666947
-  position -0.2269559615539265 14.850750142222665 61.790964294652895
+  orientation 0.5774746227227228 0.5777726183995374 -0.576803139328308 2.0946476340578815
+  position -0.2269559615539265 14.850750142222664 61.790964294652895
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -494,6 +495,9 @@ Solid {
     }
   ]
   name "Concrete Block 1"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -9.5 20.01 0.5
@@ -508,6 +512,9 @@ Solid {
     }
   ]
   name "Concrete Block 2"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -9.5 27.5 0.5
@@ -522,6 +529,9 @@ Solid {
     }
   ]
   name "Concrete Block 3"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation 9.5 12.51 0.5
@@ -536,6 +546,9 @@ Solid {
     }
   ]
   name "Concrete Block 4"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation 9.5 20.01 0.5
@@ -550,6 +563,9 @@ Solid {
     }
   ]
   name "Concrete Block 5"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation 6.5 22.01 0.5
@@ -565,6 +581,9 @@ Solid {
     }
   ]
   name "Concrete Block 6"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation 1.5 22.01 0.5
@@ -580,6 +599,9 @@ Solid {
     }
   ]
   name "Concrete Block 7"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -6.5 29.5 0.5
@@ -595,6 +617,9 @@ Solid {
     }
   ]
   name "Concrete Block 8"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -1.5 29.5 0.5
@@ -610,6 +635,9 @@ Solid {
     }
   ]
   name "Concrete Block 9"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -70.8792 -227.605 0.5
@@ -625,6 +653,9 @@ Solid {
     }
   ]
   name "Concrete Block 10"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -74.4086 -234.058 0.5
@@ -640,6 +671,9 @@ Solid {
     }
   ]
   name "Concrete Block 11"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -77.935 -240.515 0.5
@@ -655,6 +689,9 @@ Solid {
     }
   ]
   name "Concrete Block 12"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -76.2632 -243.704 0.5
@@ -670,6 +707,9 @@ Solid {
     }
   ]
   name "Concrete Block 13"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -71.876 -246.101 0.5
@@ -685,6 +725,9 @@ Solid {
     }
   ]
   name "Concrete Block 14"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -53.9211 -236.192 0.5
@@ -700,6 +743,9 @@ Solid {
     }
   ]
   name "Concrete Block 15"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -57.5169 -242.767 0.5
@@ -715,6 +761,9 @@ Solid {
     }
   ]
   name "Concrete Block 16"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -61.1063 -243.09 0.5
@@ -730,6 +779,9 @@ Solid {
     }
   ]
   name "Concrete Block 17"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 Solid {
   translation -65.4866 -240.697 0.5
@@ -745,10 +797,25 @@ Solid {
     }
   ]
   name "Concrete Block 18"
+  boundingObject Box {
+    size 1 5 1
+  }
 }
 PlasticBarrel {
   translation -7.26 0 -0.01
   name "Plastic Barrel 1"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -768,6 +835,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -6.38 0 -0.01
   name "Plastic Barrel 2"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -787,6 +866,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation 6.53 -9.07 -0.01
   name "Plastic Barrel 3"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -806,6 +897,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation 2.53 -15.27 -0.01
   name "Plastic Barrel 4"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -825,6 +928,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -2.73 -37.88 -0.01
   name "Plastic Barrel 5"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -844,6 +959,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation 1.85 -53.09 -0.01
   name "Plastic Barrel 6"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -863,6 +990,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation 0.97 -53.09 -0.01
   name "Plastic Barrel 7"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -882,6 +1021,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -14.22 -76.43 -0.01
   name "Plastic Barrel 8"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -901,6 +1052,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -13.34 -76.43 -0.01
   name "Plastic Barrel 9"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -920,6 +1083,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -4.54 -87.57 -0.01
   name "Plastic Barrel 10"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -939,6 +1114,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -20.35 -131.13 -0.01
   name "Plastic Barrel 11"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -958,6 +1145,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -39.95 -163.71 -0.01
   name "Plastic Barrel 12"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -977,6 +1176,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -23.82 -168.96 -0.01
   name "Plastic Barrel 13"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -996,6 +1207,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -35.29 -187.14 -0.01
   name "Plastic Barrel 14"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -1015,6 +1238,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -36.17 -187.14 -0.01
   name "Plastic Barrel 15"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -1034,6 +1269,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -50.16 -199.97 -0.01
   name "Plastic Barrel 16"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -1053,6 +1300,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -39.24 -199.15 -0.01
   name "Plastic Barrel 17"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -1072,6 +1331,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -54.1 -214.06 -0.01
   name "Plastic Barrel 18"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -1091,6 +1362,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -53.22 -214.06 -0.01
   name "Plastic Barrel 19"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -1110,6 +1393,18 @@ PlasticBarrel {
 PlasticBarrel {
   translation -58.76 -224.45 -0.01
   name "Plastic Barrel 20"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
   modelPath [
     "../models/plastic_barrel/plastic_barrel.dae"
   ]
@@ -1131,7 +1426,7 @@ Pole {
   rotation 0 0 1 -2.3561953071795863
   name "Road Sign 1"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1155,7 +1450,7 @@ Pole {
   rotation 0 0 -1 1.8325953071795864
   name "Road Sign 2"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1179,7 +1474,7 @@ Pole {
   rotation 0 0 -1 1.5708
   name "Road Sign 3"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1203,7 +1498,7 @@ Pole {
   rotation 0 0 1 -2.3561953071795863
   name "Road Sign 4"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1227,7 +1522,7 @@ Pole {
   rotation 0 0 1 -2.3561953071795863
   name "Road Sign 5"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1251,7 +1546,7 @@ Pole {
   rotation 0 0 1 -2.3561953071795863
   name "Road Sign 6"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1275,7 +1570,7 @@ Pole {
   rotation 0 0 1 0.523598
   name "Road Sign 7"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1299,7 +1594,7 @@ Pole {
   rotation 0 0 1 0.785394
   name "Road Sign 8"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1323,7 +1618,7 @@ Pole {
   rotation 0 0 1 0.785396
   name "Road Sign 9"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1347,7 +1642,7 @@ Pole {
   rotation 0 0 1 0.785395
   name "Road Sign 10"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1371,7 +1666,7 @@ Pole {
   rotation 0 0 1 1.309
   name "Road Sign 11"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1395,7 +1690,7 @@ Pole {
   rotation 0 0 1 1.5708
   name "Road Sign 12"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1419,7 +1714,7 @@ Pole {
   rotation 0 0 -1 -1.0472053071795866
   name "Road Sign 13"
   slot [
-    Transform {
+    Pose {
       translation -0.04 0 0
       children [
         Shape {
@@ -1437,4 +1732,13 @@ Pole {
       ]
     }
   ]
+}
+GenericTrafficLight {
+  translation -2.51004 9.574 -0.01
+  rotation 0 0 1 1.5708
+  name "Traffic Light"
+  startGreen FALSE
+  greenTime 2
+  redTime 1
+  state "red"
 }

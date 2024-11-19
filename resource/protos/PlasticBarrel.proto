@@ -7,6 +7,8 @@ PROTO PlasticBarrel [
   field SFBool     castShadows       TRUE
   field SFBool     isPickable        TRUE
   field SFString   contactMaterial   "default"
+  field SFNode     physics           NULL
+  field SFNode     boundingObject    NULL
   field MFString   modelPath            ["models/plastic_barrel/plastic_barrel.dae"]
   field MFString   baseColorTexturePath ["models/plastic_barrel/textures/base_map.jpg"]
   field MFString   roughnessTexturePath ["models/plastic_barrel/textures/roughness_map.jpg"]
@@ -14,7 +16,6 @@ PROTO PlasticBarrel [
   field MFString   normalTexturePath    ["models/plastic_barrel/textures/normal_map.png"]
   field SFFloat    translationStep   0.01
   field SFFloat    rotationStep      0.262
-  field SFFloat    mass              10.0 # Кг
 ] {
   Solid {
     translation IS translation
@@ -44,8 +45,8 @@ PROTO PlasticBarrel [
     ]
     name IS name
     contactMaterial IS contactMaterial
-    physics NULL
-    boundingObject NULL
+    physics IS physics
+    boundingObject IS boundingObject
     locked FALSE
     radarCrossSection 0
     recognitionColors [

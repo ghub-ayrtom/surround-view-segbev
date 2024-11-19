@@ -75,6 +75,8 @@ def generate_launch_description():
         robot_name='ego_vehicle', 
     )
 
+    os.environ['USING_EXTERN_CONTROLLER'] = 'True'
+
     return LaunchDescription([
         DeclareLaunchArgument(
             'world', 

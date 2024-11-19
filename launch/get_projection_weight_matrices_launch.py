@@ -4,9 +4,7 @@ import launch
 from launch.substitutions import LaunchConfiguration
 from launch import LaunchDescription
 from launch_ros.actions import Node
-import os
 from launch.substitutions.path_join_substitution import PathJoinSubstitution
-import pathlib
 from webots_ros2_driver.webots_launcher import WebotsLauncher
 
 
@@ -14,7 +12,6 @@ PACKAGE_NAME = 'surround_view_segbev'
 USE_SIM_TIME = True
 
 package_dir = get_package_share_directory(PACKAGE_NAME)
-ego_vehicle_urdf = os.path.join(package_dir, pathlib.Path(os.path.join(package_dir, 'resource/descriptions', 'EgoVehicle.urdf')))
 
 
 def get_ros2_nodes():

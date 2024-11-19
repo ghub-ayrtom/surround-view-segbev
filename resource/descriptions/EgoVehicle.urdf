@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<robot name="/home/ayrtom/Computer Vision/dev/FQW_ws/src/surround-view-segbev/resources/descriptions/EgoVehicle.urdf" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="/home/ayrtom/Computer Vision/dev/FQW_ws/src/surround_view_segbev/resources/descriptions/EgoVehicle.urdf" xmlns:xacro="http://ros.org/wiki/xacro">
+	<webots>
+    <plugin type="surround_view_segbev.plugins.EgoVehicleDriver.EgoVehicleDriver"/>
+  </webots>
   <link name="base_link">
     <visual>
       <origin xyz="1.69 0 0.52" rpy="0 0 0"/>
