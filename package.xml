@@ -3,7 +3,7 @@
 <package format="3">
   <name>surround_view_segbev</name>
   <version>0.0.1</version>
-  <description>Segmented local map for self-driving vehicles path planning based on a two-dimensional (2D) surround view system</description>
+  <description>Segmented local map for unmanned ground vehicles path planning based on a two-dimensional surround view system</description>
   <maintainer email="molchanovlive@gmail.com">Molchanov Artyom</maintainer>
   <license>No license</license>
   <export>

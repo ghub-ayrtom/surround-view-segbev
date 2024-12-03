@@ -39,13 +39,14 @@ setup(
     zip_safe=True, 
     maintainer='Molchanov Artyom', 
     maintainer_email='molchanovlive@gmail.com', 
-    description='Segmented local map for self-driving vehicles path planning based on a two-dimensional (2D) surround view system', 
+    description='Segmented local map for unmanned ground vehicles path planning based on a two-dimensional surround view system', 
     license='No license', 
     tests_require=['pytest'], 
     entry_points={
         'console_scripts': [
             'ackermann_keyboard_teleop_node = surround_view_segbev.ackermann_keyboard_teleop_node:main', 
             'chessboards_controller_node = surround_view_segbev.chessboards_controller_node:main', 
+            'gps_path_planning_node = surround_view_segbev.gps_path_planning_node:main', 
             'projection_weight_matrices_node = surround_view_segbev.projection_weight_matrices_node:main', 
             'surround_view_node = surround_view_segbev.surround_view_node:main', 
         ], 

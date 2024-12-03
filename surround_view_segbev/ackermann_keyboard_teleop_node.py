@@ -9,9 +9,9 @@ import traceback
 
 control_keys_bindings = {
     '\x77': ['w', (1.0, 0.0)], 
-    '\x61': ['a', (0.0, 1.0)], 
+    '\x61': ['a', (0.0, -1.0)], 
     '\x73': ['s', (-1.0, 0.0)], 
-    '\x64': ['d', (0.0, -1.0)], 
+    '\x64': ['d', (0.0, 1.0)], 
     '\x20': ['space', (0.0, 0.0)], 
     '\x09': ['tab', (0.0, 0.0)], 
 }
@@ -21,7 +21,6 @@ class AckermannKeyboardTeleopNode(Node):
 
     def __init__(self):
         super().__init__('ackermann_keyboard_teleop_node')
-        self._logger.info('Successfully launched!')
 
         self.current_speed = 0.0
         self.current_steering_angle = 0.0
@@ -50,6 +49,8 @@ class AckermannKeyboardTeleopNode(Node):
             f'*                                               *'
             f'\n* * * * * * * * * * * * * * * * * * * * * * * * *\n'
         )
+
+        self._logger.info('Successfully launched!')
 
         self.print_current_values()
         self.key_loop()

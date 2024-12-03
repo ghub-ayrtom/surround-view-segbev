@@ -42,6 +42,14 @@ def get_ros2_nodes():
         output='screen', 
     )
 
+    gps_path_planning_node = Node(
+        executable='gps_path_planning_node', 
+        package=PACKAGE_NAME, 
+        name='gps_path_planning_node', 
+        parameters=[{'use_sim_time': False}], 
+        output='screen', 
+    )
+
     static_transforms = [
         ['map', 'odom'], 
         ['odom', 'base_link'], 
@@ -62,6 +70,7 @@ def get_ros2_nodes():
     return [
         ego_vehicle_state_publisher_node, 
         surround_view_node, 
+        gps_path_planning_node, 
     ] + static_transform_nodes
 
 

@@ -248,7 +248,6 @@ class ChessboardsControllerNode(Node):
     def __init__(self):
         try:
             super().__init__('chessboards_controller_node')
-            self._logger.info('Successfully launched!')
 
             global node_logger
             node_logger = self._logger
@@ -271,6 +270,8 @@ class ChessboardsControllerNode(Node):
                 # self.camera_rear_left = CameraModel('camera_rear_left', node_logger, related_chessboard=self.chessboard_rear_left, load_parameters=False)
                 self.camera_rear = CameraModel('camera_rear', node_logger, related_chessboard=self.chessboard_rear, load_parameters=False)
                 # self.camera_rear_right = CameraModel('camera_rear_right', node_logger, related_chessboard=self.chessboard_rear_right, load_parameters=False)
+
+                self._logger.info('Successfully launched!')
         except Exception as e:
             self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 

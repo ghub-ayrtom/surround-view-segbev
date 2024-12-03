@@ -3,6 +3,7 @@ import cv2
 import os
 from configs import global_settings
 import time
+import math
 
 
 def image_bytes_to_numpy_array(image_bytes, image_shape, camera_name='', debug=False):
@@ -107,3 +108,120 @@ def make_white_balance(image):
     R = adjust_luminance(R, c3)
 
     return cv2.merge((B, G, R))
+
+
+def get_median_vector(vector_1, vector_2, k):
+    return [vector_1[1] * k + vector_2[1] * (1 - k), vector_1[2] * k + vector_2[2] * (1 - k)]
+
+
+def normalize_angle(angle):
+    return (angle + math.pi) % (2 * math.pi) - math.pi
+
+
+def get_vector_angle_relative_X(vector):
+        return normalize_angle(math.atan2(vector[1], vector[0]) / math.pi * 180)
+
+
+def get_vectors_angle(vector_1, vector_2):
+    return normalize_angle(get_vector_angle_relative_X(vector_1) - get_vector_angle_relative_X(vector_2))
+
+
+def get_image_relative_coordinates(image_shape, x, y, scale_x=1.0, scale_y=1.0):
+    return int(image_shape[1] / 2.0 + x * scale_x), int(image_shape[0] / 2.0 - y * scale_y)
+
+
+def euler_from_quaternion(x, y, z, w):
+    magnitude = math.sqrt(x * x + y * y + z * z + w * w)
+
+    x /= magnitude
+    y /= magnitude
+    z /= magnitude
+    w /= magnitude
+
+    t0 = 2.0 * (w * x + y * z)
+    t1 = 1.0 - 2.0 * (x * x + y * y)
+    roll_x = math.atan2(t0, t1)
+
+    t2 = 2.0 * (w * y - z * x)
+    t2 = max(-1.0, min(1.0, t2))
+    pitch_y = math.asin(t2)
+
+    t3 = 2.0 * (w * z + x * y)
+    t4 = 1.0 - 2.0 * (y * y + z * z)
+    yaw_z = math.atan2(t3, t4)
+
+    return roll_x, pitch_y, yaw_z
+
+
+def draw_path_on_surround_view(surround_view_image, ego_vehicle_vector, ego_vehicle_position, route):
+    cv2.circle(
+            surround_view_image, 
+            get_image_relative_coordinates(
+                surround_view_image.shape, 
+                ego_vehicle_position[1] - ego_vehicle_position[1], 
+                ego_vehicle_position[0] - ego_vehicle_position[0], 
+            ), 
+            5, 
+            (0, 0, 255), 
+            -1, 
+        )
+
+    cv2.arrowedLine(
+        surround_view_image, 
+        get_image_relative_coordinates(
+            surround_view_image.shape, 
+            ego_vehicle_position[1] - ego_vehicle_position[1], 
+            ego_vehicle_position[0] - ego_vehicle_position[0], 
+        ), 
+        get_image_relative_coordinates(
+            surround_view_image.shape, 
+            ego_vehicle_position[1] - ego_vehicle_vector[0], 
+            ego_vehicle_vector[1], 
+            scale_x=33.0, 
+            scale_y=33.0, 
+        ), 
+        (0, 0, 255), 
+        3, 
+    )
+
+    '''
+
+    for point in route:
+        if point[0]:
+            point_color = (0, 255, 0)
+
+            cv2.putText(
+                surround_view_image, 
+                f'{(point[3] - 5.0):.1f}', 
+                get_image_relative_coordinates(
+                    surround_view_image.shape, 
+                    (point[2] - ego_vehicle_position[1]) + 0.175, 
+                    point[1] - ego_vehicle_position[0], 
+                    scale_x=20.0, 
+                    scale_y=20.0, 
+                ), 
+                0, 
+                0.75, 
+                point_color, 
+                2, 
+            )
+        else:
+            point_color = (0, 255, 255)
+
+        cv2.circle(
+            surround_view_image, 
+            get_image_relative_coordinates(
+                surround_view_image.shape, 
+                point[2] - ego_vehicle_position[1], 
+                point[1] - ego_vehicle_position[0], 
+                scale_x=20.0, 
+                scale_y=20.0, 
+            ), 
+            5, 
+            point_color, 
+            -1, 
+        )
+
+    '''
+
+    return surround_view_image

@@ -3,7 +3,7 @@ import cv2
 from rclpy.node import Node
 import numpy as np
 import rclpy
-import sensor_msgs.msg
+from sensor_msgs.msg import Image
 from message_filters import Subscriber, TimeSynchronizer
 import traceback
 from .scripts.CameraModel import CameraModel
@@ -39,7 +39,6 @@ class SurroundViewNode(Node):
     def __init__(self):
         try:
             super().__init__('surround_view_node')
-            self._logger.info('Successfully launched!')
 
             self.camera_front_left = CameraModel('camera_front_left', self._logger)
             self.camera_front = CameraModel('camera_front', self._logger)
@@ -51,18 +50,20 @@ class SurroundViewNode(Node):
             # self.camera_rear_right = CameraModel('camera_rear_right', self._logger)
 
             self.bev = BirdsEyeView(self._logger, load_weights_and_masks=True)
-            self.surround_view_publisher = self.create_publisher(sensor_msgs.msg.Image, '/surround_view', 10)
+            self.surround_view_publisher = self.create_publisher(Image, '/surround_view', 10)
 
             self.images_projected = {}
             camera_topics_subscribers = []
 
             for camera_name in camera_topics.keys():
-                subscriber = Subscriber(self, sensor_msgs.msg.Image, camera_topics[camera_name])
+                subscriber = Subscriber(self, Image, camera_topics[camera_name])
                 subscriber.registerCallback(self.__on_color_image_message, camera_name)
 
                 camera_topics_subscribers.append(subscriber)
 
             TimeSynchronizer(camera_topics_subscribers, 1).registerCallback(self.__on_color_image_message)
+
+            self._logger.info('Successfully launched!')
         except Exception as e:
             self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 

@@ -17,7 +17,6 @@ class ProjectionWeightMatricesNode(Node):
     def __init__(self):
         try:
             super().__init__('projection_weight_matrices_node')
-            self._logger.info('Successfully launched!')
 
             self.camera_front_left = CameraModel('camera_front_left', self._logger)
             self.camera_front = CameraModel('camera_front', self._logger)
@@ -27,6 +26,8 @@ class ProjectionWeightMatricesNode(Node):
             # self.camera_rear_left = CameraModel('camera_rear_left', self._logger)
             self.camera_rear = CameraModel('camera_rear', self._logger)
             # self.camera_rear_right = CameraModel('camera_rear_right', self._logger)
+
+            self._logger.info('Successfully launched!')
         except Exception as e:
             self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 
