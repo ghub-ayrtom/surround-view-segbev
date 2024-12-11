@@ -34,7 +34,7 @@ TexturedBackgroundLight {
 }
 MercedesBenzSprinter {
   translation -0.000107357 16.991 0.393878
-  rotation 0.001128149692340488 0.0011281396923432149 -0.9999987272887431 1.5708
+  rotation 0 0 1 -1.5708
   color 0.427451 0.0470588 0.0784314
   name "ego_vehicle"
   controller "<extern>"
@@ -391,8 +391,7 @@ MercedesBenzSprinter {
     }
   ]
   sensorsSlotCenter [
-    InertialUnit {
-      name "imu"
+    Compass {
     }
   ]
 }

@@ -1,6 +1,6 @@
 from rclpy.node import Node
 import rclpy
-from sensor_msgs.msg import NavSatFix, Image, Imu
+from sensor_msgs.msg import NavSatFix, Image, MagneticField
 import traceback
 import math
 from ackermann_msgs.msg import AckermannDrive
@@ -23,21 +23,20 @@ class GPSPathPlanningNode(Node):
             self.max_steering_angle = global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE
 
             self.ego_vehicle_vector = []
-            self.ego_vehicle_position = []
+            self.ego_vehicle_vector_relative = []
 
-            self.roll, self.pitch, self.yaw = 0.0, 0.0, 0.0
-            self.create_subscription(Imu, '/imu', self.__imu_callback, 1)
-
-            # active, latitude (Y), longitude (X), distance
-            self.route = [
-                [False, -3.0033403515877835, 1.9076212569577976e-05, 0.0], 
-                # [False, -32.06279467008776, -7.789157866052413, 0.0], 
-                # [False, -51.335662524526406, -2.525439545257973, 0.0], 
-                # [False, -148.01160921471228, -28.23647957745029, 0.0], 
-                # [False, -173.03383070766156, -28.133704336866714, 0.0], 
-            ]
+            self.yaw = 0.0
+            self.create_subscription(MagneticField, '/compass', self.__compass_callback, 1)
 
             self.current_route_point_index = 0
+            # active, latitude (Y), longitude (X), distance
+            self.route = [
+                [False, 16.991067331610402, -0.00010735764714900826, 0.0], 
+                [False, 9.968392320728903, -0.00013375661671748124, 0.0], 
+                [False, 1.3373338213758672, 5.0329741047400685, 0.0], 
+            ]
+
+            self.ego_vehicle_position = []
             self.create_subscription(NavSatFix, '/gps', self.__gps_callback, 1)
 
             self.drive_command = AckermannDrive()
@@ -47,7 +46,7 @@ class GPSPathPlanningNode(Node):
             self.create_subscription(Image, '/surround_view', self.__surround_view_callback, 10)
 
             self.callbacks_status = {
-                'imu': False, 
+                'compass': False, 
                 'gps': False, 
                 'surround_view': False, 
             }
@@ -58,12 +57,13 @@ class GPSPathPlanningNode(Node):
 
 
     def __surround_view_callback(self, message):
-        if self.callbacks_status['imu'] and self.callbacks_status['gps']:
+        if self.callbacks_status['compass'] and self.callbacks_status['gps']:
             surround_view_image = CvBridge().imgmsg_to_cv2(message, 'bgr8')
 
             surround_view_frame = draw_path_on_surround_view(
                 surround_view_image, 
-                self.ego_vehicle_vector, 
+                self.ego_vehicle_vector_relative, 
+                self.yaw, 
                 self.ego_vehicle_position, 
                 self.route, 
             )
@@ -75,18 +75,27 @@ class GPSPathPlanningNode(Node):
                 self.callbacks_status['surround_view'] = True
 
 
-    def __imu_callback(self, message):
-        x, y, z, w = message.orientation.x, message.orientation.y, message.orientation.z, message.orientation.w
-        self.roll, self.pitch, self.yaw = euler_from_quaternion(x, y, z, w)
+    def __compass_callback(self, message):
+        x, y, z = message.magnetic_field.x, message.magnetic_field.y, message.magnetic_field.z
+        self.yaw = math.atan2(y, x)
 
+        if self.yaw < 0.0:
+            self.yaw += 2.0 * math.pi  # [0, 2π]
         self.ego_vehicle_vector = [math.cos(self.yaw), math.sin(self.yaw)]
 
-        if not self.callbacks_status['imu']:
-            self.callbacks_status['imu'] = True
+        self.ego_vehicle_vector_relative = [
+            self.ego_vehicle_vector[0] * math.cos(-self.yaw) - self.ego_vehicle_vector[1] * math.sin(-self.yaw), 
+            self.ego_vehicle_vector[0] * math.sin(-self.yaw) + self.ego_vehicle_vector[1] * math.cos(-self.yaw), 
+        ]
+
+        if not self.callbacks_status['compass']:
+            self.callbacks_status['compass'] = True
 
 
     def __gps_callback(self, message):
-        self.ego_vehicle_position = [message.latitude, message.longitude]
+        self.ego_vehicle_position = [message.latitude, message.longitude]  # y, x
+
+        # self._logger.info(f'{self.ego_vehicle_position}')
 
         if not self.callbacks_status['gps']:
             self.callbacks_status['gps'] = True
@@ -108,14 +117,14 @@ class GPSPathPlanningNode(Node):
             dy = target_latitude - current_latitude
             dx = target_longitude - current_longitude
 
-            if self.current_route_point_index < len(self.route) - 1:
-                current_route_point_vector = self.route[self.current_route_point_index]
-                next_route_point_vector = self.route[self.current_route_point_index + 1]
+            # if self.current_route_point_index < len(self.route) - 1:
+            #     current_route_point_vector = self.route[self.current_route_point_index]
+            #     next_route_point_vector = self.route[self.current_route_point_index + 1]
 
-                median_route_point_vector = get_median_vector(current_route_point_vector, next_route_point_vector, 0.75)
+            #     median_route_point_vector = get_median_vector(current_route_point_vector, next_route_point_vector, 0.75)
 
-                dy = median_route_point_vector[0] - current_latitude
-                dx = median_route_point_vector[1] - current_longitude
+            #     dy = median_route_point_vector[0] - current_latitude
+            #     dx = median_route_point_vector[1] - current_longitude
 
             distance_to_target_route_point = math.sqrt(dy**2 + dx**2)
             self.route[self.current_route_point_index][3] = distance_to_target_route_point

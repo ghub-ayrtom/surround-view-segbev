@@ -130,63 +130,51 @@ def get_image_relative_coordinates(image_shape, x, y, scale_x=1.0, scale_y=1.0):
     return int(image_shape[1] / 2.0 + x * scale_x), int(image_shape[0] / 2.0 - y * scale_y)
 
 
-def euler_from_quaternion(x, y, z, w):
-    magnitude = math.sqrt(x * x + y * y + z * z + w * w)
+def get_image_relative_route_point(route_point, ego_vehicle_yaw, ego_vehicle_position):
+    route_point_relative = route_point.copy()
 
-    x /= magnitude
-    y /= magnitude
-    z /= magnitude
-    w /= magnitude
+    dx = route_point[2] - ego_vehicle_position[1]
+    dy = route_point[1] - ego_vehicle_position[0]
 
-    t0 = 2.0 * (w * x + y * z)
-    t1 = 1.0 - 2.0 * (x * x + y * y)
-    roll_x = math.atan2(t0, t1)
+    route_point_relative[2] = dx * math.cos(-ego_vehicle_yaw) + dy * math.sin(-ego_vehicle_yaw)
+    route_point_relative[1] = -dx * math.sin(-ego_vehicle_yaw) + dy * math.cos(-ego_vehicle_yaw)
 
-    t2 = 2.0 * (w * y - z * x)
-    t2 = max(-1.0, min(1.0, t2))
-    pitch_y = math.asin(t2)
-
-    t3 = 2.0 * (w * z + x * y)
-    t4 = 1.0 - 2.0 * (y * y + z * z)
-    yaw_z = math.atan2(t3, t4)
-
-    return roll_x, pitch_y, yaw_z
+    return route_point_relative
 
 
-def draw_path_on_surround_view(surround_view_image, ego_vehicle_vector, ego_vehicle_position, route):
+def draw_path_on_surround_view(surround_view_image, ego_vehicle_vector_relative, ego_vehicle_yaw, ego_vehicle_position, route):
     cv2.circle(
-            surround_view_image, 
-            get_image_relative_coordinates(
-                surround_view_image.shape, 
-                ego_vehicle_position[1] - ego_vehicle_position[1], 
-                ego_vehicle_position[0] - ego_vehicle_position[0], 
-            ), 
-            5, 
-            (0, 0, 255), 
-            -1, 
-        )
+        surround_view_image, 
+        get_image_relative_coordinates(
+            surround_view_image.shape, 
+            ego_vehicle_position[1] - ego_vehicle_position[1], 
+            # 40.0 - глобальное смещение GPS в Webots относительно центра эго-автомобиля (изображения)
+            (ego_vehicle_position[0] - ego_vehicle_position[0]) - 40.0, 
+        ), 
+        5, 
+        (0, 0, 255), 
+        -1, 
+    )
 
     cv2.arrowedLine(
         surround_view_image, 
         get_image_relative_coordinates(
             surround_view_image.shape, 
             ego_vehicle_position[1] - ego_vehicle_position[1], 
-            ego_vehicle_position[0] - ego_vehicle_position[0], 
+            (ego_vehicle_position[0] - ego_vehicle_position[0]) - 40.0, 
         ), 
         get_image_relative_coordinates(
             surround_view_image.shape, 
-            ego_vehicle_position[1] - ego_vehicle_vector[0], 
-            ego_vehicle_vector[1], 
-            scale_x=33.0, 
-            scale_y=33.0, 
+            ego_vehicle_vector_relative[1], 
+            ego_vehicle_vector_relative[0], 
         ), 
         (0, 0, 255), 
         3, 
     )
 
-    '''
-
     for point in route:
+        point_relative = get_image_relative_route_point(point, ego_vehicle_yaw, ego_vehicle_position)
+
         if point[0]:
             point_color = (0, 255, 0)
 
@@ -195,10 +183,10 @@ def draw_path_on_surround_view(surround_view_image, ego_vehicle_vector, ego_vehi
                 f'{(point[3] - 5.0):.1f}', 
                 get_image_relative_coordinates(
                     surround_view_image.shape, 
-                    (point[2] - ego_vehicle_position[1]) + 0.175, 
-                    point[1] - ego_vehicle_position[0], 
-                    scale_x=20.0, 
-                    scale_y=20.0, 
+                    point_relative[2] + 0.45, 
+                    point_relative[1] - 1.45, 
+                    scale_x=30.0, 
+                    scale_y=27.5, 
                 ), 
                 0, 
                 0.75, 
@@ -212,16 +200,15 @@ def draw_path_on_surround_view(surround_view_image, ego_vehicle_vector, ego_vehi
             surround_view_image, 
             get_image_relative_coordinates(
                 surround_view_image.shape, 
-                point[2] - ego_vehicle_position[1], 
-                point[1] - ego_vehicle_position[0], 
-                scale_x=20.0, 
-                scale_y=20.0, 
+                point_relative[2], 
+                # 1.45 - относительное смещение GPS в Webots относительно центра эго-автомобиля (изображения)
+                point_relative[1] - 1.45, 
+                scale_x=30.0, 
+                scale_y=27.5, 
             ), 
             5, 
             point_color, 
             -1, 
         )
-
-    '''
 
     return surround_view_image

@@ -3,7 +3,7 @@ from ackermann_msgs.msg import AckermannDrive
 import traceback
 import time
 from configs import global_settings
-from sensor_msgs.msg import NavSatFix, Imu
+from sensor_msgs.msg import NavSatFix, MagneticField
 from rclpy.executors import MultiThreadedExecutor
 import numpy as np
 
@@ -14,9 +14,9 @@ class EgoVehicleDriver:
         self.__robot = webots_node.robot
         self.__drive_command = AckermannDrive()
 
-        self.__imu = self.__robot.getDevice('imu')
-        self.__imu_message = Imu()
-        self.__imu.enable(10)  # Обновление каждые 10 мс
+        self.__compass = self.__robot.getDevice('compass')
+        self.__compass_message = MagneticField()
+        self.__compass.enable(10)  # Обновление каждые 10 мс
 
         self.__gps = self.__robot.getDevice('gps')
         self.__gps_mesage = NavSatFix()
@@ -28,8 +28,8 @@ class EgoVehicleDriver:
         self.__node_executor = MultiThreadedExecutor()
         self.__node_executor.add_node(self.__node)
 
-        self.__imu_publisher = self.__node.create_publisher(Imu, '/imu', 1)
-        self.__node.create_timer(0.1, self.__imu_publisher_callback)
+        self.__compass_publisher = self.__node.create_publisher(MagneticField, '/compass', 1)
+        self.__node.create_timer(0.1, self.__compass_publisher_callback)
 
         self.__gps_publisher = self.__node.create_publisher(NavSatFix, '/gps', 1)
         self.__node.create_timer(0.1, self.__gps_publisher_callback)
@@ -40,15 +40,14 @@ class EgoVehicleDriver:
         self.__node._logger.info('Successfully launched!')
 
 
-    def __imu_publisher_callback(self):
-        x, y, z, w = self.__imu.getQuaternion()
+    def __compass_publisher_callback(self):
+        coordinates = self.__compass.getValues()
 
-        self.__imu_message.orientation.x = x
-        self.__imu_message.orientation.y = y
-        self.__imu_message.orientation.z = z
-        self.__imu_message.orientation.w = w
+        self.__compass_message.magnetic_field.x = coordinates[0]
+        self.__compass_message.magnetic_field.y = coordinates[1]
+        self.__compass_message.magnetic_field.z = coordinates[2]
 
-        self.__imu_publisher.publish(self.__imu_message)
+        self.__compass_publisher.publish(self.__compass_message)
 
 
     def __gps_publisher_callback(self):
