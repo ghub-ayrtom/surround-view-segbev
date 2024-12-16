@@ -110,20 +110,14 @@ def make_white_balance(image):
     return cv2.merge((B, G, R))
 
 
-def get_median_vector(vector_1, vector_2, k):
-    return [vector_1[1] * k + vector_2[1] * (1 - k), vector_1[2] * k + vector_2[2] * (1 - k)]
-
-
-def normalize_angle(angle):
-    return (angle + math.pi) % (2 * math.pi) - math.pi
-
-
-def get_vector_angle_relative_X(vector):
-        return normalize_angle(math.atan2(vector[1], vector[0]) / math.pi * 180)
-
-
 def get_vectors_angle(vector_1, vector_2):
-    return normalize_angle(get_vector_angle_relative_X(vector_1) - get_vector_angle_relative_X(vector_2))
+    # a * b = ax * bx + ay * by = |a| * |b| * cos(θ)
+    scalar = vector_1[0] * vector_2[0] + vector_1[1] * vector_2[1]
+
+    # det(a, b) = ax * by - ay * bx = |a| * |b| * sin(θ)
+    determinant = vector_1[0] * vector_2[1] - vector_1[1] * vector_2[0]  # det(a, b) > 0 - b CCW a, det(a, b) < 0 - b CW a
+
+    return math.atan2(determinant, scalar)  # (-π, π]
 
 
 def get_image_relative_coordinates(image_shape, x, y, scale_x=1.0, scale_y=1.0):
@@ -143,6 +137,64 @@ def get_image_relative_route_point(route_point, ego_vehicle_yaw, ego_vehicle_pos
 
 
 def draw_path_on_surround_view(surround_view_image, ego_vehicle_vector_relative, ego_vehicle_yaw, ego_vehicle_position, route):
+    for i, point in enumerate(route):
+        point_relative = get_image_relative_route_point(point, ego_vehicle_yaw, ego_vehicle_position)
+        point_color = (0, 255, 0) if point[0] else (0, 255, 255)
+
+        cv2.circle(
+            surround_view_image, 
+            get_image_relative_coordinates(
+                surround_view_image.shape, 
+                point_relative[2], 
+                # 1.45 - относительное смещение GPS в Webots относительно центра эго-автомобиля (изображения)
+                point_relative[1] - 1.45, 
+                scale_x=30.0, 
+                scale_y=27.5, 
+            ), 
+            5, 
+            point_color, 
+            -1, 
+        )
+
+        if i != 0 and point[0]:
+            previous_point_relative = get_image_relative_route_point(route[i - 1], ego_vehicle_yaw, ego_vehicle_position)
+
+            cv2.arrowedLine(
+                surround_view_image, 
+                get_image_relative_coordinates(
+                    surround_view_image.shape, 
+                    previous_point_relative[2], 
+                    previous_point_relative[1] - 1.45, 
+                    scale_x=30.0, 
+                    scale_y=27.5, 
+                ), 
+                get_image_relative_coordinates(
+                    surround_view_image.shape, 
+                    point_relative[2], 
+                    point_relative[1] - 1.45, 
+                    scale_x=30.0, 
+                    scale_y=27.5, 
+                ), 
+                (255, 0, 255), 
+                3, 
+            )
+
+            cv2.putText(
+                surround_view_image, 
+                f'{(point[3] - 5.0):.1f}', 
+                get_image_relative_coordinates(
+                    surround_view_image.shape, 
+                    point_relative[2] + 0.45, 
+                    point_relative[1] - 1.45, 
+                    scale_x=30.0, 
+                    scale_y=27.5, 
+                ), 
+                0, 
+                0.75, 
+                point_color, 
+                2, 
+            )
+
     cv2.circle(
         surround_view_image, 
         get_image_relative_coordinates(
@@ -171,44 +223,5 @@ def draw_path_on_surround_view(surround_view_image, ego_vehicle_vector_relative,
         (0, 0, 255), 
         3, 
     )
-
-    for point in route:
-        point_relative = get_image_relative_route_point(point, ego_vehicle_yaw, ego_vehicle_position)
-
-        if point[0]:
-            point_color = (0, 255, 0)
-
-            cv2.putText(
-                surround_view_image, 
-                f'{(point[3] - 5.0):.1f}', 
-                get_image_relative_coordinates(
-                    surround_view_image.shape, 
-                    point_relative[2] + 0.45, 
-                    point_relative[1] - 1.45, 
-                    scale_x=30.0, 
-                    scale_y=27.5, 
-                ), 
-                0, 
-                0.75, 
-                point_color, 
-                2, 
-            )
-        else:
-            point_color = (0, 255, 255)
-
-        cv2.circle(
-            surround_view_image, 
-            get_image_relative_coordinates(
-                surround_view_image.shape, 
-                point_relative[2], 
-                # 1.45 - относительное смещение GPS в Webots относительно центра эго-автомобиля (изображения)
-                point_relative[1] - 1.45, 
-                scale_x=30.0, 
-                scale_y=27.5, 
-            ), 
-            5, 
-            point_color, 
-            -1, 
-        )
 
     return surround_view_image

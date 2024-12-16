@@ -8,6 +8,9 @@ from message_filters import Subscriber, TimeSynchronizer
 import traceback
 from .scripts.CameraModel import CameraModel
 from .scripts.BirdsEyeView import BirdsEyeView
+import os
+import time
+from configs import global_settings
 
 
 camera_topics = {
@@ -39,6 +42,8 @@ class SurroundViewNode(Node):
     def __init__(self):
         try:
             super().__init__('surround_view_node')
+
+            self.collect_models_training_data = False
 
             self.camera_front_left = CameraModel('camera_front_left', self._logger)
             self.camera_front = CameraModel('camera_front', self._logger)
@@ -85,6 +90,11 @@ class SurroundViewNode(Node):
 
             match camera_name:
                 case 'camera_front_left':
+                    if self.collect_models_training_data:
+                        cv2.imwrite(os.path.join(
+                            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                        ), image_color)
                     if not self.camera_front_left.projection_matrix_received:
                         self.images_projected[camera_name] = self.camera_front_left.get_projection_matrix(image_color)
                         self.camera_front_left.projection_matrix_received = True
@@ -92,6 +102,11 @@ class SurroundViewNode(Node):
                     pass
 
                 case 'camera_front':
+                    if self.collect_models_training_data:
+                        cv2.imwrite(os.path.join(
+                            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                        ), image_color)
                     if not self.camera_front.projection_matrix_received:
                         self.images_projected[camera_name] = self.camera_front.get_projection_matrix(image_color)
                         self.camera_front.projection_matrix_received = True
@@ -99,6 +114,11 @@ class SurroundViewNode(Node):
                     pass
 
                 case 'camera_front_blind':
+                    if self.collect_models_training_data:
+                        cv2.imwrite(os.path.join(
+                            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                        ), image_color)
                     if not self.camera_front_blind.projection_matrix_received:
                         self.images_projected[camera_name] = self.camera_front_blind.get_projection_matrix(image_color)
                         self.camera_front_blind.projection_matrix_received = True
@@ -106,6 +126,11 @@ class SurroundViewNode(Node):
                     pass
 
                 case 'camera_front_right':
+                    if self.collect_models_training_data:
+                        cv2.imwrite(os.path.join(
+                            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                        ), image_color)
                     if not self.camera_front_right.projection_matrix_received:
                         self.images_projected[camera_name] = self.camera_front_right.get_projection_matrix(image_color)
                         self.camera_front_right.projection_matrix_received = True
@@ -113,6 +138,11 @@ class SurroundViewNode(Node):
                     pass
 
                 # case 'camera_rear_left':
+                #     if self.collect_models_training_data:
+                #         cv2.imwrite(os.path.join(
+                #             os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                #             f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                #         ), image_color)
                 #     if not self.camera_rear_left.projection_matrix_received:
                 #         self.images_projected[camera_name] = self.camera_rear_left.get_projection_matrix(image_color)
                 #         self.camera_rear_left.projection_matrix_received = True
@@ -120,6 +150,11 @@ class SurroundViewNode(Node):
                 #     pass
 
                 case 'camera_rear':
+                    if self.collect_models_training_data:
+                        cv2.imwrite(os.path.join(
+                            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                        ), image_color)
                     if not self.camera_rear.projection_matrix_received:
                         self.images_projected[camera_name] = self.camera_rear.get_projection_matrix(image_color)
                         self.camera_rear.projection_matrix_received = True
@@ -127,6 +162,11 @@ class SurroundViewNode(Node):
                     pass
 
                 # case 'camera_rear_right':
+                #     if self.collect_models_training_data:
+                #         cv2.imwrite(os.path.join(
+                #             os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                #             f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                #         ), image_color)
                 #     if not self.camera_rear_right.projection_matrix_received:
                 #         self.images_projected[camera_name] = self.camera_rear_right.get_projection_matrix(image_color)
                 #         self.camera_rear_right.projection_matrix_received = True
@@ -142,6 +182,12 @@ class SurroundViewNode(Node):
 
             self.images_projected.clear()
             self.surround_view_publisher.publish(CvBridge().cv2_to_imgmsg(self.bev.image, 'rgb8'))
+
+            if self.collect_models_training_data:
+                cv2.imwrite(os.path.join(
+                    os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/surround_view/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                ), cv2.cvtColor(self.bev.image, cv2.COLOR_BGR2RGB))
 
             self.camera_front_left.projection_matrix_received = False
             self.camera_front.projection_matrix_received = False

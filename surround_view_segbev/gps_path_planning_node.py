@@ -15,11 +15,7 @@ class GPSPathPlanningNode(Node):
         try:
             super().__init__('gps_path_planning_node')
 
-            self.p = 2.5
             self.max_speed = global_settings.EGO_VEHICLE_MAX_SPEED
-
-            self.ego_vehicle_turn_angle = 0.0
-            self.ego_vehicle_turn_angle_previous = 0.0
             self.max_steering_angle = global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE
 
             self.ego_vehicle_vector = []
@@ -33,7 +29,8 @@ class GPSPathPlanningNode(Node):
             self.route = [
                 [False, 16.991067331610402, -0.00010735764714900826, 0.0], 
                 [False, 9.968392320728903, -0.00013375661671748124, 0.0], 
-                [False, 1.3373338213758672, 5.0329741047400685, 0.0], 
+                [False, -4.724915343945192, -2.987762225939476, 0.0], 
+                [False, -23.72987929573131, 3.477421821567322, 0.0], 
             ]
 
             self.ego_vehicle_position = []
@@ -114,19 +111,10 @@ class GPSPathPlanningNode(Node):
             current_latitude, current_longitude = self.ego_vehicle_position
             _, target_latitude, target_longitude, _ = self.route[self.current_route_point_index]
 
-            dy = target_latitude - current_latitude
             dx = target_longitude - current_longitude
+            dy = target_latitude - current_latitude
 
-            # if self.current_route_point_index < len(self.route) - 1:
-            #     current_route_point_vector = self.route[self.current_route_point_index]
-            #     next_route_point_vector = self.route[self.current_route_point_index + 1]
-
-            #     median_route_point_vector = get_median_vector(current_route_point_vector, next_route_point_vector, 0.75)
-
-            #     dy = median_route_point_vector[0] - current_latitude
-            #     dx = median_route_point_vector[1] - current_longitude
-
-            distance_to_target_route_point = math.sqrt(dy**2 + dx**2)
+            distance_to_target_route_point = math.sqrt(dx**2 + dy**2)
             self.route[self.current_route_point_index][3] = distance_to_target_route_point
 
             if distance_to_target_route_point < 5.0:
@@ -135,21 +123,12 @@ class GPSPathPlanningNode(Node):
                 self.current_route_point_index += 1
                 return
 
-            Pk = 125
-            Ik = 0.965
-
             angle_to_target_route_point = get_vectors_angle(self.ego_vehicle_vector, [dy, dx])
-            self.ego_vehicle_turn_angle = float(min(1.0, max(-1.0, angle_to_target_route_point / Pk)))
 
-            angle_to_target_route_point = (self.ego_vehicle_turn_angle_previous - self.ego_vehicle_turn_angle) * Ik
-            self.ego_vehicle_turn_angle += angle_to_target_route_point
-
-            self.ego_vehicle_turn_angle_previous = self.ego_vehicle_turn_angle
-
-            self.drive_command.speed = min(self.max_speed, distance_to_target_route_point * self.p)
+            self.drive_command.speed = min(self.max_speed, distance_to_target_route_point * 2.5)  # Pk = 2.5
             self.drive_command.steering_angle = max(-self.max_steering_angle, min(self.max_steering_angle, math.degrees(angle_to_target_route_point)))
 
-            # self.cmd_ackermann_publisher.publish(self.drive_command)
+            self.cmd_ackermann_publisher.publish(self.drive_command)
 
 
 def main(args=None):
