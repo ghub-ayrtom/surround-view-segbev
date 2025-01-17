@@ -10,7 +10,6 @@ from cv_bridge import CvBridge
 
 
 class GPSPathPlanningNode(Node):
-
     def __init__(self):
         try:
             super().__init__('gps_path_planning_node')
@@ -52,10 +51,9 @@ class GPSPathPlanningNode(Node):
         except Exception as e:
             self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 
-
     def __surround_view_callback(self, message):
         if self.callbacks_status['compass'] and self.callbacks_status['gps']:
-            surround_view_image = CvBridge().imgmsg_to_cv2(message, 'bgr8')
+            surround_view_image = CvBridge().imgmsg_to_cv2(message, 'rgb8')
 
             surround_view_frame = draw_path_on_surround_view(
                 surround_view_image, 
@@ -70,7 +68,6 @@ class GPSPathPlanningNode(Node):
 
             if not self.callbacks_status['surround_view']:
                 self.callbacks_status['surround_view'] = True
-
 
     def __compass_callback(self, message):
         x, y, z = message.magnetic_field.x, message.magnetic_field.y, message.magnetic_field.z
@@ -88,7 +85,6 @@ class GPSPathPlanningNode(Node):
         if not self.callbacks_status['compass']:
             self.callbacks_status['compass'] = True
 
-
     def __gps_callback(self, message):
         self.ego_vehicle_position = [message.latitude, message.longitude]  # y, x
 
@@ -96,7 +92,6 @@ class GPSPathPlanningNode(Node):
 
         if not self.callbacks_status['gps']:
             self.callbacks_status['gps'] = True
-
 
     def __navigate(self):
         if self.callbacks_status['gps']:

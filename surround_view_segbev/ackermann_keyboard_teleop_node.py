@@ -18,7 +18,6 @@ control_keys_bindings = {
 
 
 class AckermannKeyboardTeleopNode(Node):
-
     def __init__(self):
         super().__init__('ackermann_keyboard_teleop_node')
 
@@ -52,15 +51,18 @@ class AckermannKeyboardTeleopNode(Node):
 
         self._logger.info('Successfully launched!')
 
-        self.print_current_values()
-        self.key_loop()
-
+        if global_settings.CONTROL_MODE == 'Manual':
+            self.print_current_values()
+            self.key_loop()
+        elif global_settings.CONTROL_MODE == 'Auto':
+            self._logger.warning('Switch control mode from "Auto" to "Manual" first')
+        else:
+            self._logger.error('Undefined control mode!')
 
     def publisher_callback(self):
         self.message.speed = self.current_speed
         self.message.steering_angle = self.current_steering_angle
         self.cmd_ackermann_publisher.publish(self.message)
-
 
     def print_current_values(self):
         sys.stderr.write('\x1b[2J\x1b[H')
@@ -72,7 +74,6 @@ class AckermannKeyboardTeleopNode(Node):
 
         self.publisher_callback()
 
-
     def get_pressed_key(self):
         tty.setraw(sys.stdin.fileno())
         select.select([sys.stdin], [], [], 0)
@@ -81,7 +82,6 @@ class AckermannKeyboardTeleopNode(Node):
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self.settings)
 
         return pressed_key
-
 
     def key_loop(self):
         self.settings = termios.tcgetattr(sys.stdin)

@@ -12,39 +12,23 @@ yb = bev_parameters.vehicle_bottomside_edges_y
 
 def get_upper_part(image):
     return image[:yt, :]
-
-
 def get_lower_part(image):
     return image[yb:, :]
-
-
 def lr_get_central_part(image):
     return image[yt:yb, :]
-
-
 def get_left_part(image):
     return image[:, :xl]
-
-
 def get_right_part(image):
     return image[:, xr:]
-
-
 def f_get_central_part_blind(image):
     return image[:, (xl - 135):(xr + 130)]
-
-
 def f_get_central_part(image):
     return image[:295, (xl - 32):(xr + 30)]
-
-
 def fb_get_central_part(image):
     return image[:, xl:xr]
 
 
 class BirdsEyeView():
-
-
     def __init__(self, node_logger, images=None, load_weights_and_masks=False):
         self.node_logger = node_logger
         self.frames = images
@@ -57,7 +41,6 @@ class BirdsEyeView():
         if load_weights_and_masks:
             self.load_weights_and_masks()
 
-
     def load_weights_and_masks(self):
         weights_file_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 'configs/BEV/weights.npy')
         masks_file_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 'configs/BEV/masks.npy')
@@ -67,7 +50,6 @@ class BirdsEyeView():
 
         self.weights = [np.stack((Gmat[:, :, i], Gmat[:, :, i], Gmat[:, :, i]), axis=2) for i in range(Gmat.shape[2])]
         self.masks = [Mmat[:, :, i] for i in range(Mmat.shape[2])]
-
 
     def extract_frames(self):
         front_left = self.frames['camera_front_left']
@@ -81,26 +63,22 @@ class BirdsEyeView():
 
         return front_left, front, front_blind, front_right, back
 
-
     def get_weights_and_masks(self):
         if self.frames:
             left, front, front_blind, right, back = self.extract_frames()
 
-            G0, M0 = get_weight_mask_matrix(get_left_part(front), get_upper_part(left))
-            G1, M1 = get_weight_mask_matrix(f_get_central_part_blind(front), f_get_central_part_blind(front_blind))
-            G2, M2 = get_weight_mask_matrix(get_right_part(front), get_upper_part(right))
-            G3, M3 = get_weight_mask_matrix(get_left_part(back), get_lower_part(left))
-            G4, M4 = get_weight_mask_matrix(get_right_part(back), get_lower_part(right))
+            G0, M0 = get_weight_mask_matrix(get_left_part(front[0]), get_upper_part(left[0]))
+            G1, M1 = get_weight_mask_matrix(f_get_central_part_blind(front[0]), f_get_central_part_blind(front_blind[0]))
+            G2, M2 = get_weight_mask_matrix(get_right_part(front[0]), get_upper_part(right[0]))
+            G3, M3 = get_weight_mask_matrix(get_left_part(back[0]), get_lower_part(left[0]))
+            G4, M4 = get_weight_mask_matrix(get_right_part(back[0]), get_lower_part(right[0]))
 
             self.weights = [np.stack((G, G, G), axis=2) for G in (G0, G1, G2, G3, G4)]
             self.masks = [(M / 255.0).astype(int) for M in (M0, M1, M2, M3, M4)]
 
             return np.stack((G0, G1, G2, G3, G4), axis=2), np.stack((M0, M1, M2, M3, M4), axis=2)
 
-
     def luminance_balance(self):
-
-
         def tune(x):
             if x >= 1:
                 return x * np.exp((1 - x) * 0.5)
@@ -111,11 +89,11 @@ class BirdsEyeView():
             left, front, front_blind, right, back = self.extract_frames()
             M0, M1, M2, M3, M4 = self.masks
 
-            left_B, left_G, left_R = cv2.split(left)
-            front_B, front_G, front_R = cv2.split(front)
-            front_blind_B, front_blind_G, front_blind_R = cv2.split(front_blind)
-            right_B, right_G, right_R = cv2.split(right)
-            back_B, back_G, back_R = cv2.split(back)
+            left_B, left_G, left_R = cv2.split(left[0])
+            front_B, front_G, front_R = cv2.split(front[0])
+            front_blind_B, front_blind_G, front_blind_R = cv2.split(front_blind[0])
+            right_B, right_G, right_R = cv2.split(right[0])
+            back_B, back_G, back_R = cv2.split(back[0])
 
             a1 = mean_luminance_ratio(get_upper_part(right_B), get_right_part(front_B), M2)
             a2 = mean_luminance_ratio(get_upper_part(right_G), get_right_part(front_G), M2)
@@ -221,7 +199,6 @@ class BirdsEyeView():
                 cv2.merge((back_B, back_G, back_R)), 
             ]
 
-
     @property
     def front_left(self): return self.image[:yt, :xl]
     @property
@@ -250,35 +227,132 @@ class BirdsEyeView():
         G = self.weights[i]
         return (image_1 * G + image_2 * (1 - G)).astype(np.uint8)
 
-
     def stitch(self):
         if self.frames:
             left, front, front_blind, right, back = self.extract_frames()
 
-            np.copyto(self.back_central, fb_get_central_part(back))
+            np.copyto(self.back_central, fb_get_central_part(back[0]))
 
-            np.copyto(self.left_central, lr_get_central_part(left))
-            np.copyto(self.right_central, lr_get_central_part(right))
+            np.copyto(self.left_central, lr_get_central_part(left[0]))
+            np.copyto(self.right_central, lr_get_central_part(right[0]))
 
-            np.copyto(self.front_left, self.merge(get_left_part(front), get_upper_part(left), 0))
-            np.copyto(self.front_right, self.merge(get_right_part(front), get_upper_part(right), 2))
+            np.copyto(self.front_left, self.merge(get_left_part(front[0]), get_upper_part(left[0]), 0))
+            np.copyto(self.front_right, self.merge(get_right_part(front[0]), get_upper_part(right[0]), 2))
 
-            np.copyto(self.front_central, f_get_central_part(front))
-            np.copyto(self.front_central_blind, self.merge(f_get_central_part_blind(front), f_get_central_part_blind(front_blind), 1)[295 : - 13, 103 : - 100])
+            np.copyto(self.front_central, f_get_central_part(front[0]))
+            np.copyto(self.front_central_blind, self.merge(f_get_central_part_blind(front[0]), f_get_central_part_blind(front_blind[0]), 1)[295 : - 13, 103 : - 100])
 
-            np.copyto(self.back_left, self.merge(get_left_part(back), get_lower_part(left), 3))
-            np.copyto(self.back_right, self.merge(get_right_part(back), get_lower_part(right), 4))
-
+            np.copyto(self.back_left, self.merge(get_left_part(back[0]), get_lower_part(left[0]), 3))
+            np.copyto(self.back_right, self.merge(get_right_part(back[0]), get_lower_part(right[0]), 4))
 
     def white_balance(self):
         self.image = make_white_balance(self.image)
-
     
-    def add_ego_vehicle(self):
+    def add_ego_vehicle_and_track_obstacles(self):
+        blind_area_mask_image = cv2.imread(os.path.join(
+            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+            'resource/images/blind_area_mask.png'
+        ), cv2.IMREAD_UNCHANGED)  # RGBA
         ego_vehicle_image = cv2.imread(os.path.join(
             os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
             'resource/images/ego_vehicle.png'
         ))
 
-        ego_vehicle_image = cv2.cvtColor(ego_vehicle_image, cv2.COLOR_BGR2RGB)
+        if blind_area_mask_image.shape[2] == 4:
+            mask_image_rgb = blind_area_mask_image[:, :, :3]
+            mask_image_alpha = blind_area_mask_image[:, :, 3] / 255.0
+
+            center_y, center_x = bev_parameters.total_height // 2, bev_parameters.total_width // 2
+
+            start_y = center_y - blind_area_mask_image.shape[0] // 2
+            end_y = start_y + blind_area_mask_image.shape[0]
+            start_x = center_x - blind_area_mask_image.shape[1] // 2
+            end_x = start_x + blind_area_mask_image.shape[1]
+
+            blind_area = self.image[start_y:end_y, start_x:end_x]
+
+            for channel in range(3):
+                blind_area[:, :, channel] = (
+                    mask_image_alpha * mask_image_rgb[:, :, channel] + (1 - mask_image_alpha) * blind_area[:, :, channel]
+                )
+            
+            self.image[start_y:end_y, start_x:end_x] = blind_area
+
         np.copyto(self.central, cv2.resize(ego_vehicle_image, (xr - xl, (yb + 5) - (yt - 10))))
+
+        if self.frames:
+            for camera_name in self.frames:
+                if self.frames[camera_name][1] and self.frames[camera_name][2]:
+                    obstacle_centers = self.frames[camera_name][1]
+                    obstacle_distances_m = self.frames[camera_name][2]
+
+                    match camera_name:
+                        case 'camera_front_left':
+                            for i, obstacle_center in enumerate(obstacle_centers):
+                                center_y, center_x = self.image.shape[0] - obstacle_center[2], obstacle_center[3]
+                                cv2.line(self.image, (362, 437), (center_x, center_y), (255, 0, 0), 1)
+                                cv2.putText(
+                                    self.image, 
+                                    f'{obstacle_distances_m[i]:.1f}', 
+                                    (center_x, center_y), 
+                                    0, 
+                                    0.5, 
+                                    (255, 255, 255), 
+                                    1, 
+                                )
+                        case 'camera_front':
+                            for i, obstacle_center in enumerate(obstacle_centers):
+                                center_x, center_y = obstacle_center[2], obstacle_center[3]
+                                cv2.line(self.image, (392, 375), (center_x, center_y), (255, 0, 0), 1)
+                                cv2.putText(
+                                    self.image, 
+                                    f'{obstacle_distances_m[i]:.1f}', 
+                                    (center_x, center_y), 
+                                    0, 
+                                    0.5, 
+                                    (255, 255, 255), 
+                                    1, 
+                                )
+                        # case 'camera_front_blind':
+                        #     for i, obstacle_center in enumerate(obstacle_centers):
+                        #         center_x, center_y = obstacle_center[2], obstacle_center[3]
+                        #         cv2.line(self.image, (392, 332), (center_x, center_y), (255, 0, 0), 1)
+                        #         cv2.putText(
+                        #             self.image, 
+                        #             f'{obstacle_distances_m[i]:.1f}', 
+                        #             (center_x, center_y), 
+                        #             0, 
+                        #             0.5, 
+                        #             (255, 255, 255), 
+                        #             1, 
+                        #         )
+                        case 'camera_front_right':
+                            for i, obstacle_center in enumerate(obstacle_centers):
+                                center_y, center_x = obstacle_center[2], self.image.shape[1] - obstacle_center[3]
+                                cv2.line(self.image, (421, 437), (center_x, center_y), (255, 0, 0), 1)
+                                cv2.putText(
+                                    self.image, 
+                                    f'{obstacle_distances_m[i]:.1f}', 
+                                    (center_x, center_y), 
+                                    0, 
+                                    0.5, 
+                                    (255, 255, 255), 
+                                    1, 
+                                )
+                        # case 'camera_rear_left':
+                        #     pass
+                        case 'camera_rear':
+                            for i, obstacle_center in enumerate(obstacle_centers):
+                                center_x, center_y = self.image.shape[1] - obstacle_center[2], self.image.shape[0] - obstacle_center[3]
+                                cv2.line(self.image, (392, 531), (center_x, center_y), (255, 0, 0), 1)
+                                cv2.putText(
+                                    self.image, 
+                                    f'{obstacle_distances_m[i]:.1f}', 
+                                    (center_x, center_y), 
+                                    0, 
+                                    0.5, 
+                                    (255, 255, 255), 
+                                    1, 
+                                )
+                        # case 'camera_rear_right':
+                        #     pass

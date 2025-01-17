@@ -3,7 +3,7 @@ import cv2
 from rclpy.node import Node
 import numpy as np
 import rclpy
-from sensor_msgs.msg import Image
+import sensor_msgs.msg
 from message_filters import Subscriber, TimeSynchronizer
 import traceback
 from .scripts.CameraModel import CameraModel
@@ -11,6 +11,10 @@ from .scripts.BirdsEyeView import BirdsEyeView
 import os
 import time
 from configs import global_settings
+import torch
+from ultralytics import YOLO
+from fastseg import MobileV3Large
+from fastseg.image import colorize
 
 
 camera_topics = {
@@ -36,14 +40,32 @@ camera_topics = {
     # 'camera_rear_right_depth': '/ego_vehicle/camera_rear_right_depth/image', 
 }
 
+YOLO_WEIGHTS_PATH = os.path.join(
+    os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+    f'models/{global_settings.USED_DETECTOR_FOLDER_NAME}/model.pt'
+)
+
+FASTSEG_WEIGHTS_PATH = os.path.join(
+    os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+    f'models/{global_settings.USED_SEGMENTOR_FOLDER_NAME}/model.pth'
+)
+
 
 class SurroundViewNode(Node):
-
     def __init__(self):
         try:
             super().__init__('surround_view_node')
 
             self.collect_models_training_data = False
+
+            if global_settings.CONTROL_MODE == 'Auto':
+                device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+                self.yolo_model = YOLO(YOLO_WEIGHTS_PATH).to(device)
+
+                self.fastseg_model = MobileV3Large(num_classes=19).to(device)
+                self.fastseg_model.load_state_dict(torch.load(FASTSEG_WEIGHTS_PATH, map_location=device))
+                self.fastseg_model.eval()
 
             self.camera_front_left = CameraModel('camera_front_left', self._logger)
             self.camera_front = CameraModel('camera_front', self._logger)
@@ -55,13 +77,13 @@ class SurroundViewNode(Node):
             # self.camera_rear_right = CameraModel('camera_rear_right', self._logger)
 
             self.bev = BirdsEyeView(self._logger, load_weights_and_masks=True)
-            self.surround_view_publisher = self.create_publisher(Image, '/surround_view', 10)
+            self.surround_view_publisher = self.create_publisher(sensor_msgs.msg.Image, '/surround_view', 10)
 
-            self.images_projected = {}
+            self.images_projected_with_obstacles_info = {}
             camera_topics_subscribers = []
 
             for camera_name in camera_topics.keys():
-                subscriber = Subscriber(self, Image, camera_topics[camera_name])
+                subscriber = Subscriber(self, sensor_msgs.msg.Image, camera_topics[camera_name])
                 subscriber.registerCallback(self.__on_color_image_message, camera_name)
 
                 camera_topics_subscribers.append(subscriber)
@@ -72,11 +94,21 @@ class SurroundViewNode(Node):
         except Exception as e:
             self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 
-
     def __on_color_image_message(self, message, camera_name):
-        if len(self.images_projected) < 5:  # 5 - количество используемых видеокамер
+        if len(self.images_projected_with_obstacles_info) < 5:  # 5 - количество используемых видеокамер
             if 'depth' not in camera_name:
-                image_color = CvBridge().imgmsg_to_cv2(message, 'bgra8')
+                image_color = CvBridge().imgmsg_to_cv2(message, 'rgb8')
+
+                if global_settings.USED_DETECTOR_FOLDER_NAME == 'YOLO11' and global_settings.CONTROL_MODE == 'Auto':
+                    predicted_bboxes = self.yolo_model.predict(
+                        source=cv2.cvtColor(image_color, cv2.COLOR_BGR2RGB), 
+                        conf=0.9, 
+                        verbose=False, 
+                        # show=True, 
+                    )
+                if global_settings.USED_SEGMENTOR_FOLDER_NAME == 'FastSeg' and global_settings.CONTROL_MODE == 'Auto':
+                    predicted_labels = self.fastseg_model.predict_one(image_color)
+                    image_color = np.array(colorize(predicted_labels, palette='surround_view_segbev'))
             else:
                 # 32FC1 - один из типов кодировки "глубинных" изображений (32-битное число с плавающей запятой и одним каналом)
                 image_distance = CvBridge().imgmsg_to_cv2(message, '32FC1')  # image_distance[height][width] для получения расстояния в метрах до конкретного пикселя изображения
@@ -96,10 +128,17 @@ class SurroundViewNode(Node):
                             f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
                         ), image_color)
                     if not self.camera_front_left.projection_matrix_received:
-                        self.images_projected[camera_name] = self.camera_front_left.get_projection_matrix(image_color)
+                        self.images_projected_with_obstacles_info[camera_name] = self.camera_front_left.get_projection_matrix(image_color, obstacle_bboxes=predicted_bboxes)
                         self.camera_front_left.projection_matrix_received = True
                 case 'camera_front_left_depth':
-                    pass
+                    if camera_name[:-6] in self.images_projected_with_obstacles_info.keys():
+                        image_color_projected, obstacle_centers, obstacle_distances_m = self.images_projected_with_obstacles_info[camera_name[:-6]]
+
+                        for obstacle_center in obstacle_centers:
+                            x, y = obstacle_center[0], obstacle_center[1]
+                            obstacle_distances_m.append(image_distance[y][x])
+                        
+                        self.images_projected_with_obstacles_info[camera_name[:-6]] = image_color_projected, obstacle_centers, obstacle_distances_m
 
                 case 'camera_front':
                     if self.collect_models_training_data:
@@ -108,10 +147,17 @@ class SurroundViewNode(Node):
                             f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
                         ), image_color)
                     if not self.camera_front.projection_matrix_received:
-                        self.images_projected[camera_name] = self.camera_front.get_projection_matrix(image_color)
+                        self.images_projected_with_obstacles_info[camera_name] = self.camera_front.get_projection_matrix(image_color, obstacle_bboxes=predicted_bboxes)
                         self.camera_front.projection_matrix_received = True
                 case 'camera_front_depth':
-                    pass
+                    if camera_name[:-6] in self.images_projected_with_obstacles_info.keys():
+                        image_color_projected, obstacle_centers, obstacle_distances_m = self.images_projected_with_obstacles_info[camera_name[:-6]]
+
+                        for obstacle_center in obstacle_centers:
+                            x, y = obstacle_center[0], obstacle_center[1]
+                            obstacle_distances_m.append(image_distance[y][x])
+                        
+                        self.images_projected_with_obstacles_info[camera_name[:-6]] = image_color_projected, obstacle_centers, obstacle_distances_m
 
                 case 'camera_front_blind':
                     if self.collect_models_training_data:
@@ -120,10 +166,17 @@ class SurroundViewNode(Node):
                             f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
                         ), image_color)
                     if not self.camera_front_blind.projection_matrix_received:
-                        self.images_projected[camera_name] = self.camera_front_blind.get_projection_matrix(image_color)
+                        self.images_projected_with_obstacles_info[camera_name] = self.camera_front_blind.get_projection_matrix(image_color, obstacle_bboxes=predicted_bboxes)
                         self.camera_front_blind.projection_matrix_received = True
                 case 'camera_front_blind_depth':
-                    pass
+                    if camera_name[:-6] in self.images_projected_with_obstacles_info.keys():
+                        image_color_projected, obstacle_centers, obstacle_distances_m = self.images_projected_with_obstacles_info[camera_name[:-6]]
+
+                        for obstacle_center in obstacle_centers:
+                            x, y = obstacle_center[0], obstacle_center[1]
+                            obstacle_distances_m.append(image_distance[y][x])
+                        
+                        self.images_projected_with_obstacles_info[camera_name[:-6]] = image_color_projected, obstacle_centers, obstacle_distances_m
 
                 case 'camera_front_right':
                     if self.collect_models_training_data:
@@ -132,10 +185,17 @@ class SurroundViewNode(Node):
                             f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
                         ), image_color)
                     if not self.camera_front_right.projection_matrix_received:
-                        self.images_projected[camera_name] = self.camera_front_right.get_projection_matrix(image_color)
+                        self.images_projected_with_obstacles_info[camera_name] = self.camera_front_right.get_projection_matrix(image_color, obstacle_bboxes=predicted_bboxes)
                         self.camera_front_right.projection_matrix_received = True
                 case 'camera_front_right_depth':
-                    pass
+                    if camera_name[:-6] in self.images_projected_with_obstacles_info.keys():
+                        image_color_projected, obstacle_centers, obstacle_distances_m = self.images_projected_with_obstacles_info[camera_name[:-6]]
+
+                        for obstacle_center in obstacle_centers:
+                            x, y = obstacle_center[0], obstacle_center[1]
+                            obstacle_distances_m.append(image_distance[y][x])
+                        
+                        self.images_projected_with_obstacles_info[camera_name[:-6]] = image_color_projected, obstacle_centers, obstacle_distances_m
 
                 # case 'camera_rear_left':
                 #     if self.collect_models_training_data:
@@ -144,10 +204,17 @@ class SurroundViewNode(Node):
                 #             f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
                 #         ), image_color)
                 #     if not self.camera_rear_left.projection_matrix_received:
-                #         self.images_projected[camera_name] = self.camera_rear_left.get_projection_matrix(image_color)
+                #         self.images_projected[camera_name] = self.camera_rear_left.get_projection_matrix(image_color, obstacles_bboxes=predicted_bboxes)
                 #         self.camera_rear_left.projection_matrix_received = True
                 # case 'camera_rear_left_depth':
-                #     pass
+                #     if camera_name[:-6] in self.images_projected_with_obstacles_info.keys():
+                #         image_color_projected, obstacle_centers, obstacle_distances_m = self.images_projected_with_obstacles_info[camera_name[:-6]]
+
+                #         for obstacle_center in obstacle_centers:
+                #             x, y = obstacle_center[0], obstacle_center[1]
+                #             obstacle_distances_m.append(image_distance[y][x])
+                        
+                #         self.images_projected_with_obstacles_info[camera_name[:-6]] = image_color_projected, obstacle_centers, obstacle_distances_m
 
                 case 'camera_rear':
                     if self.collect_models_training_data:
@@ -156,10 +223,17 @@ class SurroundViewNode(Node):
                             f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
                         ), image_color)
                     if not self.camera_rear.projection_matrix_received:
-                        self.images_projected[camera_name] = self.camera_rear.get_projection_matrix(image_color)
+                        self.images_projected_with_obstacles_info[camera_name] = self.camera_rear.get_projection_matrix(image_color, obstacle_bboxes=predicted_bboxes)
                         self.camera_rear.projection_matrix_received = True
                 case 'camera_rear_depth':
-                    pass
+                    if camera_name[:-6] in self.images_projected_with_obstacles_info.keys():
+                        image_color_projected, obstacle_centers, obstacle_distances_m = self.images_projected_with_obstacles_info[camera_name[:-6]]
+
+                        for obstacle_center in obstacle_centers:
+                            x, y = obstacle_center[0], obstacle_center[1]
+                            obstacle_distances_m.append(image_distance[y][x])
+                        
+                        self.images_projected_with_obstacles_info[camera_name[:-6]] = image_color_projected, obstacle_centers, obstacle_distances_m
 
                 # case 'camera_rear_right':
                 #     if self.collect_models_training_data:
@@ -168,19 +242,32 @@ class SurroundViewNode(Node):
                 #             f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
                 #         ), image_color)
                 #     if not self.camera_rear_right.projection_matrix_received:
-                #         self.images_projected[camera_name] = self.camera_rear_right.get_projection_matrix(image_color)
+                #         self.images_projected[camera_name] = self.camera_rear_right.get_projection_matrix(image_color, obstacles_bboxes=predicted_bboxes)
                 #         self.camera_rear_right.projection_matrix_received = True
                 # case 'camera_rear_right_depth':
-                #     pass
+                #     if camera_name[:-6] in self.images_projected_with_obstacles_info.keys():
+                #         image_color_projected, obstacle_centers, obstacle_distances_m = self.images_projected_with_obstacles_info[camera_name[:-6]]
+
+                #         for obstacle_center in obstacle_centers:
+                #             x, y = obstacle_center[0], obstacle_center[1]
+                #             obstacle_distances_m.append(image_distance[y][x])
+                        
+                #         self.images_projected_with_obstacles_info[camera_name[:-6]] = image_color_projected, obstacle_centers, obstacle_distances_m
         else:
-            self.bev.frames = self.images_projected
+            self.bev.frames = self.images_projected_with_obstacles_info
 
             # self.bev.luminance_balance()
             self.bev.stitch()
             self.bev.white_balance()
-            self.bev.add_ego_vehicle()
 
-            self.images_projected.clear()
+            if global_settings.USED_SEGMENTOR_FOLDER_NAME == 'FastSegBEV' and global_settings.CONTROL_MODE == 'Auto':
+                self.bev.image = cv2.cvtColor(self.bev.image, cv2.COLOR_BGR2RGB)
+                predicted_labels = self.fastseg_model.predict_one(self.bev.image)
+                self.bev.image = np.array(colorize(predicted_labels, palette='surround_view_segbev'))
+
+            self.bev.add_ego_vehicle_and_track_obstacles()
+
+            self.images_projected_with_obstacles_info.clear()
             self.surround_view_publisher.publish(CvBridge().cv2_to_imgmsg(self.bev.image, 'rgb8'))
 
             if self.collect_models_training_data:

@@ -264,11 +264,11 @@ class CameraModel:
                 return image.copy()[::-1, ::-1, :]
 
 
-    def get_projection_matrix(self, image, gotten=True):
+    def get_projection_matrix(self, image, obstacle_bboxes=None, gotten=True):
         image_undistorted = image  # self.undistort(image)
 
         if not gotten:
-            # gui = PointSelector(cv2.cvtColor(image_undistorted, cv2.COLOR_RGBA2RGB), title=self.device_name)
+            # gui = PointSelector(image_undistorted, title=self.device_name)
             # choice = gui.loop()
 
             if True:  # choice > 0:
@@ -292,7 +292,25 @@ class CameraModel:
 
         image_projected = cv2.warpPerspective(image_undistorted, self.projection_matrix, bev_parameters.projection_shapes[self.device_name])
 
+        obstacle_centers = []
+        obstacle_distances_m = []
+
+        if obstacle_bboxes is not None:
+            for obstacle in obstacle_bboxes:
+                for bbox in obstacle.boxes.data:
+                    x1, y1, x2, y2, _, cls = bbox.cpu().numpy()
+
+                    if cls == 0:  # plastic_barrel
+                        bbox_center = (int((x1 + x2) / 2), int((y1 + y2) / 2))
+                        bbox_center_homogeneous = np.array([bbox_center[0], bbox_center[1], 1])  # Переводим в однородные координаты
+
+                        bbox_center_warped = np.dot(self.projection_matrix, bbox_center_homogeneous)
+                        bbox_center_warped /= bbox_center_warped[2]  # Нормализация
+
+                        bbox_center = [int((x1 + x2) / 2), int((y1 + y2) / 2), int(bbox_center_warped[0]), int(bbox_center_warped[1])]
+                        obstacle_centers.append(bbox_center)
+
         # display_image("Bird's Eye View", image_projected)
         # cv2.destroyAllWindows()
 
-        return self.flip(cv2.cvtColor(image_projected, cv2.COLOR_RGBA2BGR))
+        return self.flip(cv2.cvtColor(image_projected, cv2.COLOR_RGB2BGR)), obstacle_centers, obstacle_distances_m

@@ -39,7 +39,7 @@ class ProjectionWeightMatricesNode(Node):
         # bev.luminance_balance()
         bev.stitch()
         bev.white_balance()
-        bev.add_ego_vehicle()
+        bev.add_ego_vehicle_and_track_obstacles()
 
         ret = display_image("Bird's Eye View", cv2.cvtColor(bev.image, cv2.COLOR_BGR2RGB))
 

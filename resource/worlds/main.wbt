@@ -15,7 +15,6 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/traffic/protos/GenericTrafficLight.proto"
 
 WorldInfo {
-  basicTimeStep 64
   contactProperties [
     ContactProperties {
       softCFM 1e-05
