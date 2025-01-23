@@ -292,6 +292,7 @@ class CameraModel:
 
         image_projected = cv2.warpPerspective(image_undistorted, self.projection_matrix, bev_parameters.projection_shapes[self.device_name])
 
+        obstacle_corners = []
         obstacle_centers = []
         obstacle_distances_m = []
 
@@ -301,16 +302,30 @@ class CameraModel:
                     x1, y1, x2, y2, _, cls = bbox.cpu().numpy()
 
                     if cls == 0:  # plastic_barrel
-                        bbox_center = (int((x1 + x2) / 2), int((y1 + y2) / 2))
-                        bbox_center_homogeneous = np.array([bbox_center[0], bbox_center[1], 1])  # Переводим в однородные координаты
+                        # Однородные координаты углов ограничивающей рамки
+                        bbox_corners_homogeneous = np.array([
+                            [x1, y1, 1],  # Верхний левый
+                            [x2, y1, 1],  # Верхний правый
+                            [x2, y2, 1],  # Нижний правый
+                            [x1, y2, 1],  # Нижний левый
+                        ])
+
+                        # Однородные координаты центра ограничивающей рамки
+                        bbox_center_homogeneous = np.array([int((x1 + x2) / 2), int((y1 + y2) / 2), 1])
+
+                        bbox_corners_warped = np.dot(self.projection_matrix, bbox_corners_homogeneous.T).T
+                        bbox_corners_warped = bbox_corners_warped[:, :2] / bbox_corners_warped[:, 2:3]  # Нормализация
 
                         bbox_center_warped = np.dot(self.projection_matrix, bbox_center_homogeneous)
-                        bbox_center_warped /= bbox_center_warped[2]  # Нормализация
+                        bbox_center_warped /= bbox_center_warped[2]  #
 
+                        bbox_corners = [x1, y1, x2, y2, np.round(bbox_corners_warped[:, :2]).astype(int).tolist()]
                         bbox_center = [int((x1 + x2) / 2), int((y1 + y2) / 2), int(bbox_center_warped[0]), int(bbox_center_warped[1])]
+
+                        obstacle_corners.append(bbox_corners)
                         obstacle_centers.append(bbox_center)
 
         # display_image("Bird's Eye View", image_projected)
         # cv2.destroyAllWindows()
 
-        return self.flip(cv2.cvtColor(image_projected, cv2.COLOR_RGB2BGR)), obstacle_centers, obstacle_distances_m
+        return self.flip(cv2.cvtColor(image_projected, cv2.COLOR_RGB2BGR)), obstacle_corners, obstacle_centers, obstacle_distances_m

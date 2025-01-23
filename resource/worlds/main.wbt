@@ -22,8 +22,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5774746227227228 0.5777726183995374 -0.576803139328308 2.0946476340578815
-  position -0.2269559615539265 14.850750142222664 61.790964294652895
+  orientation 0.5774326042849574 0.5777300091912736 -0.5768878781778508 2.0945287410565236
+  position -0.2269559615539256 14.85075014222268 61.790964294652895
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -811,7 +811,7 @@ Solid {
   }
 }
 PlasticBarrel {
-  translation -7.26 0 -0.01
+  translation -6.27 15 -0.01
   name "Plastic Barrel 1"
   physics Physics {
     mass 10
@@ -842,7 +842,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -6.38 0 -0.01
+  translation -0.38 19.99 -0.01
   name "Plastic Barrel 2"
   physics Physics {
     mass 10
@@ -873,7 +873,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation 6.53 -9.07 -0.01
+  translation 1.52 5.94 -0.01
   name "Plastic Barrel 3"
   physics Physics {
     mass 10
@@ -904,7 +904,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation 2.53 -15.27 -0.01
+  translation 3.53 15.74 -0.01
   name "Plastic Barrel 4"
   physics Physics {
     mass 10

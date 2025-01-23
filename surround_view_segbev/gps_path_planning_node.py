@@ -27,10 +27,13 @@ class GPSPathPlanningNode(Node):
             # active, latitude (Y), longitude (X), distance
             self.route = [
                 [False, 16.991067331610402, -0.00010735764714900826, 0.0], 
-                [False, 9.968392320728903, -0.00013375661671748124, 0.0], 
-                [False, -4.724915343945192, -2.987762225939476, 0.0], 
-                [False, -23.72987929573131, 3.477421821567322, 0.0], 
+                [False, -28.47221484907397, -1.2501082404662278, 0.0], 
+                [False, -82.22642887316448, -8.510491942451722, 0.0], 
+                [False, -140.02917234582293, -23.028442597699428, 0.0], 
+                [False, -191.80253792082658, -42.38006783066907, 0.0], 
+                [False, -233.09667968988404, -62.987831481369646, 0.0], 
             ]
+            self.__split_route()
 
             self.ego_vehicle_position = []
             self.create_subscription(NavSatFix, '/gps', self.__gps_callback, 1)
@@ -51,24 +54,6 @@ class GPSPathPlanningNode(Node):
         except Exception as e:
             self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 
-    def __surround_view_callback(self, message):
-        if self.callbacks_status['compass'] and self.callbacks_status['gps']:
-            surround_view_image = CvBridge().imgmsg_to_cv2(message, 'rgb8')
-
-            surround_view_frame = draw_path_on_surround_view(
-                surround_view_image, 
-                self.ego_vehicle_vector_relative, 
-                self.yaw, 
-                self.ego_vehicle_position, 
-                self.route, 
-            )
-
-            cv2.imshow('surround_view', surround_view_frame)
-            cv2.waitKey(1)
-
-            if not self.callbacks_status['surround_view']:
-                self.callbacks_status['surround_view'] = True
-
     def __compass_callback(self, message):
         x, y, z = message.magnetic_field.x, message.magnetic_field.y, message.magnetic_field.z
         self.yaw = math.atan2(y, x)
@@ -84,6 +69,39 @@ class GPSPathPlanningNode(Node):
 
         if not self.callbacks_status['compass']:
             self.callbacks_status['compass'] = True
+
+    def __split_route(self):
+        route_splitted = [self.route[0]]
+
+        for i in range(1, len(self.route)):
+            start_point = self.route[i - 1]
+            start_latitude, start_longitude = start_point[1], start_point[2]
+
+            end_point = self.route[i]
+            end_latitude, end_longitude = end_point[1], end_point[2]
+
+            dx = end_longitude - start_longitude
+            dy = end_latitude - start_latitude
+
+            points_distance = math.sqrt(dx**2 + dy**2)
+
+            if points_distance > 15.0:
+                split_points_count = 2
+
+                while points_distance / split_points_count > 10.0:
+                    split_points_count += 1
+                
+                intermediate_latitudes = np.linspace(start_latitude, end_latitude, split_points_count)
+                intermediate_longitudes = np.linspace(start_longitude, end_longitude, split_points_count)
+
+                coordinates = list(zip(intermediate_latitudes, intermediate_longitudes))
+
+                for j in range(1, len(coordinates)):
+                    route_splitted.append([False, coordinates[j][0], coordinates[j][1], 0.0])
+            else:
+                route_splitted.append([False, end_latitude, end_longitude, 0.0])
+
+        self.route = route_splitted
 
     def __gps_callback(self, message):
         self.ego_vehicle_position = [message.latitude, message.longitude]  # y, x
@@ -123,7 +141,26 @@ class GPSPathPlanningNode(Node):
             self.drive_command.speed = min(self.max_speed, distance_to_target_route_point * 2.5)  # Pk = 2.5
             self.drive_command.steering_angle = max(-self.max_steering_angle, min(self.max_steering_angle, math.degrees(angle_to_target_route_point)))
 
-            self.cmd_ackermann_publisher.publish(self.drive_command)
+            # self.cmd_ackermann_publisher.publish(self.drive_command)
+
+    def __surround_view_callback(self, message):
+        if self.callbacks_status['compass'] and self.callbacks_status['gps']:
+            surround_view_image = CvBridge().imgmsg_to_cv2(message, 'rgb8')
+
+            surround_view_frame, self.current_route_point_index, self.route = draw_path_on_surround_view(
+                surround_view_image, 
+                self.ego_vehicle_vector_relative, 
+                self.yaw, 
+                self.ego_vehicle_position, 
+                self.current_route_point_index, 
+                self.route, 
+            )
+
+            cv2.imshow('surround_view', surround_view_frame)
+            cv2.waitKey(1)
+
+            if not self.callbacks_status['surround_view']:
+                self.callbacks_status['surround_view'] = True
 
 
 def main(args=None):

@@ -50,6 +50,14 @@ def get_ros2_nodes():
         output='screen', 
     )
 
+    # nav2_path_planning_node = Node(
+    #     executable='nav2_path_planning_node', 
+    #     package=PACKAGE_NAME, 
+    #     name='nav2_path_planning_node', 
+    #     parameters=[{'use_sim_time': USE_SIM_TIME}], 
+    #     output='screen', 
+    # )
+
     static_transforms = [
         ['map', 'odom'], 
         ['odom', 'base_link'], 
@@ -71,6 +79,7 @@ def get_ros2_nodes():
         ego_vehicle_state_publisher_node, 
         surround_view_node, 
         gps_path_planning_node, 
+        # nav2_path_planning_node, 
     ] + static_transform_nodes
 
 
