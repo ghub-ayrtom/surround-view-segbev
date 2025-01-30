@@ -5,7 +5,6 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Asphalt.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/mercedes_benz/MercedesBenzSprinter.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/tools/protos/EyeScrew.proto"
 
 WorldInfo {
   contactProperties [
@@ -35,10 +34,6 @@ MercedesBenzSprinter {
   hidden rotation_2 -7.856838407197545e-12 0.9999999710939536 0.00024044145185318398 6.664001874625056e-08
   hidden rotation_3 0 0.9999999999999999 0 0.00011349772251931514
   hidden rotation_4 0 -0.9999999999999999 0 0.00011349777338516787
-  hidden translation_17 -0.951000630686298 -0.0017981189983862222 0.5609649462396564
-  hidden rotation_17 -0.018682093490394836 0.9994032078386927 0.02905524986206655 -1.0465039168830739
-  hidden translation_23 -0.9510363609259568 0.0019359430098329078 0.5608564875654831
-  hidden rotation_23 -0.02301394782697329 0.9987987404615746 0.0432600769508054 -1.0470970087227665
   translation 0.09998739972230822 1.9807673360519888 0.36325389284134746
   rotation 0.0010216645561230858 0.0010216707472434816 -0.9999989561946648 1.570791054741876
   color 0.427451 0.0470588 0.0784314
@@ -221,80 +216,6 @@ MercedesBenzSprinter {
   ]
   sensorsSlotRear [
     Camera {
-      translation -6.03572 -1.0436 0.565
-      rotation 0 0 -1 0.9575
-      children [
-        RangeFinder {
-          name "camera_rear_left_depth"
-          fieldOfView 1.9198621771937625
-          width 1305
-          height 640
-          minRange 0.2
-          maxRange 20
-        }
-        Group {
-          children [
-            EyeScrew {
-              translation -0.122 0 -0.0038
-              rotation 0 -1 0 2.0944
-              name "Eye screw 1"
-              appearance PBRAppearance {
-                baseColor 0 0 0
-              }
-              screwRadius 0.0018
-              screwLength 0.01
-              enablePhysics FALSE
-            }
-            Pose {
-              translation -0.0716 0 -0.00839976
-              rotation 0 1 0 1.5708
-              children [
-                Shape {
-                  appearance PBRAppearance {
-                    baseColor 0 0 0
-                  }
-                  geometry Cylinder {
-                    height 0.1
-                    radius 0.0025
-                    top FALSE
-                  }
-                }
-              ]
-            }
-            Transform {
-              translation -0.0217 -3.05886e-08 -0.042
-              rotation 0 0 -0.9999999999999999 1.5707953071795862
-              scale 0.001 0.001 0.001
-              children [
-                Shape {
-                  appearance PBRAppearance {
-                    baseColor 0 0 0
-                  }
-                  geometry Mesh {
-                    url [
-                      "../models/ZED_2/ZED_2.stl"
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-      name "camera_rear_left"
-      fieldOfView 1.9198621771937625
-      width 1305
-      height 640
-      lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
-      }
-      focus Focus {
-        focalLength 457
-      }
-    }
-    Camera {
       translation -0.073 -0.008 1.92955
       rotation 0 1 0 0.785398
       children [
@@ -325,80 +246,6 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_rear"
-      fieldOfView 1.9198621771937625
-      width 1305
-      height 640
-      lens Lens {
-        center 0.45 0.55
-        radialCoefficients 0.25 -0.25
-        tangentialCoefficients 0.005 -0.005
-      }
-      focus Focus {
-        focalLength 457
-      }
-    }
-    Camera {
-      translation -6.04724 1.0255 0.565
-      rotation 0 0 0.9999999999999999 0.9575
-      children [
-        RangeFinder {
-          name "camera_rear_right_depth"
-          fieldOfView 1.9198621771937625
-          width 1305
-          height 640
-          minRange 0.2
-          maxRange 20
-        }
-        Group {
-          children [
-            EyeScrew {
-              translation -0.122 0 -0.0038
-              rotation 0 -1 0 2.0944
-              name "Eye screw 2"
-              appearance PBRAppearance {
-                baseColor 0 0 0
-              }
-              screwRadius 0.0018
-              screwLength 0.01
-              enablePhysics FALSE
-            }
-            Pose {
-              translation -0.0716 0 -0.00839976
-              rotation 0 1 0 1.5708
-              children [
-                Shape {
-                  appearance PBRAppearance {
-                    baseColor 0 0 0
-                  }
-                  geometry Cylinder {
-                    height 0.1
-                    radius 0.0025
-                    top FALSE
-                  }
-                }
-              ]
-            }
-            Transform {
-              translation -0.0217 -3.05886e-08 -0.042
-              rotation 0 0 -0.9999999999999999 1.5707953071795862
-              scale 0.001 0.001 0.001
-              children [
-                Shape {
-                  appearance PBRAppearance {
-                    baseColor 0 0 0
-                  }
-                  geometry Mesh {
-                    url [
-                      "../models/ZED_2/ZED_2.stl"
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-      name "camera_rear_right"
       fieldOfView 1.9198621771937625
       width 1305
       height 640
@@ -446,31 +293,9 @@ DEF chessboard_front_right Pose {
     }
   ]
 }
-DEF chessboard_rear_left Pose {
-  translation 12.9067 5.8403 1.1
-  rotation 0.8061448911893915 -0.418407943524764 -0.418407943524764 1.78464
-  children [
-    CadShape {
-      url [
-        "../models/chessboard/chessboard.dae"
-      ]
-    }
-  ]
-}
 DEF chessboard_rear Pose {
   translation 0.10002 6 0.982499
   rotation 0.9999999999964972 -1.8715699999934444e-06 1.8715799999934445e-06 1.5708
-  children [
-    CadShape {
-      url [
-        "../models/chessboard/chessboard.dae"
-      ]
-    }
-  ]
-}
-DEF chessboard_rear_right Pose {
-  translation -12.9072 5.98463 1.1
-  rotation 0.8061449292872898 0.41840790682322815 0.41840790682322815 1.78464
   children [
     CadShape {
       url [

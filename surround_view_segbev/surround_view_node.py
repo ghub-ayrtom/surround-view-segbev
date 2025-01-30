@@ -16,6 +16,10 @@ from ultralytics import YOLO
 from fastseg import MobileV3Large
 from fastseg.image import colorize
 from nav_msgs.msg import OccupancyGrid
+from std_msgs.msg import Header
+import yaml
+from sensor_msgs.msg import LaserScan
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 
 
 camera_topics = {
@@ -31,14 +35,8 @@ camera_topics = {
     'camera_front_right': '/ego_vehicle/camera_front_right/image_color', 
     'camera_front_right_depth': '/ego_vehicle/camera_front_right_depth/image', 
 
-    # 'camera_rear_left': '/ego_vehicle/camera_rear_left/image_color', 
-    # 'camera_rear_left_depth': '/ego_vehicle/camera_rear_left_depth/image', 
-
     'camera_rear': '/ego_vehicle/camera_rear/image_color', 
     'camera_rear_depth': '/ego_vehicle/camera_rear_depth/image', 
-
-    # 'camera_rear_right': '/ego_vehicle/camera_rear_right/image_color', 
-    # 'camera_rear_right_depth': '/ego_vehicle/camera_rear_right_depth/image', 
 }
 
 YOLO_WEIGHTS_PATH = os.path.join(
@@ -72,15 +70,48 @@ class SurroundViewNode(Node):
             self.camera_front = CameraModel('camera_front', self._logger)
             self.camera_front_blind = CameraModel('camera_front_blind', self._logger)
             self.camera_front_right = CameraModel('camera_front_right', self._logger)
-
-            # self.camera_rear_left = CameraModel('camera_rear_left', self._logger)
             self.camera_rear = CameraModel('camera_rear', self._logger)
-            # self.camera_rear_right = CameraModel('camera_rear_right', self._logger)
 
             self.bev = BirdsEyeView(self._logger, load_weights_and_masks=True)
 
-            self.surround_view_publisher = self.create_publisher(sensor_msgs.msg.Image, '/surround_view', 10)
-            self.local_costmap_publisher = self.create_publisher(OccupancyGrid, '/local_costmap', 1)
+            image_qos = QoSProfile(
+                reliability=ReliabilityPolicy.BEST_EFFORT, 
+                history=HistoryPolicy.KEEP_LAST, 
+                depth=2, 
+            )
+
+            self.surround_view_publisher = self.create_publisher(sensor_msgs.msg.Image, '/surround_view', image_qos)
+
+            costmap_qos = QoSProfile(
+                reliability=ReliabilityPolicy.RELIABLE, 
+                history=HistoryPolicy.KEEP_LAST, 
+                depth=1, 
+            )
+
+            self.local_costmap_publisher = self.create_publisher(OccupancyGrid, '/local_costmap', costmap_qos)
+
+            scan_qos = QoSProfile(
+                reliability=ReliabilityPolicy.RELIABLE, 
+                history=HistoryPolicy.KEEP_LAST, 
+                depth=2, 
+            )
+
+            self.laserscan_publisher = self.create_publisher(LaserScan, '/scan', scan_qos)
+
+            self.grid = OccupancyGrid()
+            self.grid.header = Header()
+
+            self.laser_scan = LaserScan()
+            self.laser_scan.header = Header()
+
+            self.__load_nav2_parameters()
+
+            self.laser_scan.angle_min = -np.pi  # Полный круговой обзор (360°)
+            self.laser_scan.angle_max = np.pi   #
+            self.laser_scan.angle_increment = np.pi / 360  # 0.5° на шаг
+
+            self.laser_scan.range_min = 0.2   # Метры
+            self.laser_scan.range_max = 20.0  #
 
             self.images_projected_with_obstacles_info = {}
             camera_topics_subscribers = []
@@ -91,11 +122,35 @@ class SurroundViewNode(Node):
 
                 camera_topics_subscribers.append(subscriber)
 
-            TimeSynchronizer(camera_topics_subscribers, 10).registerCallback(self.__on_color_image_message)
+            TimeSynchronizer(camera_topics_subscribers, 2).registerCallback(self.__on_color_image_message)
 
             self._logger.info('Successfully launched!')
         except Exception as e:
             self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+
+    def __load_nav2_parameters(self):
+        with open(os.path.join(
+            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+            'configs/nav2_params.yaml'
+        )) as nav2_params_yaml_file:
+            try:
+                nav2_parameters = yaml.safe_load(nav2_params_yaml_file)
+                self.grid.header.frame_id = nav2_parameters['local_costmap']['local_costmap']['ros__parameters']['global_frame']
+                self.laser_scan.header.frame_id = nav2_parameters['local_costmap']['local_costmap']['ros__parameters']['robot_base_frame']
+
+                self.grid.info.width = nav2_parameters['local_costmap']['local_costmap']['ros__parameters']['width']
+                self.grid.info.height = nav2_parameters['local_costmap']['local_costmap']['ros__parameters']['height']
+                self.grid.info.resolution = nav2_parameters['local_costmap']['local_costmap']['ros__parameters']['resolution']
+
+                self.grid.info.origin.position.x = self.grid.info.width * self.grid.info.resolution / 2.0
+                self.grid.info.origin.position.y = -self.grid.info.height * self.grid.info.resolution / 2.0
+
+                self.grid.info.origin.orientation.y = 1.0
+                self.grid.info.origin.orientation.w = 0.0
+
+                nav2_params_yaml_file.close()
+            except yaml.YAMLError as e:
+                self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 
     def __on_color_image_message(self, message, camera_name):
         if len(self.images_projected_with_obstacles_info) < 5:  # 5 - количество используемых видеокамер
@@ -202,25 +257,6 @@ class SurroundViewNode(Node):
                         
                         self.images_projected_with_obstacles_info[camera_name[:-6]] = image_color_projected, obstacle_corners, obstacle_centers, obstacle_distances_m
 
-                # case 'camera_rear_left':
-                #     if self.collect_models_training_data:
-                #         cv2.imwrite(os.path.join(
-                #             os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                #             f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
-                #         ), image_color)
-                #     if not self.camera_rear_left.projection_matrix_received:
-                #         self.images_projected[camera_name] = self.camera_rear_left.get_projection_matrix(image_color, obstacles_bboxes=predicted_bboxes)
-                #         self.camera_rear_left.projection_matrix_received = True
-                # case 'camera_rear_left_depth':
-                #     if camera_name[:-6] in self.images_projected_with_obstacles_info.keys():
-                #         image_color_projected, obstacle_corners, obstacle_centers, obstacle_distances_m = self.images_projected_with_obstacles_info[camera_name[:-6]]
-
-                #         for obstacle_center in obstacle_centers:
-                #             x, y = obstacle_center[0], obstacle_center[1]
-                #             obstacle_distances_m.append(image_distance[y][x])
-                        
-                #         self.images_projected_with_obstacles_info[camera_name[:-6]] = image_color_projected, obstacle_corners, obstacle_centers, obstacle_distances_m
-
                 case 'camera_rear':
                     if self.collect_models_training_data:
                         cv2.imwrite(os.path.join(
@@ -239,25 +275,6 @@ class SurroundViewNode(Node):
                             obstacle_distances_m.append(image_distance[y][x])
                         
                         self.images_projected_with_obstacles_info[camera_name[:-6]] = image_color_projected, obstacle_corners, obstacle_centers, obstacle_distances_m
-
-                # case 'camera_rear_right':
-                #     if self.collect_models_training_data:
-                #         cv2.imwrite(os.path.join(
-                #             os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                #             f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
-                #         ), image_color)
-                #     if not self.camera_rear_right.projection_matrix_received:
-                #         self.images_projected[camera_name] = self.camera_rear_right.get_projection_matrix(image_color, obstacles_bboxes=predicted_bboxes)
-                #         self.camera_rear_right.projection_matrix_received = True
-                # case 'camera_rear_right_depth':
-                #     if camera_name[:-6] in self.images_projected_with_obstacles_info.keys():
-                #         image_color_projected, obstacle_corners, obstacle_centers, obstacle_distances_m = self.images_projected_with_obstacles_info[camera_name[:-6]]
-
-                #         for obstacle_center in obstacle_centers:
-                #             x, y = obstacle_center[0], obstacle_center[1]
-                #             obstacle_distances_m.append(image_distance[y][x])
-                        
-                #         self.images_projected_with_obstacles_info[camera_name[:-6]] = image_color_projected, obstacle_corners, obstacle_centers, obstacle_distances_m
         else:
             self.bev.frames = self.images_projected_with_obstacles_info
 
@@ -271,6 +288,34 @@ class SurroundViewNode(Node):
             #     self.bev.image = np.array(colorize(predicted_labels, palette='surround_view_segbev'))
 
             local_costmap = self.bev.add_ego_vehicle_and_track_obstacles()
+            local_costmap = cv2.resize(local_costmap, (self.grid.info.width, self.grid.info.height), interpolation=cv2.INTER_NEAREST)
+
+            self.grid.header.stamp = self.get_clock().now().to_msg()
+            self.grid.data = local_costmap.flatten().tolist()
+
+            self.laser_scan.header.stamp = self.get_clock().now().to_msg()
+            self.laser_scan.ranges = [self.laser_scan.range_max] * int(
+                (self.laser_scan.angle_max - self.laser_scan.angle_min) / self.laser_scan.angle_increment)
+
+            for y in range(self.grid.info.height):
+                for x in range(self.grid.info.width):
+                    i = y * self.grid.info.width + x
+
+                    # Если ячейка локальной карты стоимости содержит препятствие
+                    if self.grid.data[i] > 0:
+                        cx = self.grid.info.origin.position.x - x * self.grid.info.resolution  # Находим её координаты
+                        cy = self.grid.info.origin.position.y + y * self.grid.info.resolution  #
+
+                        angle = np.arctan2(cy, cx)
+                        distance = np.hypot(cx, cy)
+
+                        j = int((angle - self.laser_scan.angle_min) / self.laser_scan.angle_increment)
+
+                        if 0 <= j < len(self.laser_scan.ranges):
+                            self.laser_scan.ranges[j] = min(self.laser_scan.ranges[j], distance)
+
+            self.local_costmap_publisher.publish(self.grid)
+            self.laserscan_publisher.publish(self.laser_scan)
 
             self.images_projected_with_obstacles_info.clear()
             self.surround_view_publisher.publish(CvBridge().cv2_to_imgmsg(self.bev.image, 'rgb8'))
@@ -285,10 +330,7 @@ class SurroundViewNode(Node):
             self.camera_front.projection_matrix_received = False
             self.camera_front_blind.projection_matrix_received = False
             self.camera_front_right.projection_matrix_received = False
-
-            # self.camera_rear_left.projection_matrix_received = False
             self.camera_rear.projection_matrix_received = False
-            # self.camera_rear_right.projection_matrix_received = False
 
 
 def main(args=None):

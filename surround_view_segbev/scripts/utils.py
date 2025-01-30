@@ -161,6 +161,8 @@ def draw_path_on_surround_view(
         route, 
     ):
 
+    current_route_point_relative = None
+
     for i, point in enumerate(route):
         point_relative = get_image_relative_route_point(point, ego_vehicle_yaw, ego_vehicle_position)
         point_relative = get_image_relative_coordinates(
@@ -213,6 +215,8 @@ def draw_path_on_surround_view(
         )
 
         if i != 0 and point[0]:
+            current_route_point_relative = point_relative
+
             previous_point_relative = get_image_relative_route_point(route[i - 1], ego_vehicle_yaw, ego_vehicle_position)
             previous_point_relative = get_image_relative_coordinates(
                 surround_view_image.shape, 
@@ -272,4 +276,4 @@ def draw_path_on_surround_view(
         3, 
     )
 
-    return surround_view_image, current_route_point_index, route
+    return surround_view_image, current_route_point_relative

@@ -107,8 +107,6 @@ camera_images = {
     'cfl': [],  # camera_front_left
     'cfr': [],  # camera_front_right
     'cr': [],   # camera_rear
-    # 'crl': [],  # camera_rear_left
-    # 'crr': [],  # camera_rear_right
     # 'sv': [],     # surround_view
 }
 

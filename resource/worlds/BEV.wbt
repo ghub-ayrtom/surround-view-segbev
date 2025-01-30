@@ -5,7 +5,6 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/vehicles/protos/mercedes_benz/MercedesBenzSprinter.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Asphalt.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/factory/tools/protos/EyeScrew.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/obstacles/protos/OilBarrel.proto"
 
 WorldInfo {
@@ -32,14 +31,10 @@ MercedesBenzSprinter {
   hidden position2_0_1 9.455965426861852e-06
   hidden position_0_2 -0.001097289103121994
   hidden position_0_3 -0.0010972907864425514
-  hidden rotation_1 5.917533623234656e-12 -0.9999999999695396 -7.805164142571511e-06 9.498295171220437e-06
-  hidden rotation_2 5.992259931303291e-12 0.9999999999686308 7.92076260073006e-06 9.498108150887242e-06
+  hidden rotation_1 5.932276027966848e-12 -0.9999999999695153 -7.808287126114489e-06 9.498295171220437e-06
+  hidden rotation_2 5.994363099041353e-12 0.9999999999686271 7.921208138704874e-06 9.498108150887242e-06
   hidden rotation_3 0 -0.9999999999999999 0 0.0008154782270045729
   hidden rotation_4 0 1 0 0.0008154732942274523
-  hidden translation_17 -0.955354649468825 -0.0022428670240164372 0.5534385969080498
-  hidden rotation_17 -0.021048610567068096 -0.9989837980657889 0.03985382284357295 1.0469340594582448
-  hidden translation_23 -0.9553347886060279 0.0022427564037275083 0.5534266083423814
-  hidden rotation_23 0.02099819941061531 -0.9989883593839524 -0.03976598341385844 1.0469297065706704
   translation -1.12716e-05 1.77769 0.503254
   rotation 0.0010216650004616936 0.0010216711903216448 -0.9999989561937582 1.5707910559799458
   color 0.427451 0.0470588 0.0784314
@@ -210,77 +205,6 @@ MercedesBenzSprinter {
   ]
   sensorsSlotRear [
     Camera {
-      translation -6.03572 -1.0436 0.565
-      rotation 0 0 -1 0.9574999999999999
-      children [
-        RangeFinder {
-          name "camera_rear_left_depth"
-          fieldOfView 1.9198621771937625
-          width 1305
-          height 640
-          minRange 0.2
-          maxRange 20
-        }
-        Group {
-          children [
-            EyeScrew {
-              translation -0.122 0 -0.0038
-              rotation 0 -1 0 2.0944
-              name "Eye screw 1"
-              appearance PBRAppearance {
-                baseColor 0 0 0
-              }
-              screwRadius 0.0018
-              screwLength 0.01
-              enablePhysics FALSE
-            }
-            Pose {
-              translation -0.0716 0 -0.00839976
-              rotation 0 1 0 1.5708
-              children [
-                Shape {
-                  appearance PBRAppearance {
-                    baseColor 0 0 0
-                  }
-                  geometry Cylinder {
-                    height 0.1
-                    radius 0.0025
-                    top FALSE
-                  }
-                }
-              ]
-            }
-            Transform {
-              translation -0.0217 -3.05886e-08 -0.042
-              rotation 0 0 -0.9999999999999999 1.5707953071795862
-              scale 0.001 0.001 0.001
-              children [
-                Shape {
-                  appearance PBRAppearance {
-                    baseColor 0 0 0
-                  }
-                  geometry Mesh {
-                    url [
-                      "../models/ZED_2/ZED_2.stl"
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-      name "camera_rear_left"
-      fieldOfView 1.9198621771937625
-      width 1305
-      height 640
-      lens Lens {
-      }
-      focus Focus {
-        focalLength 457
-      }
-    }
-    Camera {
       translation -0.073 -0.008 1.92955
       rotation 0 1 0 0.785398
       children [
@@ -311,77 +235,6 @@ MercedesBenzSprinter {
         }
       ]
       name "camera_rear"
-      fieldOfView 1.9198621771937625
-      width 1305
-      height 640
-      lens Lens {
-      }
-      focus Focus {
-        focalLength 457
-      }
-    }
-    Camera {
-      translation -6.04724 1.0255 0.565
-      rotation 0 0 0.9999999999999999 0.9575
-      children [
-        RangeFinder {
-          name "camera_rear_right_depth"
-          fieldOfView 1.9198621771937625
-          width 1305
-          height 640
-          minRange 0.2
-          maxRange 20
-        }
-        Group {
-          children [
-            EyeScrew {
-              translation -0.122 0 -0.0038
-              rotation 0 -1 0 2.0944
-              name "Eye screw 2"
-              appearance PBRAppearance {
-                baseColor 0 0 0
-              }
-              screwRadius 0.0018
-              screwLength 0.01
-              enablePhysics FALSE
-            }
-            Pose {
-              translation -0.0716 0 -0.00839976
-              rotation 0 1 0 1.5708
-              children [
-                Shape {
-                  appearance PBRAppearance {
-                    baseColor 0 0 0
-                  }
-                  geometry Cylinder {
-                    height 0.1
-                    radius 0.0025
-                    top FALSE
-                  }
-                }
-              ]
-            }
-            Transform {
-              translation -0.0217 -3.05886e-08 -0.042
-              rotation 0 0 -0.9999999999999999 1.5707953071795862
-              scale 0.001 0.001 0.001
-              children [
-                Shape {
-                  appearance PBRAppearance {
-                    baseColor 0 0 0
-                  }
-                  geometry Mesh {
-                    url [
-                      "../models/ZED_2/ZED_2.stl"
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-      name "camera_rear_right"
       fieldOfView 1.9198621771937625
       width 1305
       height 640

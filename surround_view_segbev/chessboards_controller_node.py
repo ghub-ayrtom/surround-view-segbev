@@ -28,7 +28,7 @@ chessboards_movement_trajectory = {
         ['Z', [0.57735, -0.57735, -0.57735, 2.0944]], 
         ['Y', -0.9675], 
         ['Y', -1.9675], 
-    ],
+    ], 
 
     'chessboard_front': [ 
         ['Y', -3.25], 
@@ -49,7 +49,7 @@ chessboards_movement_trajectory = {
         ['Z', [-0.0926917, 0.704062, 0.704063, -2.95675]], 
         ['Z', [-3.3905e-09, 0.707106, 0.707107, 3.14159]], 
         ['Y', -4.0], 
-    ],
+    ], 
 
     'chessboard_front_blind': [ 
         ['Y', -3.25], 
@@ -70,7 +70,7 @@ chessboards_movement_trajectory = {
         ['Z', [-0.0926917, 0.704062, 0.704063, -2.95675]], 
         ['Z', [-3.3905e-09, 0.707106, 0.707107, 3.14159]], 
         ['Y', -4.0], 
-    ],
+    ], 
 
     'chessboard_front_right': [ 
         ['X', -3.0], 
@@ -84,20 +84,7 @@ chessboards_movement_trajectory = {
         ['Z', [0.57735, 0.57735, 0.57735, 2.0944]], 
         ['Y', -2.9675], 
         ['Y', -1.9675], 
-    ],
-
-    # 'chessboard_rear_left': [ 
-    #     ['XY', [3.08477, -1.0723]], 
-    #     ['XY', [2.78879, -0.66916]], 
-    #     ['XY', [3.07659, -1.07806]], 
-    #     ['XY', [3.36447, -1.48701]], 
-    #     ['XY', [3.07659, -1.07806]], 
-    #     ['Z', [-0.711475, 0.496892, 0.496892, -1.90483]], 
-    #     ['Z', [0.806145, -0.418408, -0.418408, 1.78464]], 
-    #     ['Z', [0.88983, -0.322647, -0.322647, 1.68726]], 
-    #     ['Z', [0.806145, -0.418408, -0.418408, 1.78464]], 
-    #     ['XY', [4.7122, 0.0730846]], 
-    # ],
+    ], 
 
     'chessboard_rear': [ 
         ['Y', 4.75], 
@@ -118,29 +105,11 @@ chessboards_movement_trajectory = {
         ['Z', [0.983106, 0.129426, 0.12943, 1.58784]], 
         ['Z', [1, -1.87157e-06, 1.87158e-06, 1.5708]], 
         ['Y', 5.0], 
-    ],
-
-    # 'chessboard_rear_right': [ 
-    #     ['XY', [-3.07659, -0.93396]], 
-    #     ['Z', [-0.88983, -0.322647, -0.322647, -1.68726]], 
-    #     ['Z', [-0.954692, -0.210432, -0.210433, -1.61715]], 
-    #     ['Z', [-0.992641, -0.085628, -0.0856291, -1.57819]], 
-    #     ['Z', [-0.954692, -0.210432, -0.210433, -1.61715]], 
-    #     ['Z', [-0.88983, -0.322647, -0.322647, -1.68726]], 
-    #     ['Z', [0.806145, 0.418408, 0.418408, 1.78464]], 
-    #     ['Z', [0.711475, 0.496892, 0.496892, 1.90482]], 
-    #     ['Z', [0.611859, 0.559298, 0.559298, 2.0434]], 
-    #     ['Z', [0.511206, 0.607729, 0.607729, 2.19644]], 
-    #     ['Z', [0.611859, 0.559298, 0.559298, 2.0434]], 
-    #     ['Z', [0.711475, 0.496892, 0.496892, 1.90482]], 
-    #     ['Z', [0.806145, 0.418408, 0.418408, 1.78464]], 
-    #     ['XY', [-4.7122, 0.217176]], 
-    # ]
+    ], 
 }
 
 
 class Chessboard:
-
     pattern_size = (np.prod(CHESSBOARD_PATTERN_SIZE), 3)  # CHESSBOARD_PATTERN_SIZE[0] * CHESSBOARD_PATTERN_SIZE[1] квадратов с 3-мя реальными координатами (X, Y, Z)
 
     # Создание массива координат углов паттерна шахматной доски в 3D-пространстве
@@ -158,7 +127,6 @@ class Chessboard:
     pattern_points_3D[:,:2] = pattern_points_indices
     pattern_points_3D *= CHESSBOARD_SQUARE_SIZE  # Конвертируем индексы точек пересечения паттерна в их координаты X и Y с реальной размерностью CHESSBOARD_SQUARE_SIZE сантиметров
 
-
     def __init__(self, webots_def_name):
         self.pose_node = supervisor.getFromDef(webots_def_name)
 
@@ -167,7 +135,6 @@ class Chessboard:
             self.rotation_field = self.pose_node.getField('rotation')
 
         self.trajectory = chessboards_movement_trajectory[webots_def_name]
-
 
     def update_position(self):
         current_translation_value = self.translation_field.getSFVec3f()  # x, y, z
@@ -244,7 +211,6 @@ class Chessboard:
 
 
 class ChessboardsControllerNode(Node):
-
     def __init__(self):
         try:
             super().__init__('chessboards_controller_node')
@@ -257,19 +223,13 @@ class ChessboardsControllerNode(Node):
                 self.chessboard_front = Chessboard('chessboard_front')
                 self.chessboard_front_blind = Chessboard('chessboard_front_blind')
                 self.chessboard_front_right = Chessboard('chessboard_front_right')
-
-                # self.chessboard_rear_left = Chessboard('chessboard_rear_left')
                 self.chessboard_rear = Chessboard('chessboard_rear')
-                # self.chessboard_rear_right = Chessboard('chessboard_rear_right')
 
                 self.camera_front_left = CameraModel('camera_front_left', node_logger, related_chessboard=self.chessboard_front_left, load_parameters=False)
                 self.camera_front = CameraModel('camera_front', node_logger, related_chessboard=self.chessboard_front, load_parameters=False)
                 self.camera_front_blind = CameraModel('camera_front_blind', node_logger, related_chessboard=self.chessboard_front_blind, load_parameters=False)
                 self.camera_front_right = CameraModel('camera_front_right', node_logger, related_chessboard=self.chessboard_front_right, load_parameters=False)
-
-                # self.camera_rear_left = CameraModel('camera_rear_left', node_logger, related_chessboard=self.chessboard_rear_left, load_parameters=False)
                 self.camera_rear = CameraModel('camera_rear', node_logger, related_chessboard=self.chessboard_rear, load_parameters=False)
-                # self.camera_rear_right = CameraModel('camera_rear_right', node_logger, related_chessboard=self.chessboard_rear_right, load_parameters=False)
 
                 self._logger.info('Successfully launched!')
         except Exception as e:
@@ -290,10 +250,7 @@ def main(args=None):
             cf_image_color = image_bytes_to_numpy_array(node.camera_front.device.getImage(), node.camera_front.image_shape, camera_name=node.camera_front.device_name)
             cfb_image_color = image_bytes_to_numpy_array(node.camera_front_blind.device.getImage(), node.camera_front_blind.image_shape, camera_name=node.camera_front_blind.device_name)
             cfr_image_color = image_bytes_to_numpy_array(node.camera_front_right.device.getImage(), node.camera_front_right.image_shape, camera_name=node.camera_front_right.device_name)
-
-            # crl_image_color = image_bytes_to_numpy_array(node.camera_rear_left.device.getImage(), node.camera_rear_left.image_shape, camera_name=node.camera_rear_left.device_name)
             cr_image_color = image_bytes_to_numpy_array(node.camera_rear.device.getImage(), node.camera_rear.image_shape, camera_name=node.camera_rear.device_name)
-            # crr_image_color = image_bytes_to_numpy_array(node.camera_rear_right.device.getImage(), node.camera_rear_right.image_shape, camera_name=node.camera_rear_right.device_name)
 
             node.camera_front_left.calibrate_camera(cfl_image_color)
             node.chessboard_front_left.update_position()
@@ -307,14 +264,8 @@ def main(args=None):
             node.camera_front_right.calibrate_camera(cfr_image_color)
             node.chessboard_front_right.update_position()
 
-            # node.camera_rear_left.calibrate_camera(crl_image_color)
-            # node.chessboard_rear_left.update_position()
-
             node.camera_rear.calibrate_camera(cr_image_color)
             node.chessboard_rear.update_position()
-
-            # node.camera_rear_right.calibrate_camera(crr_image_color)
-            # node.chessboard_rear_right.update_position()
 
             rclpy.spin_once(node, timeout_sec=0.1)
         node.destroy_node()

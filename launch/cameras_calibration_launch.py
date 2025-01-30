@@ -8,8 +8,8 @@ from launch.substitutions.path_join_substitution import PathJoinSubstitution
 from webots_ros2_driver.webots_launcher import WebotsLauncher
 
 
-PACKAGE_NAME = 'surround_view_segbev'
 USE_SIM_TIME = True  # Использовать симуляционное время
+PACKAGE_NAME = 'surround_view_segbev'
 
 package_dir = get_package_share_directory(PACKAGE_NAME)
 
@@ -39,7 +39,16 @@ def get_ros2_nodes():
             package='tf2_ros', 
             name='static_transform_publisher', 
             parameters=[{'use_sim_time': USE_SIM_TIME}], 
-            arguments=['0', '0', '0', '0', '0', '0'] + transform, 
+            arguments=[
+                '--x', '0.00', 
+                '--y', '0.00', 
+                '--z', '0.00', 
+                '--roll', '0.00', 
+                '--pitch', '0.00', 
+                '--yaw', '0.00', 
+                '--frame-id', transform[0], 
+                '--child-frame-id', transform[1], 
+            ], 
             output='screen', 
         ))
 

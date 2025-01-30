@@ -39,9 +39,7 @@ projection_shapes = {
     'camera_front': (total_width, vehicle_topside_edges_y), 
     'camera_front_blind': (total_width, vehicle_topside_edges_y), 
     'camera_front_right': (total_height, vehicle_leftside_edges_x), 
-    # 'camera_rear_left': (0, 0), 
     'camera_rear': (total_width, vehicle_topside_edges_y), 
-    # 'camera_rear_right': (0, 0), 
 }
 
 projection_src_points = {
@@ -73,26 +71,12 @@ projection_src_points = {
         (1141, 208), 
     ], 
 
-    # 'camera_rear_left': [
-    #     (0, 0), 
-    #     (0, 0), 
-    #     (0, 0), 
-    #     (0, 0), 
-    # ], 
-
     'camera_rear': [
         (307, 60), 
         (999, 60), 
         (0, 236), 
         (1304, 236), 
     ], 
-
-    # 'camera_rear_right': [
-    #     (0, 0), 
-    #     (0, 0), 
-    #     (0, 0), 
-    #     (0, 0), 
-    # ], 
 }
 
 projection_dst_points = {
@@ -129,24 +113,10 @@ projection_dst_points = {
         (far_shift_height + 475, far_shift_width + 150), 
     ], 
 
-    # 'camera_rear_left': [
-    #     (0, 0), 
-    #     (0, 0), 
-    #     (0, 0), 
-    #     (0, 0), 
-    # ], 
-
     'camera_rear': [
         (far_shift_width + 115, far_shift_height), 
         (far_shift_width + 475, far_shift_height), 
         (far_shift_width + 115, far_shift_height + 150), 
         (far_shift_width + 475, far_shift_height + 150), 
     ], 
-
-    # 'camera_rear_right': [
-    #     (0, 0), 
-    #     (0, 0), 
-    #     (0, 0), 
-    #     (0, 0), 
-    # ], 
 }

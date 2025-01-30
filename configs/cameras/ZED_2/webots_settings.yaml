@@ -11,32 +11,26 @@ devices_name: [
   'camera_front_right_depth', 
   'camera_front_right', 
 
-  'camera_rear_left_depth', 
-  'camera_rear_left', 
-
   'camera_rear_depth', 
   'camera_rear', 
-
-  'camera_rear_right_depth', 
-  'camera_rear_right', 
 ]
 
 use_fov_values: True
 
-horizontal_fov: 110 # Degrees
-vertical_fov: 70 #
+horizontal_fov: 110 # Градусы
+vertical_fov: 70    #
 
-image_width: 1305 # Pixels
+image_width: 1305 # Пиксели
 
-# Recalculated if use_fov_values is True
-image_height: 640 #
-focal_length: 457 #
+# Пересчитываются при use_fov_values: True
+image_height: 640
+focal_length: 457
 
-# Brown-Conrady distortion model
-distortion_center: [0.45, 0.55] # 0.0 ≤ x, y ≤ 1.0
-radial_distortion: [0.25, -0.25] # k1, k2
+# Модель искажения Брауна-Конради
+distortion_center: [0.45, 0.55]        # 0.0 ≤ x, y ≤ 1.0
+radial_distortion: [0.25, -0.25]       # k1, k2
 tangential_distortion: [0.005, -0.005] # p1, p2
 
-# For stereo cameras via RangeFinder node
-min_range: 0.2 # Meters
-max_range: 20 #
+# Для стереокамер с узлом RangeFinder
+min_range: 0.2 # Метры
+max_range: 20  #

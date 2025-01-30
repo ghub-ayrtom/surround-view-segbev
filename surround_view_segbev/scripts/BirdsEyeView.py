@@ -56,10 +56,7 @@ class BirdsEyeView():
         front = self.frames['camera_front']
         front_blind = self.frames['camera_front_blind']
         front_right = self.frames['camera_front_right']
-
-        # back_left = self.frames['camera_rear_left']
         back = self.frames['camera_rear']
-        # back_right = self.frames['camera_rear_right']
 
         return front_left, front, front_blind, front_right, back
 
@@ -282,7 +279,6 @@ class BirdsEyeView():
 
         if self.frames:
             local_costmap = np.zeros(self.image.shape[:2], dtype=np.uint8)
-            lcm_height, lcm_width = local_costmap.shape
 
             for camera_name in self.frames:
                 if self.frames[camera_name][1] and self.frames[camera_name][2] and self.frames[camera_name][3]:
@@ -292,7 +288,7 @@ class BirdsEyeView():
 
                     match camera_name:
                         case 'camera_front_left':
-                            for bbox_corners in obstacle_corners:
+                            for i, bbox_corners in enumerate(obstacle_corners):
                                 x1, y1, x2, y2, xy_corners_warped = bbox_corners
 
                                 xy_corners_rotated = []
@@ -302,22 +298,13 @@ class BirdsEyeView():
                                     y_rotated = self.image.shape[0] - x_warped
                                     xy_corners_rotated.append([x_rotated, y_rotated])
 
-                                # x1_warped, y1_warped = map(int, map(round, xy_corners_warped[0]))  # Верхний левый угол
-                                # x2_warped, y2_warped = map(int, map(round, xy_corners_warped[2]))  # Нижний правый угол
-
-                                # # Предотвращение выхода за пределы локальной карты стоимости
-                                # x1_warped = max(0, min(((lcm_height - x1_warped) - 35), lcm_width - 1))
-                                # y1_warped = max(0, min(y1_warped, lcm_height - 1))
-                                # x2_warped = max(0, min(((lcm_height - x2_warped) + 35), lcm_width - 1))
-                                # y2_warped = max(0, min(y2_warped, lcm_height - 1))
-
-                                # x1_warped, x2_warped = sorted([x1_warped, x2_warped])  # x1_warped < x2_warped
-                                # y1_warped, y2_warped = sorted([y1_warped, y2_warped])  # y1_warped < y2_warped
-
                                 xy_corners_warped = np.array(xy_corners_rotated).reshape((-1, 1, 2))
-                                cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
 
-                                # local_costmap[x1_warped:x2_warped, y1_warped:y2_warped] = 100  # Устанавливаем высокую стоимость в области препятствия
+                                distance = obstacle_distances_m[i]
+                                cost = int(255 * (1.0 - min(distance / 10.0, 1.0)))
+
+                                cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
+                                cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
 
                             for i, obstacle_center in enumerate(obstacle_centers):
                                 center_y, center_x = self.image.shape[0] - obstacle_center[2], obstacle_center[3]
@@ -333,24 +320,15 @@ class BirdsEyeView():
                                 )
 
                         case 'camera_front':
-                            for bbox_corners in obstacle_corners:
+                            for i, bbox_corners in enumerate(obstacle_corners):
                                 x1, y1, x2, y2, xy_corners_warped = bbox_corners
                                 xy_corners_warped = np.array(xy_corners_warped).reshape((-1, 1, 2))
 
-                                # x1_warped, y1_warped = map(int, map(round, xy_corners_warped[0]))
-                                # x2_warped, y2_warped = map(int, map(round, xy_corners_warped[2]))
-
-                                # x1_warped = max(0, min((x1_warped - 25), lcm_width - 1))
-                                # y1_warped = max(0, min(y1_warped, lcm_height - 1))
-                                # x2_warped = max(0, min((x2_warped + 25), lcm_width - 1))
-                                # y2_warped = max(0, min(y2_warped, lcm_height - 1))
-
-                                # x1_warped, x2_warped = sorted([x1_warped, x2_warped])
-                                # y1_warped, y2_warped = sorted([y1_warped, y2_warped])
+                                distance = obstacle_distances_m[i]
+                                cost = int(255 * (1.0 - min(distance / 10.0, 1.0)))
 
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
-
-                                # local_costmap[y1_warped:y2_warped, x1_warped:x2_warped] = 100
+                                cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
 
                             for i, obstacle_center in enumerate(obstacle_centers):
                                 center_x, center_y = obstacle_center[2], obstacle_center[3]
@@ -366,24 +344,15 @@ class BirdsEyeView():
                                 )
 
                         case 'camera_front_blind':
-                            for bbox_corners in obstacle_corners:
+                            for i, bbox_corners in enumerate(obstacle_corners):
                                 x1, y1, x2, y2, xy_corners_warped = bbox_corners
                                 xy_corners_warped = np.array(xy_corners_warped).reshape((-1, 1, 2))
 
-                                # x1_warped, y1_warped = map(int, map(round, xy_corners_warped[0]))
-                                # x2_warped, y2_warped = map(int, map(round, xy_corners_warped[2]))
-
-                                # x1_warped = max(0, min((x1_warped - 25), lcm_width - 1))
-                                # y1_warped = max(0, min(y1_warped, lcm_height - 1))
-                                # x2_warped = max(0, min((x2_warped + 25), lcm_width - 1))
-                                # y2_warped = max(0, min(y2_warped, lcm_height - 1))
-
-                                # x1_warped, x2_warped = sorted([x1_warped, x2_warped])
-                                # y1_warped, y2_warped = sorted([y1_warped, y2_warped])
+                                distance = obstacle_distances_m[i]
+                                cost = int(255 * (1.0 - min(distance / 10.0, 1.0)))
 
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
-
-                                # local_costmap[y1_warped:y2_warped, x1_warped:x2_warped] = 100
+                                cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
 
                             for i, obstacle_center in enumerate(obstacle_centers):
                                 center_x, center_y = obstacle_center[2], obstacle_center[3]
@@ -399,7 +368,7 @@ class BirdsEyeView():
                                 )
 
                         case 'camera_front_right':
-                            for bbox_corners in obstacle_corners:
+                            for i, bbox_corners in enumerate(obstacle_corners):
                                 x1, y1, x2, y2, xy_corners_warped = bbox_corners
 
                                 xy_corners_rotated = []
@@ -409,21 +378,13 @@ class BirdsEyeView():
                                     y_rotated = x_warped
                                     xy_corners_rotated.append([x_rotated, y_rotated])
 
-                                # x1_warped, y1_warped = map(int, map(round, xy_corners_warped[0]))
-                                # x2_warped, y2_warped = map(int, map(round, xy_corners_warped[2]))
-
-                                # x1_warped = max(0, min((x1_warped - 25), lcm_width - 1))
-                                # y1_warped = max(0, min(lcm_width - y1_warped, lcm_height - 1))
-                                # x2_warped = max(0, min((x2_warped + 25), lcm_width - 1))
-                                # y2_warped = max(0, min(lcm_width - y2_warped, lcm_height - 1))
-
-                                # x1_warped, x2_warped = sorted([x1_warped, x2_warped])
-                                # y1_warped, y2_warped = sorted([y1_warped, y2_warped])
-
                                 xy_corners_warped = np.array(xy_corners_rotated).reshape((-1, 1, 2))
-                                cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
 
-                                # local_costmap[x1_warped:x2_warped, y1_warped:y2_warped] = 100
+                                distance = obstacle_distances_m[i]
+                                cost = int(255 * (1.0 - min(distance / 10.0, 1.0)))
+
+                                cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
+                                cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
 
                             for i, obstacle_center in enumerate(obstacle_centers):
                                 center_y, center_x = obstacle_center[2], self.image.shape[1] - obstacle_center[3]
@@ -438,11 +399,8 @@ class BirdsEyeView():
                                     1, 
                                 )
 
-                        # case 'camera_rear_left':
-                        #     pass
-
                         case 'camera_rear':
-                            for bbox_corners in obstacle_corners:
+                            for i, bbox_corners in enumerate(obstacle_corners):
                                 x1, y1, x2, y2, xy_corners_warped = bbox_corners
 
                                 xy_corners_rotated = []
@@ -452,21 +410,13 @@ class BirdsEyeView():
                                     y_rotated = self.image.shape[0] - y_warped
                                     xy_corners_rotated.append([x_rotated, y_rotated])
 
-                                # x1_warped, y1_warped = map(int, map(round, xy_corners_warped[0]))
-                                # x2_warped, y2_warped = map(int, map(round, xy_corners_warped[2]))
-
-                                # x1_warped = max(0, min(((lcm_width - x1_warped) - 25), lcm_width - 1))
-                                # y1_warped = max(0, min(lcm_height - y1_warped, lcm_height - 1))
-                                # x2_warped = max(0, min(((lcm_width - x2_warped) + 25), lcm_width - 1))
-                                # y2_warped = max(0, min(lcm_height - y2_warped, lcm_height - 1))
-
-                                # x1_warped, x2_warped = sorted([x1_warped, x2_warped])
-                                # y1_warped, y2_warped = sorted([y1_warped, y2_warped])
-
                                 xy_corners_warped = np.array(xy_corners_rotated).reshape((-1, 1, 2))
-                                cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
 
-                                # local_costmap[y1_warped:y2_warped, x1_warped:x2_warped] = 100
+                                distance = obstacle_distances_m[i]
+                                cost = int(255 * (1.0 - min(distance / 10.0, 1.0)))
+
+                                cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
+                                cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
 
                             for i, obstacle_center in enumerate(obstacle_centers):
                                 center_x, center_y = self.image.shape[1] - obstacle_center[2], self.image.shape[0] - obstacle_center[3]
@@ -481,10 +431,10 @@ class BirdsEyeView():
                                     1, 
                                 )
 
-                        # case 'camera_rear_right':
-                        #     pass
-
             # cv2.imshow('local_costmap', local_costmap)
             # cv2.waitKey(1)
+
+            local_costmap = (local_costmap.astype(np.int16) - 128).astype(np.int8)
+            local_costmap[local_costmap == -128] = 0
 
             return local_costmap

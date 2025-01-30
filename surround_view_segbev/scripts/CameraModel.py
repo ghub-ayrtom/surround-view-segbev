@@ -18,7 +18,6 @@ CHESSBOARD_PATTERN_SIZE = (7, 7)  # Размерность внутренних 
 
 
 class CameraModel:
-
     calibration_flags = (
         # cv2.CALIB_USE_INTRINSIC_GUESS +  # Использовать заданные внутренние параметры (fx, fy, cx, cy), а также коэффициенты радиальной и тангенциальной дисторсий в качестве начальных и оптимизировать их в процессе калибровки
         # cv2.CALIB_USE_EXTRINSIC_GUESS +  # Использовать заданные внешние параметры (rotation_vectors и translation_vectors) в качестве начальных и оптимизировать их в процессе калибровки
@@ -39,7 +38,6 @@ class CameraModel:
         # cv2.CALIB_ZERO_DISPARITY +  # Оптические центры линз обеих видеокамер имеют одинаковые координаты пикселей в выпрямленных видах
         # cv2.CALIB_USE_LU  # Использовать LU-декомпозицию вместо SVD-декомпозиции. Гораздо быстрее, но потенциально менее точно
     )
-
 
     def __init__(self, webots_camera_name, node_logger, related_chessboard=None, load_parameters=True):
         if os.getenv('USING_EXTERN_CONTROLLER') is None:
@@ -82,7 +80,6 @@ class CameraModel:
 
         self.load_camera_parameters()
 
-
     def load_camera_parameters(self):
         camera_parameters_file_path = os.path.join(
             os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
@@ -116,7 +113,6 @@ class CameraModel:
                     webots_settings_yaml_file.close()
                 except yaml.YAMLError as e:
                     self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
-
 
     def calibrate_camera(self, calibration_image, debug=False):
         calibration_image_gray = cv2.cvtColor(calibration_image, cv2.COLOR_RGBA2GRAY)
@@ -236,7 +232,6 @@ class CameraModel:
 
             self.calibrating = False
 
-
     def undistort(self, image):
         image_height, image_width = image.shape[:2]
 
@@ -251,18 +246,16 @@ class CameraModel:
 
         return image_undistorted
 
-
     def flip(self, image):
         match self.device_name:
-            case 'camera_front_left' | 'camera_rear_left':
+            case 'camera_front_left':
                 return cv2.transpose(image)[::-1]
-            case 'camera_front_right' | 'camera_rear_right':
+            case 'camera_front_right':
                 return np.flip(cv2.transpose(image), 1)
             case 'camera_front' | 'camera_front_blind':
                 return image.copy()
             case 'camera_rear':
                 return image.copy()[::-1, ::-1, :]
-
 
     def get_projection_matrix(self, image, obstacle_bboxes=None, gotten=True):
         image_undistorted = image  # self.undistort(image)
