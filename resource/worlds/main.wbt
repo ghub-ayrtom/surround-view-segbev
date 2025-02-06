@@ -12,6 +12,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "../protos/PlasticBarrel.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/traffic/protos/Pole.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/traffic/protos/GenericTrafficLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Rubber.proto"
 
 WorldInfo {
   contactProperties [
@@ -21,8 +22,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5774326042849574 0.5777300091912736 -0.5768878781778508 2.0945287410565236
-  position -0.2269559615539256 14.85075014222268 61.790964294652895
+  orientation 0.5774325626734949 0.5777299524352524 -0.5768879766674648 2.094528965564273
+  position -0.2269559615539258 14.85075014222268 61.79096429465288
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -31,13 +32,38 @@ TexturedBackgroundLight {
   texture "noon_sunny_empty"
 }
 MercedesBenzSprinter {
-  translation -0.000107357 16.991 0.393878
-  rotation 0 0 1 -1.5708
   color 0.427451 0.0470588 0.0784314
   name "ego_vehicle"
   controller "<extern>"
   supervisor TRUE
   sensorsSlotFront [
+    Lidar {
+      translation -0.71 0 0.67
+      children [
+        Pose {
+          translation -0.04715 0 -0.0531
+          children [
+            Shape {
+              appearance Rubber {
+              }
+              geometry Cylinder {
+                height 0.125
+                radius 0.05
+              }
+            }
+          ]
+        }
+      ]
+      horizontalResolution 500
+      fieldOfView 3.14159
+      verticalFieldOfView 0.698132
+      numberOfLayers 64
+      minRange 0.1
+      maxRange 100
+      noise 0.03
+      minFrequency 10
+      maxFrequency 10
+    }
     Camera {
       translation -3.5721 0.836 1.66828
       rotation -0.3573701719399441 0.35765517207706493 0.862768415099985 1.71708
@@ -250,7 +276,6 @@ MercedesBenzSprinter {
     Compass {
     }
     InertialUnit {
-      rotation 0 0 1 1.5708
       name "imu"
     }
   ]
@@ -672,7 +697,7 @@ Solid {
   }
 }
 PlasticBarrel {
-  translation -6.27 15 -0.01
+  translation -6.27 2.94 -0.01
   name "Plastic Barrel 1"
   physics Physics {
     mass 10
@@ -703,7 +728,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -0.38 19.99 -0.01
+  translation -0.38 -2.78 -0.01
   name "Plastic Barrel 2"
   physics Physics {
     mass 10
@@ -734,7 +759,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation 1.52 5.94 -0.01
+  translation 7.15 2.71 -0.01
   name "Plastic Barrel 3"
   physics Physics {
     mass 10
@@ -765,7 +790,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation 3.53 15.74 -0.01
+  translation 0.5 8.16 -0.01
   name "Plastic Barrel 4"
   physics Physics {
     mass 10
@@ -796,7 +821,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -2.73 -37.88 -0.01
+  translation 6.35 -0.47 -0.01
   name "Plastic Barrel 5"
   physics Physics {
     mass 10
@@ -827,7 +852,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation 1.85 -53.09 -0.01
+  translation 1.52 -13.76 -0.01
   name "Plastic Barrel 6"
   physics Physics {
     mass 10
@@ -858,7 +883,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation 0.97 -53.09 -0.01
+  translation -3.15 -26.56 -0.01
   name "Plastic Barrel 7"
   physics Physics {
     mass 10
@@ -889,7 +914,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -14.22 -76.43 -0.01
+  translation -2.73 -37.88 -0.01
   name "Plastic Barrel 8"
   physics Physics {
     mass 10
@@ -920,7 +945,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -13.34 -76.43 -0.01
+  translation 1.85 -53.09 -0.01
   name "Plastic Barrel 9"
   physics Physics {
     mass 10
@@ -951,7 +976,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -4.54 -87.57 -0.01
+  translation 0.97 -53.09 -0.01
   name "Plastic Barrel 10"
   physics Physics {
     mass 10
@@ -982,7 +1007,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -20.35 -131.13 -0.01
+  translation -14.22 -76.43 -0.01
   name "Plastic Barrel 11"
   physics Physics {
     mass 10
@@ -1013,7 +1038,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -39.95 -163.71 -0.01
+  translation -13.34 -76.43 -0.01
   name "Plastic Barrel 12"
   physics Physics {
     mass 10
@@ -1044,7 +1069,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -23.82 -168.96 -0.01
+  translation -4.54 -87.57 -0.01
   name "Plastic Barrel 13"
   physics Physics {
     mass 10
@@ -1075,7 +1100,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -35.29 -187.14 -0.01
+  translation -20.35 -131.13 -0.01
   name "Plastic Barrel 14"
   physics Physics {
     mass 10
@@ -1106,7 +1131,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -36.17 -187.14 -0.01
+  translation -39.95 -163.71 -0.01
   name "Plastic Barrel 15"
   physics Physics {
     mass 10
@@ -1137,7 +1162,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -50.16 -199.97 -0.01
+  translation -23.82 -168.96 -0.01
   name "Plastic Barrel 16"
   physics Physics {
     mass 10
@@ -1168,7 +1193,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -39.24 -199.15 -0.01
+  translation -35.29 -187.14 -0.01
   name "Plastic Barrel 17"
   physics Physics {
     mass 10
@@ -1199,7 +1224,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -54.1 -214.06 -0.01
+  translation -36.17 -187.14 -0.01
   name "Plastic Barrel 18"
   physics Physics {
     mass 10
@@ -1230,7 +1255,7 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -53.22 -214.06 -0.01
+  translation -50.16 -199.97 -0.01
   name "Plastic Barrel 19"
   physics Physics {
     mass 10
@@ -1261,8 +1286,101 @@ PlasticBarrel {
   ]
 }
 PlasticBarrel {
-  translation -58.76 -224.45 -0.01
+  translation -39.24 -199.15 -0.01
   name "Plastic Barrel 20"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -54.1 -214.06 -0.01
+  name "Plastic Barrel 21"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -53.22 -214.06 -0.01
+  name "Plastic Barrel 22"
+  physics Physics {
+    mass 10
+  }
+  boundingObject Pose {
+    translation -0.042 -0.04 0.701
+    children [
+      Cylinder {
+        height 1.38
+        radius 0.443
+      }
+    ]
+  }
+  modelPath [
+    "../models/plastic_barrel/plastic_barrel.dae"
+  ]
+  baseColorTexturePath [
+    "../models/plastic_barrel/textures/base_map.jpg"
+  ]
+  roughnessTexturePath [
+    "../models/plastic_barrel/textures/roughness_map.jpg"
+  ]
+  metallicTexturePath [
+    "../models/plastic_barrel/textures/metallic_map.jpg"
+  ]
+  normalTexturePath [
+    "../models/plastic_barrel/textures/normal_map.png"
+  ]
+}
+PlasticBarrel {
+  translation -58.76 -224.45 -0.01
+  name "Plastic Barrel 23"
   physics Physics {
     mass 10
   }

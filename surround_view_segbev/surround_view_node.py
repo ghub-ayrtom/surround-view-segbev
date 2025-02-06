@@ -10,7 +10,7 @@ from .scripts.CameraModel import CameraModel
 from .scripts.BirdsEyeView import BirdsEyeView
 import os
 import time
-from configs import global_settings
+from configs import global_settings, qos_profiles
 import torch
 from ultralytics import YOLO
 from fastseg import MobileV3Large
@@ -19,7 +19,6 @@ from nav_msgs.msg import OccupancyGrid
 from std_msgs.msg import Header
 import yaml
 from sensor_msgs.msg import LaserScan
-from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 
 
 camera_topics = {
@@ -74,44 +73,24 @@ class SurroundViewNode(Node):
 
             self.bev = BirdsEyeView(self._logger, load_weights_and_masks=True)
 
-            image_qos = QoSProfile(
-                reliability=ReliabilityPolicy.BEST_EFFORT, 
-                history=HistoryPolicy.KEEP_LAST, 
-                depth=2, 
-            )
-
-            self.surround_view_publisher = self.create_publisher(sensor_msgs.msg.Image, '/surround_view', image_qos)
-
-            costmap_qos = QoSProfile(
-                reliability=ReliabilityPolicy.RELIABLE, 
-                history=HistoryPolicy.KEEP_LAST, 
-                depth=1, 
-            )
-
-            self.local_costmap_publisher = self.create_publisher(OccupancyGrid, '/local_costmap', costmap_qos)
-
-            scan_qos = QoSProfile(
-                reliability=ReliabilityPolicy.RELIABLE, 
-                history=HistoryPolicy.KEEP_LAST, 
-                depth=2, 
-            )
-
-            self.laserscan_publisher = self.create_publisher(LaserScan, '/scan', scan_qos)
+            self.surround_view_publisher = self.create_publisher(sensor_msgs.msg.Image, '/surround_view', qos_profiles.image_qos)
+            self.local_costmap_publisher = self.create_publisher(OccupancyGrid, '/local_costmap', qos_profiles.costmap_qos)
+            self.laserscan_publisher = self.create_publisher(LaserScan, '/scan', qos_profiles.scan_qos)
 
             self.grid = OccupancyGrid()
             self.grid.header = Header()
 
-            self.laser_scan = LaserScan()
-            self.laser_scan.header = Header()
+            self.laserscan = LaserScan()
+            self.laserscan.header = Header()
 
             self.__load_nav2_parameters()
 
-            self.laser_scan.angle_min = -np.pi  # Полный круговой обзор (360°)
-            self.laser_scan.angle_max = np.pi   #
-            self.laser_scan.angle_increment = np.pi / 360  # 0.5° на шаг
+            self.laserscan.angle_min = -np.pi  # Полный круговой обзор (360°)
+            self.laserscan.angle_max = np.pi   #
+            self.laserscan.angle_increment = np.pi / 360  # 0.5° на шаг
 
-            self.laser_scan.range_min = 0.2   # Метры
-            self.laser_scan.range_max = 20.0  #
+            self.laserscan.range_min = 0.2   # Метры
+            self.laserscan.range_max = 20.0  #
 
             self.images_projected_with_obstacles_info = {}
             camera_topics_subscribers = []
@@ -136,17 +115,17 @@ class SurroundViewNode(Node):
             try:
                 nav2_parameters = yaml.safe_load(nav2_params_yaml_file)
                 self.grid.header.frame_id = nav2_parameters['local_costmap']['local_costmap']['ros__parameters']['global_frame']
-                self.laser_scan.header.frame_id = nav2_parameters['local_costmap']['local_costmap']['ros__parameters']['robot_base_frame']
+                self.laserscan.header.frame_id = nav2_parameters['local_costmap']['local_costmap']['ros__parameters']['robot_base_frame']
 
                 self.grid.info.width = nav2_parameters['local_costmap']['local_costmap']['ros__parameters']['width']
                 self.grid.info.height = nav2_parameters['local_costmap']['local_costmap']['ros__parameters']['height']
                 self.grid.info.resolution = nav2_parameters['local_costmap']['local_costmap']['ros__parameters']['resolution']
 
-                self.grid.info.origin.position.x = self.grid.info.width * self.grid.info.resolution / 2.0
-                self.grid.info.origin.position.y = -self.grid.info.height * self.grid.info.resolution / 2.0
+                self.grid.info.origin.position.x = -self.grid.info.height * self.grid.info.resolution / 2.0
+                self.grid.info.origin.position.y = self.grid.info.width * self.grid.info.resolution / 2.0
 
-                self.grid.info.origin.orientation.y = 1.0
-                self.grid.info.origin.orientation.w = 0.0
+                self.grid.info.origin.orientation.z = -1.0
+                self.grid.info.origin.orientation.w = 1.0
 
                 nav2_params_yaml_file.close()
             except yaml.YAMLError as e:
@@ -159,13 +138,13 @@ class SurroundViewNode(Node):
             if 'depth' not in camera_name:
                 image_color = CvBridge().imgmsg_to_cv2(message, 'rgb8')
 
-                if global_settings.USED_DETECTOR_FOLDER_NAME == 'YOLO11' and global_settings.CONTROL_MODE == 'Auto':
-                    predicted_bboxes = self.yolo_model.predict(
-                        source=cv2.cvtColor(image_color, cv2.COLOR_BGR2RGB), 
-                        conf=0.9, 
-                        verbose=False, 
-                        # show=True, 
-                    )
+                # if global_settings.USED_DETECTOR_FOLDER_NAME == 'YOLO11' and global_settings.CONTROL_MODE == 'Auto':
+                #     predicted_bboxes = self.yolo_model.predict(
+                #         source=cv2.cvtColor(image_color, cv2.COLOR_BGR2RGB), 
+                #         conf=0.9, 
+                #         verbose=False, 
+                #         # show=True, 
+                #     )
                 if global_settings.USED_SEGMENTOR_FOLDER_NAME == 'FastSeg' and global_settings.CONTROL_MODE == 'Auto':
                     predicted_labels = self.fastseg_model.predict_one(image_color)
                     image_color = np.array(colorize(predicted_labels, palette='surround_view_segbev'))
@@ -291,31 +270,31 @@ class SurroundViewNode(Node):
             local_costmap = cv2.resize(local_costmap, (self.grid.info.width, self.grid.info.height), interpolation=cv2.INTER_NEAREST)
 
             self.grid.header.stamp = self.get_clock().now().to_msg()
-            self.grid.data = local_costmap.flatten().tolist()
+            self.grid.data = np.flipud(local_costmap).flatten().tolist()
 
-            self.laser_scan.header.stamp = self.get_clock().now().to_msg()
-            self.laser_scan.ranges = [self.laser_scan.range_max] * int(
-                (self.laser_scan.angle_max - self.laser_scan.angle_min) / self.laser_scan.angle_increment)
+            self.laserscan.header.stamp = self.get_clock().now().to_msg()
+            self.laserscan.ranges = [self.laserscan.range_max] * int(
+                (self.laserscan.angle_max - self.laserscan.angle_min) / self.laserscan.angle_increment)
 
-            for y in range(self.grid.info.height):
-                for x in range(self.grid.info.width):
-                    i = y * self.grid.info.width + x
+            for x in range(self.grid.info.height):
+                for y in range(self.grid.info.width):
+                    i = x * self.grid.info.width + y
 
                     # Если ячейка локальной карты стоимости содержит препятствие
-                    if self.grid.data[i] > 0:
-                        cx = self.grid.info.origin.position.x - x * self.grid.info.resolution  # Находим её координаты
-                        cy = self.grid.info.origin.position.y + y * self.grid.info.resolution  #
+                    if self.grid.data[i] < 0:
+                        cx = self.grid.info.origin.position.x + x * self.grid.info.resolution  # Находим её координаты
+                        cy = self.grid.info.origin.position.y - y * self.grid.info.resolution  #
 
                         angle = np.arctan2(cy, cx)
                         distance = np.hypot(cx, cy)
 
-                        j = int((angle - self.laser_scan.angle_min) / self.laser_scan.angle_increment)
+                        j = int((angle - self.laserscan.angle_min) / self.laserscan.angle_increment)
 
-                        if 0 <= j < len(self.laser_scan.ranges):
-                            self.laser_scan.ranges[j] = min(self.laser_scan.ranges[j], distance)
+                        if 0 <= j < len(self.laserscan.ranges):
+                            self.laserscan.ranges[j] = min(self.laserscan.ranges[j], distance)
 
             self.local_costmap_publisher.publish(self.grid)
-            self.laserscan_publisher.publish(self.laser_scan)
+            # self.laserscan_publisher.publish(self.laserscan)
 
             self.images_projected_with_obstacles_info.clear()
             self.surround_view_publisher.publish(CvBridge().cv2_to_imgmsg(self.bev.image, 'rgb8'))

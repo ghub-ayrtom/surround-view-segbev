@@ -3,7 +3,7 @@ from rclpy.node import Node
 from ackermann_msgs.msg import AckermannDrive
 import sys, select, termios, tty
 from numpy import clip
-from configs import global_settings
+from configs import global_settings, qos_profiles
 import traceback
 
 
@@ -37,7 +37,7 @@ class AckermannKeyboardTeleopNode(Node):
             )
 
         self.message = AckermannDrive()
-        self.cmd_ackermann_publisher = self.create_publisher(AckermannDrive, '/cmd_ackermann', 1)
+        self.cmd_ackermann_publisher = self.create_publisher(AckermannDrive, '/cmd_ackermann', qos_profiles.cmd_qos)
 
         self._logger.info(
             f'\n\n* * * * * * * * * * * * * * * * * * * * * * * * *\n'
@@ -51,13 +51,16 @@ class AckermannKeyboardTeleopNode(Node):
 
         self._logger.info('Successfully launched!')
 
-        if global_settings.CONTROL_MODE == 'Manual':
-            self.print_current_values()
-            self.key_loop()
-        elif global_settings.CONTROL_MODE == 'Auto':
-            self._logger.warning('Switch control mode from "Auto" to "Manual" first')
-        else:
-            self._logger.error('Undefined control mode!')
+        # if global_settings.CONTROL_MODE == 'Manual':
+        #     self.print_current_values()
+        #     self.key_loop()
+        # elif global_settings.CONTROL_MODE == 'Auto':
+        #     self._logger.warning('Switch control mode from "Auto" to "Manual" first')
+        # else:
+        #     self._logger.error('Undefined control mode!')
+
+        self.print_current_values()
+        self.key_loop()
 
     def publisher_callback(self):
         self.message.speed = self.current_speed

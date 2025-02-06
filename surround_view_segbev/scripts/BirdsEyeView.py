@@ -278,6 +278,7 @@ class BirdsEyeView():
         np.copyto(self.central, cv2.resize(ego_vehicle_image, (xr - xl, (yb + 5) - (yt - 10))))
 
         if self.frames:
+            max_perceived_distance = 20.0  # Метры
             local_costmap = np.zeros(self.image.shape[:2], dtype=np.uint8)
 
             for camera_name in self.frames:
@@ -301,7 +302,7 @@ class BirdsEyeView():
                                 xy_corners_warped = np.array(xy_corners_rotated).reshape((-1, 1, 2))
 
                                 distance = obstacle_distances_m[i]
-                                cost = int(255 * (1.0 - min(distance / 10.0, 1.0)))
+                                cost = int(127 * (1.0 - min(distance / max_perceived_distance, 1.0)))
 
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
                                 cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
@@ -325,7 +326,7 @@ class BirdsEyeView():
                                 xy_corners_warped = np.array(xy_corners_warped).reshape((-1, 1, 2))
 
                                 distance = obstacle_distances_m[i]
-                                cost = int(255 * (1.0 - min(distance / 10.0, 1.0)))
+                                cost = int(127 * (1.0 - min(distance / max_perceived_distance, 1.0)))
 
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
                                 cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
@@ -349,7 +350,7 @@ class BirdsEyeView():
                                 xy_corners_warped = np.array(xy_corners_warped).reshape((-1, 1, 2))
 
                                 distance = obstacle_distances_m[i]
-                                cost = int(255 * (1.0 - min(distance / 10.0, 1.0)))
+                                cost = int(127 * (1.0 - min(distance / max_perceived_distance, 1.0)))
 
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
                                 cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
@@ -381,7 +382,7 @@ class BirdsEyeView():
                                 xy_corners_warped = np.array(xy_corners_rotated).reshape((-1, 1, 2))
 
                                 distance = obstacle_distances_m[i]
-                                cost = int(255 * (1.0 - min(distance / 10.0, 1.0)))
+                                cost = int(127 * (1.0 - min(distance / max_perceived_distance, 1.0)))
 
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
                                 cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
@@ -413,7 +414,7 @@ class BirdsEyeView():
                                 xy_corners_warped = np.array(xy_corners_rotated).reshape((-1, 1, 2))
 
                                 distance = obstacle_distances_m[i]
-                                cost = int(255 * (1.0 - min(distance / 10.0, 1.0)))
+                                cost = int(127 * (1.0 - min(distance / max_perceived_distance, 1.0)))
 
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
                                 cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)

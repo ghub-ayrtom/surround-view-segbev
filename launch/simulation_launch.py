@@ -25,8 +25,8 @@ def get_ros2_nodes():
         ego_vehicle_description = urdf.read()
 
     ego_vehicle_state_publisher_node = Node(
-        package='robot_state_publisher', 
         executable='robot_state_publisher', 
+        package='robot_state_publisher', 
         name='robot_state_publisher', 
         parameters=[{
             'use_sim_time': USE_SIM_TIME, 
@@ -36,61 +36,43 @@ def get_ros2_nodes():
         output='screen', 
     )
 
-    surround_view_node = Node(
+    ego_vehicle_odometry_node = Node(
+        executable='ego_vehicle_odometry_node', 
         package=PACKAGE_NAME, 
-        executable='surround_view_node', 
-        name='surround_view_node', 
-        parameters=[{'use_sim_time': USE_SIM_TIME}], 
+        name='ego_vehicle_odometry_node', 
+        parameters=[{'use_sim_time': False}], 
         output='screen', 
     )
 
     gps_path_planning_node = Node(
-        package=PACKAGE_NAME, 
         executable='gps_path_planning_node', 
+        package=PACKAGE_NAME, 
         name='gps_path_planning_node', 
         parameters=[{'use_sim_time': False}], 
         output='screen', 
     )
 
-    static_transforms = [
-        ['map', 'odom'], 
-        ['odom', 'base_link'], 
-    ]
-    
-    static_transform_nodes = []
-
-    for transform in static_transforms:
-        static_transform_nodes.append(Node(
-            package='tf2_ros', 
-            executable='static_transform_publisher', 
-            name='static_transform_publisher', 
-            parameters=[{'use_sim_time': USE_SIM_TIME}], 
-            arguments=[
-                '--x', '0.00', 
-                '--y', '0.00', 
-                '--z', '0.00', 
-                '--roll', '0.00', 
-                '--pitch', '0.00', 
-                '--yaw', '0.00', 
-                '--frame-id', transform[0], 
-                '--child-frame-id', transform[1], 
-            ], 
-            output='screen', 
-        ))
+    surround_view_node = Node(
+        executable='surround_view_node', 
+        package=PACKAGE_NAME, 
+        name='surround_view_node', 
+        parameters=[{'use_sim_time': USE_SIM_TIME}], 
+        output='screen', 
+    )
 
     return [
         ego_vehicle_state_publisher_node, 
-        surround_view_node, 
-        gps_path_planning_node, 
-    ] + static_transform_nodes
+        ego_vehicle_odometry_node, 
+        # gps_path_planning_node, 
+        # surround_view_node, 
+    ]
 
 
 def get_nav2_nodes():
     lifecycle_manager = Node(
-        package='nav2_lifecycle_manager', 
         executable='lifecycle_manager', 
+        package='nav2_lifecycle_manager', 
         name='lifecycle_manager_navigation', 
-        output='screen', 
         parameters=[{
             'use_sim_time': USE_SIM_TIME, 
             'autostart': True, 
@@ -101,47 +83,48 @@ def get_nav2_nodes():
                 'bt_navigator', 
                 'waypoint_follower', 
             ]
-        }]
+        }], 
+        output='screen', 
     )
 
     controller_server = Node(
-        package='nav2_controller', 
         executable='controller_server', 
+        package='nav2_controller', 
         name='controller_server', 
-        output='screen', 
         parameters=[nav2_params_yaml], 
+        output='screen', 
     )
 
     planner_server = Node(
-        package='nav2_planner', 
         executable='planner_server', 
+        package='nav2_planner', 
         name='planner_server', 
-        output='screen', 
         parameters=[{'use_sim_time': USE_SIM_TIME}, nav2_params_yaml], 
+        output='screen', 
     )
 
     behavior_server = Node(
-        package='nav2_behaviors', 
         executable='behavior_server', 
+        package='nav2_behaviors', 
         name='behavior_server', 
-        output='screen', 
         parameters=[{'use_sim_time': USE_SIM_TIME}], 
+        output='screen', 
     )
 
     bt_navigator = Node(
-        package='nav2_bt_navigator', 
         executable='bt_navigator', 
+        package='nav2_bt_navigator', 
         name='bt_navigator', 
-        output='screen', 
         parameters=[{'use_sim_time': USE_SIM_TIME}], 
+        output='screen', 
     )
 
     waypoint_follower = Node(
-        package='nav2_waypoint_follower', 
         executable='waypoint_follower', 
+        package='nav2_waypoint_follower', 
         name='waypoint_follower', 
-        output='screen', 
         parameters=[{'use_sim_time': USE_SIM_TIME}], 
+        output='screen', 
     )
 
     return [

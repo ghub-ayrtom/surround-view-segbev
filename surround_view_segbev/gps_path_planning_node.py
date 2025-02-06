@@ -4,12 +4,11 @@ from sensor_msgs.msg import NavSatFix, Image, MagneticField
 import traceback
 import math
 from ackermann_msgs.msg import AckermannDrive
-from configs import global_settings
+from configs import global_settings, qos_profiles
 from .scripts.utils import *
 from cv_bridge import CvBridge
 from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import Header
-from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 
 
 class GPSPathPlanningNode(Node):
@@ -23,14 +22,8 @@ class GPSPathPlanningNode(Node):
             self.ego_vehicle_vector = []
             self.ego_vehicle_vector_relative = []
 
-            compass_qos = QoSProfile(
-                reliability=ReliabilityPolicy.BEST_EFFORT, 
-                history=HistoryPolicy.KEEP_LAST, 
-                depth=3, 
-            )
-
             self.yaw = 0.0
-            self.create_subscription(MagneticField, '/compass', self.__compass_callback, compass_qos)
+            self.create_subscription(MagneticField, '/compass', self.__compass_callback, qos_profiles.compass_qos)
 
             self.current_route_point_index = 0
             self.current_route_point_relative = None
@@ -47,44 +40,20 @@ class GPSPathPlanningNode(Node):
 
             self.__split_route()
 
-            gps_qos = QoSProfile(
-                reliability=ReliabilityPolicy.BEST_EFFORT, 
-                history=HistoryPolicy.KEEP_LAST, 
-                depth=1, 
-            )
-
             self.ego_vehicle_position = []
-            self.create_subscription(NavSatFix, '/gps', self.__gps_callback, gps_qos)
-
-            cmd_qos = QoSProfile(
-                reliability=ReliabilityPolicy.RELIABLE, 
-                history=HistoryPolicy.KEEP_LAST, 
-                depth=1, 
-            )
+            self.create_subscription(NavSatFix, '/gps', self.__gps_callback, qos_profiles.gps_qos)
 
             self.drive_command = AckermannDrive()
-            self.cmd_ackermann_publisher = self.create_publisher(AckermannDrive, '/cmd_ackermann', cmd_qos)
+            self.cmd_ackermann_publisher = self.create_publisher(AckermannDrive, '/cmd_ackermann', qos_profiles.cmd_qos)
 
             self.current_goal = PoseStamped()
             self.current_goal.header = Header()
             self.current_goal.header.frame_id = 'odom'
 
-            goal_qos = QoSProfile(
-                reliability=ReliabilityPolicy.BEST_EFFORT, 
-                history=HistoryPolicy.KEEP_LAST, 
-                depth=5, 
-            )
-
-            self.nav2_goal_publisher = self.create_publisher(PoseStamped, '/goal_pose', goal_qos)
-
-            image_qos = QoSProfile(
-                reliability=ReliabilityPolicy.BEST_EFFORT, 
-                history=HistoryPolicy.KEEP_LAST, 
-                depth=2, 
-            )
+            self.nav2_goal_publisher = self.create_publisher(PoseStamped, '/goal_pose', qos_profiles.goal_qos)
 
             self.create_timer(0.2, self.__navigate)
-            self.create_subscription(Image, '/surround_view', self.__surround_view_callback, image_qos)
+            self.create_subscription(Image, '/surround_view', self.__surround_view_callback, qos_profiles.image_qos)
 
             self.callbacks_status = {
                 'compass': False, 
@@ -183,7 +152,7 @@ class GPSPathPlanningNode(Node):
             self.drive_command.speed = min(self.max_speed, distance_to_target_route_point * 2.5)  # Pk = 2.5
             self.drive_command.steering_angle = max(-self.max_steering_angle, min(self.max_steering_angle, math.degrees(angle_to_target_route_point)))
 
-            self.cmd_ackermann_publisher.publish(self.drive_command)
+            # self.cmd_ackermann_publisher.publish(self.drive_command)
 
             self.current_goal.header.stamp = self.get_clock().now().to_msg()
 
