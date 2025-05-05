@@ -1,3 +1,4 @@
+# DEF-наименования объектов типа Camera в Webots
 devices_name: [
   'camera_front_left_depth', 
   'camera_front_left', 
@@ -15,6 +16,7 @@ devices_name: [
   'camera_rear', 
 ]
 
+# Учитывать значения горизонтального и вертикального углов обзора
 use_fov_values: True
 
 horizontal_fov: 110 # Градусы
@@ -23,14 +25,14 @@ vertical_fov: 70    #
 image_width: 1305 # Пиксели
 
 # Пересчитываются при use_fov_values: True
-image_height: 640
-focal_length: 457
+image_height: 640 # Пиксели
+focal_length: 457 #
 
-# Модель искажения Брауна-Конради
+# Упрощённая модель искажения Брауна-Конради
 distortion_center: [0.45, 0.55]        # 0.0 ≤ x, y ≤ 1.0
 radial_distortion: [0.25, -0.25]       # k1, k2
 tangential_distortion: [0.005, -0.005] # p1, p2
 
-# Для стереокамер с узлом RangeFinder
+# Для стереокамер с объектом типа RangeFinder в Webots
 min_range: 0.2 # Метры
 max_range: 20  #

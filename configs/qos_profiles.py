@@ -25,7 +25,7 @@ costmap_qos = QoSProfile(
     depth=1, 
 )
 
-scan_qos = QoSProfile(
+laserscan_qos = QoSProfile(
     reliability=ReliabilityPolicy.RELIABLE, 
     history=HistoryPolicy.KEEP_LAST, 
     depth=10, 
@@ -71,4 +71,26 @@ odometry_qos = QoSProfile(
     reliability=ReliabilityPolicy.RELIABLE, 
     history=HistoryPolicy.KEEP_LAST, 
     depth=5, 
+)
+
+scan_qos = QoSProfile(
+    reliability=ReliabilityPolicy.BEST_EFFORT, 
+    history=HistoryPolicy.KEEP_ALL, 
+)
+
+bridge_qos = QoSProfile(
+    reliability=ReliabilityPolicy.RELIABLE, 
+    history=HistoryPolicy.KEEP_ALL, 
+)
+
+lidar_qos = QoSProfile(
+    reliability=ReliabilityPolicy.RELIABLE, 
+    history=HistoryPolicy.KEEP_LAST, 
+    depth=10, 
+)
+
+pose_qos = QoSProfile(
+    reliability=ReliabilityPolicy.RELIABLE, 
+    history=HistoryPolicy.KEEP_LAST, 
+    depth=10, 
 )

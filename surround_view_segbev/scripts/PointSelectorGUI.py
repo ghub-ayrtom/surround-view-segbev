@@ -21,7 +21,7 @@ def display_image(window_title, image):
 class PointSelector(object):
 
     POINT_COLOR = (0, 0, 255)
-    FILL_COLOR = (0, 255, 255)
+    FILL_COLOR = (0, 255, 255, 0)
 
 
     def __init__(self, image, title="PointSelector"):

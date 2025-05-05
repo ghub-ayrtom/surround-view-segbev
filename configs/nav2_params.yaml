@@ -1,67 +1,114 @@
+# Adaptive Monte Carlo Localization для определения позиции и ориентации робота на карте
+# amcl:
+#   ros__parameters:
+#     base_frame_id: base_footprint
+#     global_frame_id: map
+#     laser_min_range: 0.1
+#     laser_max_range: 100.0
+#     set_initial_pose: true
+#     initial_pose: {
+#       x: 0.0, 
+#       y: 0.0, 
+#       z: 0.0, 
+#       yaw: 0.0, 
+#     }
+#     max_beams: 250 # Используем каждый 2-ой луч лидара (500 (горизонтальное разрешение) / 2 = 250)
+#     min_particles: 5000
+#     max_particles: 10000
+#     odom_frame_id: odom
+#     robot_model_type: 'nav2_amcl::DifferentialMotionModel' # nav2_amcl::OmniMotionModel
+#     tf_broadcast: true # Публиковать tf для локализации
+#     transform_tolerance: 0.7 # Задержка на преобразование tf (полезно при высокой задержке сенсоров)
+#     update_min_a: 0.05 # Обновлять локализацию каждые 0.05 радиан (около 2.8°) поворота
+#     update_min_d: 0.1  # Обновлять локализацию каждые 10 см движения
+#     always_reset_initial_pose: true
+#     scan_topic: /scan_reliable
+
+# Контроллер движения
+controller_server:
+  ros__parameters:
+    # Основные параметры
+    # controller_frequency: 20.0 # Гц
+
+    progress_checker_plugins: ['progress_checker']
+    goal_checker_plugins: ['goal_checker']
+    controller_plugins: ['FollowPath']
+
+    # Проверка движения
+    progress_checker:
+      plugin: 'nav2_controller::SimpleProgressChecker'
+      # required_movement_radius: 0.5 # Минимальное смещение за заданное время (м)
+      # movement_time_allowance: 10.0 # Время на прогресс перед пересчётом маршрута (с)
+    # Проверка достижения цели
+    goal_checker:
+      plugin: 'nav2_controller::SimpleGoalChecker'
+      xy_goal_tolerance: 5.0     # Допуск по отклонению в положении (м)
+      yaw_goal_tolerance: 1.5708 # Допуск по отклонению в ориентации (рад)
+      stateful: True
+    FollowPath:
+      plugin: 'nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController'
+      # use_fixed_curvature_lookahead: false # Использовать фиксированную кривизну траектории движения
+
+      # lookahead_dist: 3.0     # Дистанция предсказания траектории (м)
+      # min_lookahead_dist: 1.5 # Минимальное значение упреждения (м)
+      # max_lookahead_dist: 3.0 # Максимальное значение упреждения (м)
+      # lookahead_time: 2.0     # Время упреждения (с)
+
+      # min_approach_linear_velocity: 0.2        # Минимальная линейная скорость при приближении к цели (м/с)
+      # approach_velocity_scaling_dist: 2.0      # С какой дистанции начать замедляться (м)
+      # regulated_linear_scaling_min_radius: 1.5 # Минимальный радиус поворота с замедлением (м)
+
+      # Учёт препятствий
+      use_collision_detection: true        # Избегать столкновения
+      # cost_scaling_dist: 0.5             # Дистанция учёта препятствий (м)
+      # cost_scaling_gain: 1.0             # Усиление влияния препятствий
+      # inflation_cost_scaling_factor: 2.6 # Радиус "опасной зоны" вокруг препятствий (м)
+
+      allow_reversing: true        # Разрешить движение задним ходом
+      use_rotate_to_heading: false # Разрешить вращение на месте
+
 global_costmap:
   global_costmap:
     ros__parameters:
-      global_frame: base_link
+      # update_frequency: 20.0
+      # publish_frequency: 10.0
+      global_frame: map
       robot_base_frame: base_link
-      rolling_window: True
-      width: 160       # Метры
-      height: 200      #
-      resolution: 0.05 # 1 пиксель = 0.05 метров (1 метр = 20 пикселей)
-      robot_radius: 0.5
-      plugins: ['obstacle_layer', 'inflation_layer']
-      obstacle_layer:
-        plugin: 'nav2_costmap_2d::ObstacleLayer'
-        observation_sources: costmap
-        costmap:
-          topic: /scan
-          data_type: LaserScan
-      inflation_layer:
-        plugin: 'nav2_costmap_2d::InflationLayer'
-        inflation_radius: 0.7
-
-local_costmap:
-  local_costmap:
-    ros__parameters:
-      global_frame: base_link
-      robot_base_frame: base_link
-      rolling_window: True
-      width: 160
-      height: 200
+      rolling_window: false
       resolution: 0.05
-      robot_radius: 0.5
-      plugins: ['obstacle_layer', 'inflation_layer']
+      robot_radius: 0.0
+      # Углы эго-автомобиля: левый задний, левый передний, правый передний, правый задний
+      footprint: '[ [-3.5, -1.5], [-3.5,  1.5], [ 3.5,  1.5], [ 3.5, -1.5] ]'
+      track_unknown_space: true
+      plugins: ['static_layer', 'obstacle_layer', 'inflation_layer']
+      static_layer:
+        plugin: 'nav2_costmap_2d::StaticLayer'
+        map_subscribe_transient_local: true
       obstacle_layer:
         plugin: 'nav2_costmap_2d::ObstacleLayer'
-        observation_sources: costmap
-        costmap:
-          topic: /scan
-          data_type: LaserScan
+        enabled: true
+        footprint_clearing_enabled: true # Очистка препятствий под эго-автомобилем
+        observation_sources: scan
+        scan:
+          topic: /scan_reliable
+          sensor_frame: lidar
+          data_type: 'LaserScan'
+          min_obstacle_height: 0.0
+          max_obstacle_height: 0.75
+          clearing: true
+          marking: true
+          raytrace_min_range: 0.3  # Минимальное расстояние, с которого лучи учитываются в расчёте свободного пространства
+          raytrace_max_range: 25.0 # Максимальная дальность, до которой лучи очищают пространство от препятствий
+          obstacle_min_range: 0.3  # Учитываем препятствия от 30 см
+          obstacle_max_range: 15.0 # до 15 м, игнорируя шумы вблизи лидара
       inflation_layer:
         plugin: 'nav2_costmap_2d::InflationLayer'
-        inflation_radius: 0.7
+        # cost_scaling_factor: 5.0
+        # inflation_radius: 2.6
+      always_send_full_costmap: false
 
-controller_server:
+# Загрузка статической глобальной карты, построенной с использованием SLAM Toolbox
+map_server:
   ros__parameters:
-    use_sim_time: True
-    controller_plugins: ['FollowPath']
-    FollowPath:
-      plugin: 'dwb_core::DWBLocalPlanner'
-      critics: [
-        'RotateToGoal', 
-        'Oscillation', 
-        'BaseObstacle', 
-        'GoalAlign', 
-        'PathAlign', 
-        'PathDist', 
-        'GoalDist', 
-      ]
-      RotateToGoal.scale: 32.0
-      RotateToGoal.slowing_factor: 5.0
-      RotateToGoal.lookahead_time: -1.0
-      BaseObstacle.scale: 0.02
-      GoalAlign.scale: 24.0
-      GoalAlign.forward_point_distance: 0.1
-      PathAlign.scale: 32.0
-      PathAlign.forward_point_distance: 0.1
-      PathDist.scale: 32.0
-      GoalDist.scale: 24.0
+    yaml_filename: '/home/ayrtom/ROS2/dev/FQW_ws/src/surround_view_segbev/configs/slam_toolbox/maps/main_wbt/main_wbt.yaml'
+    map_subscribe_transient_local: true

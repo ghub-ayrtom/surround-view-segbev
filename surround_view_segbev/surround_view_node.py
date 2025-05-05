@@ -75,7 +75,7 @@ class SurroundViewNode(Node):
 
             self.surround_view_publisher = self.create_publisher(sensor_msgs.msg.Image, '/surround_view', qos_profiles.image_qos)
             self.local_costmap_publisher = self.create_publisher(OccupancyGrid, '/local_costmap', qos_profiles.costmap_qos)
-            self.laserscan_publisher = self.create_publisher(LaserScan, '/scan', qos_profiles.scan_qos)
+            self.laserscan_publisher = self.create_publisher(LaserScan, '/scan', qos_profiles.laserscan_qos)
 
             self.grid = OccupancyGrid()
             self.grid.header = Header()
