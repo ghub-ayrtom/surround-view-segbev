@@ -16,5 +16,5 @@ slam_toolbox:
     mode: localization # mapping
 
     map_file_name: '/home/ayrtom/ROS2/dev/FQW_ws/src/surround_view_segbev/configs/slam_toolbox/maps/main_wbt/main_wbt'
-    map_start_pose: [0.0, 6.28, -1.57]
+    map_start_pose: [0.0, 5.75, -1.57]
     # map_start_at_dock: true

@@ -22,8 +22,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.5773893138710685 -0.5776931822592868 0.5769680817849763 4.188542316923342
-  position -0.22695596155393005 14.850750142222665 61.790964294652895
+  orientation -0.5773881545374432 -0.5776922755489732 0.5769701498092383 4.188616183078236
+  position -0.2269559615539301 14.850750142222662 61.7909642946529
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -281,6 +281,7 @@ MercedesBenzSprinter {
       name "imu"
     }
   ]
+  interior TRUE
 }
 Pose {
   translation 0 20 0
@@ -2034,7 +2035,7 @@ Pole {
   ]
 }
 GenericTrafficLight {
-  translation -2.51004 9.574 -0.01
+  translation -4.51004 9.574 -0.01
   rotation 0 0 1 1.5708
   name "Traffic Light"
   startGreen FALSE

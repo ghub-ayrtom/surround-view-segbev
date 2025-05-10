@@ -7,8 +7,6 @@ from ackermann_msgs.msg import AckermannDrive
 from configs import global_settings, qos_profiles
 from .scripts.utils import *
 from cv_bridge import CvBridge
-from geometry_msgs.msg import PoseStamped
-from std_msgs.msg import Header
 
 
 class GPSPathPlanningNode(Node):
@@ -45,12 +43,6 @@ class GPSPathPlanningNode(Node):
 
             self.drive_command = AckermannDrive()
             self.cmd_ackermann_publisher = self.create_publisher(AckermannDrive, '/cmd_ackermann', qos_profiles.cmd_qos)
-
-            self.current_goal = PoseStamped()
-            self.current_goal.header = Header()
-            self.current_goal.header.frame_id = 'odom'
-
-            self.nav2_goal_publisher = self.create_publisher(PoseStamped, '/goal_pose', qos_profiles.goal_qos)
 
             self.create_timer(0.2, self.__navigate)
             self.create_subscription(Image, '/surround_view', self.__surround_view_callback, qos_profiles.image_qos)
@@ -152,26 +144,7 @@ class GPSPathPlanningNode(Node):
             self.drive_command.speed = min(self.max_speed, distance_to_target_route_point * 2.5)  # Pk = 2.5
             self.drive_command.steering_angle = max(-self.max_steering_angle, min(self.max_steering_angle, math.degrees(angle_to_target_route_point)))
 
-            # self.cmd_ackermann_publisher.publish(self.drive_command)
-
-            self.current_goal.header.stamp = self.get_clock().now().to_msg()
-
-            if self.current_route_point_relative:
-                # Размеры исходного изображения локальной карты стоимости
-                h_init, w_init = 877, 785
-
-                # Исходные координаты (в пикселях) текущей точки маршрута на данном изображении
-                x_init, y_init = self.current_route_point_relative
-
-                x_min, x_max = -4.0, 4.0  # Границы уменьшенной локальной карты в RViz
-                y_min, y_max = -5.0, 5.0  #
-
-                # Перевод исходных координат в координаты карты в RViz
-                self.current_goal.pose.position.x = x_min + x_init * (x_max - x_min) / w_init
-                self.current_goal.pose.position.y = y_max - y_init * (y_max - y_min) / h_init
-                self.current_goal.pose.position.z = 0.0
-
-            # self.nav2_goal_publisher.publish(self.current_goal)
+            self.cmd_ackermann_publisher.publish(self.drive_command)
 
     def __surround_view_callback(self, message):
         if self.callbacks_status['compass'] and self.callbacks_status['gps']:

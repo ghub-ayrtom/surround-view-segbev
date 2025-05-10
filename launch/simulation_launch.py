@@ -67,7 +67,7 @@ def generate_launch_description():
 
     lifecycle_nodes = [
         'map_server', 
-        # 'amcl', 
+        'amcl', 
         'controller_server', 
         'smoother_server', 
         'planner_server', 
@@ -151,25 +151,6 @@ def generate_launch_description():
         description='Main simulation world', 
     )
 
-    static_transforms = [
-        ['map', 'odom'], 
-    ]
-    
-    static_transform_nodes = []
-
-    for transform in static_transforms:
-        static_transform_nodes.append(Node(
-            executable='static_transform_publisher', 
-            package='tf2_ros', 
-            name='static_transform_publisher', 
-            parameters=[{'use_sim_time': USE_SIM_TIME}], 
-            arguments=[
-                '--frame-id', transform[0], 
-                '--child-frame-id', transform[1], 
-            ], 
-            output='screen', 
-        ))
-
     with open(ego_vehicle_urdf, 'r') as urdf:
         ego_vehicle_description = urdf.read()
 
@@ -187,26 +168,26 @@ def generate_launch_description():
                 respawn_delay=2.0, 
                 output='screen', 
             ), 
-            # Node(
-            #     executable='amcl', 
-            #     package='nav2_amcl', 
-            #     name='amcl', 
-            #     parameters=[configured_params], 
-            #     remappings=remappings, 
-            #     arguments=['--ros-args', '--log-level', log_level], 
-            #     respawn=use_respawn, 
-            #     respawn_delay=2.0, 
-            #     output='screen', 
-            # ), 
+            Node(
+                executable='amcl', 
+                package='nav2_amcl', 
+                name='amcl', 
+                parameters=[configured_params], 
+                remappings=remappings, 
+                arguments=['--ros-args', '--log-level', log_level], 
+                respawn=use_respawn, 
+                respawn_delay=2.0, 
+                output='screen', 
+            ), 
             Node(
                 executable='lifecycle_manager', 
                 package='nav2_lifecycle_manager', 
                 name='lifecycle_manager_localization', 
-                parameters=[
-                    {'use_sim_time': use_sim_time}, 
-                    {'autostart': autostart}, 
-                    {'node_names': lifecycle_nodes}, 
-                ], 
+                parameters=[{
+                    'use_sim_time': use_sim_time, 
+                    'autostart': autostart, 
+                    'node_names': lifecycle_nodes, 
+                }], 
                 arguments=['--ros-args', '--log-level', log_level], 
                 output='screen', 
             ), 
@@ -293,11 +274,11 @@ def generate_launch_description():
                 executable='lifecycle_manager', 
                 package='nav2_lifecycle_manager', 
                 name='lifecycle_manager_navigation', 
-                parameters=[
-                    {'use_sim_time': use_sim_time}, 
-                    {'autostart': autostart}, 
-                    {'node_names': lifecycle_nodes}, 
-                ], 
+                parameters=[{
+                    'use_sim_time': use_sim_time, 
+                    'autostart': autostart, 
+                    'node_names': lifecycle_nodes, 
+                }], 
                 arguments=['--ros-args', '--log-level', log_level], 
                 output='screen', 
             ), 
@@ -313,20 +294,13 @@ def generate_launch_description():
                 arguments=[ego_vehicle_urdf], 
                 output='screen', 
             ), 
-            # Node(
-            #     executable='gps_path_planning_node', 
-            #     package=PACKAGE_NAME, 
-            #     name='gps_path_planning_node', 
-            #     parameters=[{'use_sim_time': False}], 
-            #     output='screen', 
-            # ), 
-            # Node(
-            #     executable='surround_view_node', 
-            #     package=PACKAGE_NAME, 
-            #     name='surround_view_node', 
-            #     parameters=[{'use_sim_time': USE_SIM_TIME}], 
-            #     output='screen', 
-            # ), 
+            Node(
+                executable='nav2_path_planning_node', 
+                package=PACKAGE_NAME, 
+                name='nav2_path_planning_node', 
+                parameters=[configured_params], 
+                output='screen', 
+            ), 
             Node(
                 executable='pointcloud_to_laserscan_node', 
                 package='pointcloud_to_laserscan', 
@@ -341,20 +315,20 @@ def generate_launch_description():
                 parameters=[{'use_sim_time': USE_SIM_TIME}], 
                 output='screen', 
             ), 
-            LifecycleNode(
-                executable='localization_slam_toolbox_node', 
-                package='slam_toolbox', 
-                name='slam_toolbox', 
-                namespace='', 
-                parameters=[
-                    mapper_params_online_async_yaml, 
-                    {
-                        'use_sim_time': USE_SIM_TIME, 
-                        'use_lifecycle_manager': False, 
-                    }, 
-                ], 
-                output='screen', 
-            ), 
+            # LifecycleNode(
+            #     executable='localization_slam_toolbox_node', 
+            #     package='slam_toolbox', 
+            #     name='slam_toolbox', 
+            #     namespace='', 
+            #     parameters=[
+            #         mapper_params_online_async_yaml, 
+            #         {
+            #             'use_sim_time': USE_SIM_TIME, 
+            #             'use_lifecycle_manager': False, 
+            #         }, 
+            #     ], 
+            #     output='screen', 
+            # ), 
             Node(
                 executable='rviz2', 
                 package='rviz2', 
@@ -363,7 +337,7 @@ def generate_launch_description():
                 arguments=['-d', config_rviz], 
                 output='screen', 
             ), 
-        ]   # + static_transform_nodes
+        ]
     )
 
     load_composable_nodes = LoadComposableNodes(
@@ -377,22 +351,22 @@ def generate_launch_description():
                 parameters=[configured_params], 
                 remappings=remappings, 
             ), 
-            # ComposableNode(
-            #     package='nav2_amcl', 
-            #     plugin='nav2_amcl::AmclNode', 
-            #     name='amcl', 
-            #     parameters=[configured_params], 
-            #     remappings=remappings, 
-            # ), 
+            ComposableNode(
+                package='nav2_amcl', 
+                plugin='nav2_amcl::AmclNode', 
+                name='amcl', 
+                parameters=[configured_params], 
+                remappings=remappings, 
+            ), 
             ComposableNode(
                 package='nav2_lifecycle_manager', 
                 plugin='nav2_lifecycle_manager::LifecycleManager', 
                 name='lifecycle_manager_localization', 
-                parameters=[
-                    {'use_sim_time': use_sim_time}, 
-                    {'autostart': autostart}, 
-                    {'node_names': lifecycle_nodes}, 
-                ], 
+                parameters=[{
+                    'use_sim_time': use_sim_time, 
+                    'autostart': autostart, 
+                    'node_names': lifecycle_nodes, 
+                }], 
             ), 
             ComposableNode(
                 package='nav2_controller', 
@@ -450,11 +424,11 @@ def generate_launch_description():
                 package='nav2_lifecycle_manager', 
                 plugin='nav2_lifecycle_manager::LifecycleManager', 
                 name='lifecycle_manager_navigation', 
-                parameters=[
-                    {'use_sim_time': use_sim_time}, 
-                    {'autostart': autostart}, 
-                    {'node_names': lifecycle_nodes}, 
-                ], 
+                parameters=[{
+                    'use_sim_time': use_sim_time, 
+                    'autostart': autostart, 
+                    'node_names': lifecycle_nodes, 
+                }], 
             ), 
         ], 
     )

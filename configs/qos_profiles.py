@@ -13,6 +13,12 @@ from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 '''
 
 
+default_qos = QoSProfile(
+    reliability=ReliabilityPolicy.RELIABLE, 
+    history=HistoryPolicy.KEEP_LAST, 
+    depth=10, 
+)
+
 image_qos = QoSProfile(
     reliability=ReliabilityPolicy.BEST_EFFORT, 
     history=HistoryPolicy.KEEP_LAST, 

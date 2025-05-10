@@ -7,7 +7,7 @@ from sensor_msgs.msg import NavSatFix, MagneticField, PointCloud2
 from rclpy.executors import MultiThreadedExecutor
 import numpy as np
 from geometry_msgs.msg import Twist, Quaternion, Vector3, TransformStamped, PoseWithCovarianceStamped
-from std_msgs.msg import Float32MultiArray, Float64
+from std_msgs.msg import Int8, Bool, Float32MultiArray
 from nav_msgs.msg import Odometry
 from tf2_ros import TransformBroadcaster
 import rclpy.wait_for_message
@@ -63,8 +63,13 @@ class EgoVehicleDriver:
         self.__odom.header.frame_id = 'odom'
         self.__odom.child_frame_id = 'base_link'
 
+        # В течение нескольких секунд после запуска решения эго-автомобиль будет находиться в центре глобального фрейма map, 
+        # однако, из-за его смещения данные одометрии в этот момент не будут соответствовать 
+        # фактическому месторасположению робота на карте
+        self.__skip_odom_publishes_count = 10
+
         self.__odom_publisher = self.__node.create_publisher(Odometry, '/odom', qos_profiles.odometry_qos)
-        # self.__odom_subscriber = self.__node.create_subscription(Odometry, '/odom', self.__odom_callback, qos_profiles.odometry_qos)
+        self.__odom_subscriber = self.__node.create_subscription(Odometry, '/odom', self.__odom_callback, qos_profiles.odometry_qos)
 
         self.__initial_pose_publisher = self.__node.create_publisher(PoseWithCovarianceStamped, '/initialpose', qos_profiles.pose_qos)
 
@@ -82,10 +87,15 @@ class EgoVehicleDriver:
         self.__last_cmd_ackermann_callback_time = 0.0
         self.__node.create_subscription(AckermannDrive, '/cmd_ackermann', self.__cmd_ackermann_callback, qos_profiles.cmd_qos)
 
-        self.__speed_message = Float64()
-        self.__speed_publisher = self.__node.create_publisher(Float64, '/speed', qos_profiles.cmd_qos)
+        self.__speed_factor = 6
+        self.__node.create_subscription(Int8, '/speed_factor', self.__speed_factor_callback, qos_profiles.cmd_qos)
 
         self.__node.create_subscription(Twist, '/cmd_vel', self.__cmd_vel_callback, qos_profiles.cmd_qos)
+
+        self.__switch_nav2 = False
+        self.__node.create_subscription(Bool, '/nav2_switch', self.__nav2_switch_callback, qos_profiles.default_qos)
+
+        self.__node.create_timer(1.0, self.__dipped_beams_callback)
 
         self.__node._logger.info('Successfully launched!')
 
@@ -108,6 +118,8 @@ class EgoVehicleDriver:
 
         initial_pose.header.frame_id = 'map'
         initial_pose.header.stamp = self.__node.get_clock().now().to_msg()
+
+        message.pose.pose.position.y -= 0.85
 
         initial_pose.pose.pose = message.pose.pose
         initial_pose.pose.covariance = message.pose.covariance
@@ -154,7 +166,10 @@ class EgoVehicleDriver:
         self.__odom.pose.pose.orientation.z = self.__quaternion_message.z
         self.__odom.pose.pose.orientation.w = self.__quaternion_message.w
 
-        self.__odom_publisher.publish(self.__odom)
+        if self.__skip_odom_publishes_count == 0:
+            self.__odom_publisher.publish(self.__odom)
+        else:
+            self.__skip_odom_publishes_count -= 1
 
         # self.__imu_euler_publisher.publish(orientation_euler)
         self.__imu_quaternion_publisher.publish(self.__quaternion_message)
@@ -184,20 +199,22 @@ class EgoVehicleDriver:
         self.__last_cmd_ackermann_callback_time = time.time()
 
         if isinstance(message.speed, float) and isinstance(message.steering_angle, float):
-            # if message.speed > 0:
-            #     if message.speed > global_settings.EGO_VEHICLE_MAX_SPEED:
-            #         message.speed = global_settings.EGO_VEHICLE_MAX_SPEED
-            # elif message.speed < 0:
-            #     if message.speed < -global_settings.EGO_VEHICLE_MAX_SPEED:
-            #         message.speed = -global_settings.EGO_VEHICLE_MAX_SPEED
+            if message.speed > 0:
+                if message.speed > global_settings.EGO_VEHICLE_MAX_SPEED:
+                    message.speed = global_settings.EGO_VEHICLE_MAX_SPEED
+            elif message.speed < 0:
+                if message.speed < -global_settings.EGO_VEHICLE_MAX_SPEED:
+                    message.speed = -global_settings.EGO_VEHICLE_MAX_SPEED
+            else:
+                pass
 
-            # if message.steering_angle > 0:
-            #     if message.steering_angle > global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE:
-            #         message.steering_angle = global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE
-            # elif message.steering_angle < 0:
-            #     if message.steering_angle < -global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE:
-            #         message.steering_angle = -global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE
-            # message.steering_angle *= 3.14 / 180  # Радианы
+            if message.steering_angle > 0:
+                if message.steering_angle > global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE:
+                    message.steering_angle = global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE
+            elif message.steering_angle < 0:
+                if message.steering_angle < -global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE:
+                    message.steering_angle = -global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE
+            message.steering_angle *= 3.14 / 180  # Радианы
 
             self.__drive_command = message
         else:
@@ -207,17 +224,35 @@ class EgoVehicleDriver:
         self.__drive_command.speed = 0.0
         self.__drive_command.steering_angle = 0.0
 
+    def __speed_factor_callback(self, message):
+        self.__speed_factor = message.data
+
     def __cmd_vel_callback(self, message):
-        drive_command = AckermannDrive()
+        if not self.__switch_nav2:
+            drive_command = AckermannDrive()
 
-        drive_command.speed = message.linear.x
-        drive_command.steering_angle = -message.angular.z
+            drive_command.speed = message.linear.x * self.__speed_factor
 
-        self.__cmd_ackermann_callback(drive_command)
+            '''
+                * 2  - Model Predictive Path Integral
+                * 10 - Regulated Pure Pursuit
+            '''
+            drive_command.steering_angle = (-message.angular.z * 180 / 3.14) * 2  # Градусы
+
+            self.__cmd_ackermann_callback(drive_command)
+
+    def __nav2_switch_callback(self, message):
+        self.__switch_nav2 = message.data
+
+    def __dipped_beams_callback(self):
+        if self.__drive_command.speed != 0:
+            self.__robot.setDippedBeams(not self.__robot.getDippedBeams())
+        else:
+            self.__robot.setDippedBeams(False)
 
     def step(self):
         try:
-            self.__node_executor.spin_once(timeout_sec=0.0)
+            rclpy.spin_once(self.__node, timeout_sec=0.0)
             current_step_time = time.time()
 
             if current_step_time - self.__last_cmd_ackermann_callback_time > 1:
@@ -225,8 +260,5 @@ class EgoVehicleDriver:
 
             self.__robot.setCruisingSpeed(self.__drive_command.speed)
             self.__robot.setSteeringAngle(self.__drive_command.steering_angle)
-
-            self.__speed_message.data = self.__drive_command.speed
-            self.__speed_publisher.publish(self.__speed_message)
         except Exception as e:
             print(''.join(traceback.TracebackException.from_exception(e).format()))

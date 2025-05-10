@@ -47,6 +47,7 @@ setup(
             'ackermann_keyboard_teleop_node = surround_view_segbev.ackermann_keyboard_teleop_node:main', 
             'chessboards_controller_node = surround_view_segbev.chessboards_controller_node:main', 
             'gps_path_planning_node = surround_view_segbev.gps_path_planning_node:main', 
+            'nav2_path_planning_node = surround_view_segbev.nav2_path_planning_node:main', 
             'pointcloud_to_laserscan_bridge_node = surround_view_segbev.pointcloud_to_laserscan_bridge_node:main', 
             'projection_weight_matrices_node = surround_view_segbev.projection_weight_matrices_node:main', 
             'surround_view_node = surround_view_segbev.surround_view_node:main', 
