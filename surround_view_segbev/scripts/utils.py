@@ -24,18 +24,34 @@ def get_mask(image):
     return mask
 
 
-def get_overlap_region_mask(image_1, image_2):
+def get_overlap_region_mask(image_1, image_2, images_part_name):
+    cv2.destroyAllWindows()
+
+    cv2.imshow(f'{images_part_name[0]}', cv2.cvtColor(image_1, cv2.COLOR_BGR2RGB))
+    cv2.waitKey(0)
+    cv2.imshow(f'{images_part_name[1]}', cv2.cvtColor(image_2, cv2.COLOR_BGR2RGB))
+    cv2.waitKey(0)
+
     overlap_region = cv2.bitwise_and(image_1, image_2)
+
+    cv2.imshow('overlap_region', cv2.cvtColor(overlap_region, cv2.COLOR_BGR2RGB))
+    cv2.waitKey(0)
 
     mask = get_mask(overlap_region)
     mask = cv2.dilate(mask, np.ones((2, 2), np.uint8), iterations=2)
 
+    cv2.imshow('overlap_region_mask', mask)
+    cv2.waitKey(0)
+
     return mask
 
 
-def get_outmost_polygon_boundary(image):
+def get_outmost_polygon_boundary(image, image_part_name):
     mask = get_mask(image)
     mask = cv2.dilate(mask, np.ones((2, 2), np.uint8), iterations=2)
+
+    cv2.imshow(f'{image_part_name}_unique_region_mask', mask)
+    cv2.waitKey(0)
 
     polygon = None
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2:]
@@ -47,19 +63,49 @@ def get_outmost_polygon_boundary(image):
     return polygon
 
 
-def get_weight_mask_matrix(image_1, image_2, max_distance=5):
-    overlap_region_mask = get_overlap_region_mask(image_1, image_2)
+def get_weight_mask_matrix(image_1, image_2, images_part_name, max_distance=5):
+    overlap_region_mask = get_overlap_region_mask(image_1, image_2, images_part_name)
     overlap_region_mask_inverted = cv2.bitwise_not(overlap_region_mask)
+
+    cv2.imshow('overlap_region_mask_inverted', overlap_region_mask_inverted)
+    cv2.waitKey(0)
 
     overlap_pixels_indices = np.where(overlap_region_mask == 255)
 
     image_1_unique_region = cv2.bitwise_and(image_1, image_1, mask=overlap_region_mask_inverted)
     image_2_unique_region = cv2.bitwise_and(image_2, image_2, mask=overlap_region_mask_inverted)
 
+    cv2.imshow(f'{images_part_name[0]}_unique_region', cv2.cvtColor(image_1_unique_region, cv2.COLOR_BGR2RGB))
+    cv2.waitKey(0)
+    cv2.imshow(f'{images_part_name[1]}_unique_region', cv2.cvtColor(image_2_unique_region, cv2.COLOR_BGR2RGB))
+    cv2.waitKey(0)
+
     G = get_mask(image_1).astype(np.float32) / 255.0
 
-    image_1_polygon = get_outmost_polygon_boundary(image_1_unique_region)
-    image_2_polygon = get_outmost_polygon_boundary(image_2_unique_region)
+    image_1_polygon = get_outmost_polygon_boundary(image_1_unique_region, images_part_name[0])
+    image_2_polygon = get_outmost_polygon_boundary(image_2_unique_region, images_part_name[1])
+
+    cv2.imshow(
+        f'{images_part_name[0]}_outmost_polygon_boundary', 
+        cv2.drawContours(
+            cv2.cvtColor(image_1_unique_region, cv2.COLOR_BGR2RGB), 
+            [image_1_polygon], 
+            -1, (255, 0, 0), 3, 
+        )
+    )
+
+    cv2.waitKey(0)
+
+    cv2.imshow(
+        f'{images_part_name[1]}_outmost_polygon_boundary', 
+        cv2.drawContours(
+            cv2.cvtColor(image_2_unique_region, cv2.COLOR_BGR2RGB), 
+            [image_2_polygon], 
+            -1, (0, 255, 0), 3, 
+        )
+    )
+    
+    cv2.waitKey(0)
 
     distance_to_image_1_polygon = 0.0
     distance_to_image_2_polygon = 0.0
@@ -76,8 +122,15 @@ def get_weight_mask_matrix(image_1, image_2, max_distance=5):
 
             distance_to_image_2_polygon *= distance_to_image_2_polygon
             distance_to_image_1_polygon *= distance_to_image_1_polygon
+            distance_to_images_polygon = distance_to_image_1_polygon + distance_to_image_2_polygon
 
-            G[y, x] = distance_to_image_2_polygon / (distance_to_image_1_polygon + distance_to_image_2_polygon)
+            if distance_to_images_polygon != 0:
+                G[y, x] = distance_to_image_2_polygon / distance_to_images_polygon
+
+    cv2.imshow('weight_matrix', G)
+    cv2.waitKey(0)
+
+    cv2.destroyAllWindows()
 
     return G, overlap_region_mask
 

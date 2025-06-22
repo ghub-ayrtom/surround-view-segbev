@@ -14,7 +14,7 @@ class PointCloudToLaserScanBridgeNode(Node):
 
         self.laserscan_bridge_publisher = self.create_publisher(LaserScan, '/scan_reliable', qos_profiles.bridge_qos)
         
-        self._logger.info('Successfully launched!')
+        self.get_logger().info('Successfully launched!')
 
     def __pointcloud_callback(self, message):
         pass

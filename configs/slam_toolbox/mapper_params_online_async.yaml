@@ -1,6 +1,5 @@
 slam_toolbox:
   ros__parameters:
-    # Plugin parameters
     solver_plugin: solver_plugins::CeresSolver
     ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
     ceres_preconditioner: SCHUR_JACOBI
@@ -8,13 +7,12 @@ slam_toolbox:
     ceres_dogleg_type: TRADITIONAL_DOGLEG
     ceres_loss_function: None
 
-    # ROS parameters
     odom_frame: odom
     map_frame: map
     base_frame: base_footprint
     scan_topic: /scan_reliable
     mode: localization # mapping
 
-    map_file_name: '/home/ayrtom/ROS2/dev/FQW_ws/src/surround_view_segbev/configs/slam_toolbox/maps/main_wbt/main_wbt'
+    map_file_name: '.../surround_view_segbev/configs/slam_toolbox/maps/main_wbt/main_wbt'
     map_start_pose: [0.0, 5.75, -1.57]
     # map_start_at_dock: true

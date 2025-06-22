@@ -47,7 +47,6 @@ config_rviz = os.path.join(
 def generate_launch_description():
     namespace = LaunchConfiguration('namespace')
     map_yaml_file = LaunchConfiguration('map')
-    use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
     params_file = LaunchConfiguration('params_file')
     use_composition = LaunchConfiguration('use_composition')
@@ -83,7 +82,7 @@ def generate_launch_description():
     ]
 
     param_substitutions = {
-        'use_sim_time': use_sim_time, 
+        'use_sim_time': str(USE_SIM_TIME), 
         'yaml_filename': map_yaml_file, 
         'autostart': autostart, 
     }
@@ -91,8 +90,8 @@ def generate_launch_description():
     configured_params = ParameterFile(
         RewrittenYaml(
             source_file=params_file, 
-            root_key=namespace, 
             param_rewrites=param_substitutions, 
+            root_key=namespace, 
             convert_types=True, 
         ), 
         allow_substs=True, 
@@ -109,11 +108,6 @@ def generate_launch_description():
         'map', 
         default_value=map_yaml, 
         description='Full path to map yaml file to load', 
-    )
-    declare_use_sim_time_cmd = DeclareLaunchArgument(
-        'use_sim_time', 
-        default_value='True', 
-        description='Use simulation (Webots/Gazebo) clock if true', 
     )
     declare_autostart_cmd = DeclareLaunchArgument(
         'autostart', 
@@ -184,7 +178,7 @@ def generate_launch_description():
                 package='nav2_lifecycle_manager', 
                 name='lifecycle_manager_localization', 
                 parameters=[{
-                    'use_sim_time': use_sim_time, 
+                    'use_sim_time': USE_SIM_TIME, 
                     'autostart': autostart, 
                     'node_names': lifecycle_nodes, 
                 }], 
@@ -275,7 +269,7 @@ def generate_launch_description():
                 package='nav2_lifecycle_manager', 
                 name='lifecycle_manager_navigation', 
                 parameters=[{
-                    'use_sim_time': use_sim_time, 
+                    'use_sim_time': USE_SIM_TIME, 
                     'autostart': autostart, 
                     'node_names': lifecycle_nodes, 
                 }], 
@@ -305,7 +299,10 @@ def generate_launch_description():
                 executable='pointcloud_to_laserscan_node', 
                 package='pointcloud_to_laserscan', 
                 name='pointcloud_to_laserscan', 
-                parameters=[pointcloud_to_laserscan_params_yaml, {'use_sim_time': USE_SIM_TIME}], 
+                parameters=[
+                    pointcloud_to_laserscan_params_yaml, 
+                    {'use_sim_time': USE_SIM_TIME}
+                ], 
                 output='screen', 
             ), 
             Node(
@@ -337,6 +334,27 @@ def generate_launch_description():
                 arguments=['-d', config_rviz], 
                 output='screen', 
             ), 
+            # Node(
+            #     package='tf2_ros', 
+            #     executable='static_transform_publisher', 
+            #     name='static_transform_publisher', 
+            #     parameters=[{'use_sim_time': USE_SIM_TIME}], 
+            #     arguments=[
+            #         '--x', '0.00', 
+            #         '--y', '0.00', 
+            #         '--z', '0.00', 
+            #         '--qx', '0.00', 
+            #         '--qy', '0.00', 
+            #         '--qz', '0.00', 
+            #         '--qw', '1.00', 
+            #         # '--roll', '0.00', 
+            #         # '--pitch', '0.00', 
+            #         # '--yaw', '0.00', 
+            #         '--frame-id', 'map', 
+            #         '--child-frame-id', 'odom', 
+            #     ], 
+            #     output='screen', 
+            # ), 
         ]
     )
 
@@ -363,7 +381,7 @@ def generate_launch_description():
                 plugin='nav2_lifecycle_manager::LifecycleManager', 
                 name='lifecycle_manager_localization', 
                 parameters=[{
-                    'use_sim_time': use_sim_time, 
+                    'use_sim_time': USE_SIM_TIME, 
                     'autostart': autostart, 
                     'node_names': lifecycle_nodes, 
                 }], 
@@ -425,7 +443,7 @@ def generate_launch_description():
                 plugin='nav2_lifecycle_manager::LifecycleManager', 
                 name='lifecycle_manager_navigation', 
                 parameters=[{
-                    'use_sim_time': use_sim_time, 
+                    'use_sim_time': USE_SIM_TIME, 
                     'autostart': autostart, 
                     'node_names': lifecycle_nodes, 
                 }], 
@@ -439,7 +457,6 @@ def generate_launch_description():
 
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_map_yaml_cmd)
-    ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_use_composition_cmd)

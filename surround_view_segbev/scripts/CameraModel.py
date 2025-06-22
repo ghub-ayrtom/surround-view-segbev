@@ -1,13 +1,11 @@
 import cv2
 from configs import global_settings
-from configs.BEV import bev_parameters
 import numpy as np
 import os
 import time
 from controller import Supervisor
 import traceback
 import yaml
-from .PointSelectorGUI import PointSelector, display_image
 
 
 if os.getenv('USING_EXTERN_CONTROLLER') is None:
@@ -46,7 +44,7 @@ class CameraModel:
             if self.device is None:
                 node_logger.error('The Webots camera device with the specified name was not found!')
             else:
-                self.device.enable(int(supervisor.getBasicTimeStep()))
+                self.device.enable(100)  # Отправлять изображения каждые 100 мс (10 Гц)
 
         self.device_name = webots_camera_name
 
@@ -59,7 +57,8 @@ class CameraModel:
         self.node_logger = node_logger
         self.chessboard = related_chessboard
 
-        self.projection_matrix_received = False
+        self.parameters_loaded = False
+        self.projected_image_with_obstacles_info_received = False
 
         ### Параметры камеры
 
@@ -78,19 +77,21 @@ class CameraModel:
         # Векторы перемещения для каждого из калибровочных изображений, длина которых - это значение смещения камеры по одной из трёх осей относительно центра мировых координат
         self.translation_vectors = [np.zeros((1, 1, 3), dtype=np.float64) for _ in range(CALIBRATION_IMAGES_COUNT)]  # Положение в пространстве относительно сцены
 
+        self.projection_shape = ()  # Разрешение BEV-изображения для текущей видеокамеры
+
         self.load_camera_parameters()
 
     def load_camera_parameters(self):
         camera_parameters_file_path = os.path.join(
             os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-            f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
+            f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml', 
         )
 
         if self.load_parameters and os.path.isfile(camera_parameters_file_path):
             try:
                 fs = cv2.FileStorage(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-                    f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
+                    f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml', 
                 ), cv2.FILE_STORAGE_READ)
 
                 if fs.isOpened():
@@ -112,7 +113,44 @@ class CameraModel:
                     self.image_shape = (self.optical_characteristics['image_height'], self.optical_characteristics['image_width'], 4)
                     webots_settings_yaml_file.close()
                 except yaml.YAMLError as e:
-                    self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+                    self.node_logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+
+        with open(os.path.join(
+            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+            'surround_view_segbev/scripts/BEVFormer/bev_parameters.yaml', 
+        )) as bev_parameters_yaml:
+            try:
+                bev_parameters = yaml.safe_load(bev_parameters_yaml)
+
+                near_shift_width = bev_parameters['near_shift_width']
+                near_shift_height = bev_parameters['near_shift_height']
+
+                far_shift_width = bev_parameters['far_shift_width']
+                far_shift_height = bev_parameters['far_shift_height']
+
+                total_width = bev_parameters['total_width_base'] + 2 * far_shift_width
+                total_height = bev_parameters['total_height_base'] + 2 * far_shift_height
+
+                vehicle_leftside_edges_x = far_shift_width + bev_parameters['vehicle_leftside_edges_x_inc'] + near_shift_width
+                vehicle_topside_edges_y = far_shift_height + bev_parameters['vehicle_topside_edges_y_inc'] + near_shift_height
+
+                match self.device_name:
+                    case 'camera_front_left':
+                        self.projection_shape = (total_height, vehicle_leftside_edges_x)
+                    case 'camera_front':
+                        self.projection_shape = (total_width, vehicle_topside_edges_y)
+                    case 'camera_front_blind':
+                        self.projection_shape = (total_width, vehicle_topside_edges_y)
+                    case 'camera_front_right':
+                        self.projection_shape = (total_height, vehicle_leftside_edges_x)
+                    case 'camera_rear':
+                        self.projection_shape = (total_width, vehicle_topside_edges_y)
+
+                bev_parameters_yaml.close()
+            except yaml.YAMLError as e:
+                print(e)
+        
+        self.parameters_loaded = True
 
     def calibrate_camera(self, calibration_image, debug=False):
         calibration_image_gray = cv2.cvtColor(calibration_image, cv2.COLOR_RGBA2GRAY)
@@ -123,13 +161,13 @@ class CameraModel:
             if self.optical_characteristics is None:
                 with open(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-                    f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/webots_settings.yaml'
+                    f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/webots_settings.yaml', 
                 )) as webots_settings_yaml_file:
                     try:
                         self.optical_characteristics = yaml.safe_load(webots_settings_yaml_file)
                         webots_settings_yaml_file.close()
                     except yaml.YAMLError as e:
-                        self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+                        self.node_logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 
             self.object_points_3D = []  # Список обнаруженных углов шахматной доски в 3D-пространстве (реальный мир)
             self.image_points_2D = []  # Список обнаруженных углов шахматной доски в 2D-пространстве (плоскость изображения)
@@ -238,7 +276,7 @@ class CameraModel:
         self_K_new, roi = cv2.getOptimalNewCameraMatrix(self.K, self.D, (image_width, image_height), 1, (image_width, image_height))
         map_x, map_y = cv2.initUndistortRectifyMap(self.K, self.D, np.eye(3), self_K_new, (image_width, image_height), cv2.CV_32FC1)
 
-        # Применяем карты преобразования для устранения искажений и создания выровненного изображения
+        # Применяем карты выравнивания для устранения искажений и создания ровного изображения
         image_undistorted = cv2.remap(image, map_x, map_y, cv2.INTER_LINEAR)
 
         x, y, w, h = roi  # Обрезаем искажённые края исправленного изображения
@@ -250,40 +288,16 @@ class CameraModel:
         match self.device_name:
             case 'camera_front_left':
                 return cv2.transpose(image)[::-1]
-            case 'camera_front_right':
-                return np.flip(cv2.transpose(image), 1)
             case 'camera_front' | 'camera_front_blind':
                 return image.copy()
+            case 'camera_front_right':
+                return np.flip(cv2.transpose(image), 1)
             case 'camera_rear':
                 return image.copy()[::-1, ::-1, :]
 
-    def get_projection_matrix(self, image, obstacle_bboxes=None, gotten=True):
+    def get_projected_image_with_obstacles_info(self, image, obstacle_bboxes=None, gotten=True):
         image_undistorted = image  # self.undistort(image)
-
-        if not gotten:
-            # gui = PointSelector(image_undistorted, title=self.device_name)
-            # choice = gui.loop()
-
-            if True:  # choice > 0:
-                src = np.float32(bev_parameters.projection_src_points[self.device_name])  # np.float32(gui.keypoints)
-                dst = np.float32(bev_parameters.projection_dst_points[self.device_name])
-
-                self.projection_matrix, _ = cv2.findHomography(src, dst, cv2.RANSAC)  # cv2.getPerspectiveTransform(src, dst)
-
-                camera_parameters_file = cv2.FileStorage(os.path.join(
-                    os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-                    f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
-                ), cv2.FILE_STORAGE_WRITE)
-
-                if camera_parameters_file.isOpened():
-                    camera_parameters_file.write('image_resolution', np.int32([image.shape[0], image.shape[1], 4]))
-                    camera_parameters_file.write('camera_matrix', self.K)
-                    camera_parameters_file.write('distortion_coefficients', self.D)
-                    camera_parameters_file.write('projection_matrix', self.projection_matrix)
-
-                    camera_parameters_file.release()
-
-        image_projected = cv2.warpPerspective(image_undistorted, self.projection_matrix, bev_parameters.projection_shapes[self.device_name])
+        image_projected = cv2.warpPerspective(image_undistorted, self.projection_matrix, self.projection_shape)
 
         obstacle_corners = []
         obstacle_centers = []
@@ -317,8 +331,5 @@ class CameraModel:
 
                         obstacle_corners.append(bbox_corners)
                         obstacle_centers.append(bbox_center)
-
-        # display_image("Bird's Eye View", image_projected)
-        # cv2.destroyAllWindows()
 
         return self.flip(cv2.cvtColor(image_projected, cv2.COLOR_RGB2BGR)), obstacle_corners, obstacle_centers, obstacle_distances_m

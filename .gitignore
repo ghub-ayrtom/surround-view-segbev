@@ -1,16 +1,7 @@
-models/
-
-resource/images/ZED_2/camera_front/data/
-resource/images/ZED_2/camera_front_blind/data/
-resource/images/ZED_2/camera_front_left/data/
-resource/images/ZED_2/camera_front_right/data/
-resource/images/ZED_2/camera_rear/data/
-resource/images/ZED_2/surround_view/data/
-
-resource/worlds/backups/
 resource/worlds/*.jpg
 resource/worlds/*.wbproj
 
 surround_view_segbev/__pycache__/
 surround_view_segbev/plugins/__pycache__/
 surround_view_segbev/scripts/__pycache__/
+surround_view_segbev/scripts/BEVFormer/__pycache__/

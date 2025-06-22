@@ -1,13 +1,15 @@
 import numpy as np
 from .utils import *
 import cv2
-from configs.BEV import bev_parameters
+import yaml
+import traceback
 
 
-xl = bev_parameters.vehicle_leftside_edges_x
-xr = bev_parameters.vehicle_rightside_edges_x
-yt = bev_parameters.vehicle_topside_edges_y
-yb = bev_parameters.vehicle_bottomside_edges_y
+# Координаты области изображения, занимаемой автомобилем: [(xl, yt), (xr, yb)]
+xl = None  # Координата X левых углов
+xr = None  # Координата X правых углов
+yt = None  # Координата Y верхних углов
+yb = None  # Координата Y нижних углов
 
 
 def get_upper_part(image):
@@ -24,7 +26,7 @@ def f_get_central_part_blind(image):
     return image[:, (xl - 135):(xr + 130)]
 def f_get_central_part(image):
     return image[:295, (xl - 32):(xr + 30)]
-def fb_get_central_part(image):
+def b_get_central_part(image):
     return image[:, xl:xr]
 
 
@@ -33,17 +35,64 @@ class BirdsEyeView():
         self.node_logger = node_logger
         self.frames = images
 
+        self.bev_parameters = None
+
+        self.near_shift_width = None   # Расстояние в пикселях между областью автомобиля (см. выше) и 
+        self.near_shift_height = None  # угловыми шахматными досками размерностью 6x5 (см. сцену BEV.wbt)
+
+        self.far_shift_width = None    # Расстояние в пикселях за пределами угловых шахматных досок 
+        self.far_shift_height = None   # (чем больше эти значения, тем большую область покрывает круговой обзор)
+
+        self.bev_total_width = None    # Итоговое разрешение единого сшитого изображения
+        self.bev_total_height = None   #
+
         self.weights = None
         self.masks = None
 
-        self.image = np.zeros((bev_parameters.total_height, bev_parameters.total_width, 3), np.uint8)
+        with open(os.path.join(
+            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+            'surround_view_segbev/scripts/BEVFormer/bev_parameters.yaml', 
+        )) as bev_parameters_yaml:
+            try:
+                self.bev_parameters = yaml.safe_load(bev_parameters_yaml)
+
+                self.near_shift_width = self.bev_parameters['near_shift_width']
+                self.near_shift_height = self.bev_parameters['near_shift_height']
+
+                self.far_shift_width = self.bev_parameters['far_shift_width']
+                self.far_shift_height = self.bev_parameters['far_shift_height']
+
+                self.bev_total_width = self.bev_parameters['total_width_base'] + 2 * self.far_shift_width
+                self.bev_total_height = self.bev_parameters['total_height_base'] + 2 * self.far_shift_height
+
+                global xl, xr, yt, yb
+
+                xl = self.far_shift_width + self.bev_parameters['vehicle_leftside_edges_x_inc'] + self.near_shift_width
+                xr = self.bev_total_width - xl
+                yt = self.far_shift_height + self.bev_parameters['vehicle_topside_edges_y_inc'] + self.near_shift_height
+                yb = self.bev_total_height - yt
+
+                bev_parameters_yaml.close()
+            except yaml.YAMLError as e:
+                if self.node_logger is not None:
+                    self.node_logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+                else:
+                    print(e)
+
+        self.image = np.zeros((self.bev_total_height, self.bev_total_width, 3), np.uint8)
 
         if load_weights_and_masks:
             self.load_weights_and_masks()
 
     def load_weights_and_masks(self):
-        weights_file_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 'configs/BEV/weights.npy')
-        masks_file_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 'configs/BEV/masks.npy')
+        weights_file_path = os.path.join(
+            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+            'surround_view_segbev/scripts/BEVFormer/weights.npy', 
+        )
+        masks_file_path = os.path.join(
+            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+            'surround_view_segbev/scripts/BEVFormer/masks.npy', 
+        )
 
         Gmat = np.load(weights_file_path)
         Mmat = np.load(masks_file_path)
@@ -52,28 +101,41 @@ class BirdsEyeView():
         self.masks = [Mmat[:, :, i] for i in range(Mmat.shape[2])]
 
     def extract_frames(self):
-        front_left = self.frames['camera_front_left']
-        front = self.frames['camera_front']
-        front_blind = self.frames['camera_front_blind']
-        front_right = self.frames['camera_front_right']
-        back = self.frames['camera_rear']
+        front_left = self.frames['camera_front_left'][0]
+        front = self.frames['camera_front'][0]
+        front_blind = self.frames['camera_front_blind'][0]
+        front_right = self.frames['camera_front_right'][0]
+        back = self.frames['camera_rear'][0]
 
         return front_left, front, front_blind, front_right, back
+        # return front_left, front, front_right, back
 
     def get_weights_and_masks(self):
         if self.frames:
             left, front, front_blind, right, back = self.extract_frames()
 
-            G0, M0 = get_weight_mask_matrix(get_left_part(front[0]), get_upper_part(left[0]))
-            G1, M1 = get_weight_mask_matrix(f_get_central_part_blind(front[0]), f_get_central_part_blind(front_blind[0]))
-            G2, M2 = get_weight_mask_matrix(get_right_part(front[0]), get_upper_part(right[0]))
-            G3, M3 = get_weight_mask_matrix(get_left_part(back[0]), get_lower_part(left[0]))
-            G4, M4 = get_weight_mask_matrix(get_right_part(back[0]), get_lower_part(right[0]))
+            G0, M0 = get_weight_mask_matrix(get_left_part(front), get_upper_part(left))
+            G1, M1 = get_weight_mask_matrix(f_get_central_part_blind(front), f_get_central_part_blind(front_blind))
+            G2, M2 = get_weight_mask_matrix(get_right_part(front), get_upper_part(right))
+            G3, M3 = get_weight_mask_matrix(get_left_part(back), get_lower_part(left))
+            G4, M4 = get_weight_mask_matrix(get_right_part(back), get_lower_part(right))
 
             self.weights = [np.stack((G, G, G), axis=2) for G in (G0, G1, G2, G3, G4)]
             self.masks = [(M / 255.0).astype(int) for M in (M0, M1, M2, M3, M4)]
 
             return np.stack((G0, G1, G2, G3, G4), axis=2), np.stack((M0, M1, M2, M3, M4), axis=2)
+
+            # left, front, right, back = self.extract_frames()
+
+            # G0, M0 = get_weight_mask_matrix(get_left_part(front), get_upper_part(left), ['front_left_part', 'left_upper_part'])
+            # G1, M1 = get_weight_mask_matrix(get_right_part(front), get_upper_part(right), ['front_right_part', 'right_upper_part'])
+            # G2, M2 = get_weight_mask_matrix(get_left_part(back), get_lower_part(left), ['back_left_part', 'left_lower_part'])
+            # G3, M3 = get_weight_mask_matrix(get_right_part(back), get_lower_part(right), ['back_right_part', 'right_lower_part'])
+
+            # self.weights = [np.stack((G, G, G), axis=2) for G in (G0, G1, G2, G3)]
+            # self.masks = [(M / 255.0).astype(int) for M in (M0, M1, M2, M3)]
+
+            # return np.stack((G0, G1, G2, G3), axis=2), np.stack((M0, M1, M2, M3), axis=2)
 
     def luminance_balance(self):
         def tune(x):
@@ -86,11 +148,14 @@ class BirdsEyeView():
             left, front, front_blind, right, back = self.extract_frames()
             M0, M1, M2, M3, M4 = self.masks
 
-            left_B, left_G, left_R = cv2.split(left[0])
-            front_B, front_G, front_R = cv2.split(front[0])
-            front_blind_B, front_blind_G, front_blind_R = cv2.split(front_blind[0])
-            right_B, right_G, right_R = cv2.split(right[0])
-            back_B, back_G, back_R = cv2.split(back[0])
+            # left, front, right, back = self.extract_frames()
+            # M0, M1, M2, M3 = self.masks
+
+            left_B, left_G, left_R = cv2.split(left)
+            front_B, front_G, front_R = cv2.split(front)
+            front_blind_B, front_blind_G, front_blind_R = cv2.split(front_blind)
+            right_B, right_G, right_R = cv2.split(right)
+            back_B, back_G, back_R = cv2.split(back)
 
             a1 = mean_luminance_ratio(get_upper_part(right_B), get_right_part(front_B), M2)
             a2 = mean_luminance_ratio(get_upper_part(right_G), get_right_part(front_G), M2)
@@ -115,6 +180,26 @@ class BirdsEyeView():
             t1 = (a1 * b1 * c1 * d1 * e1)**0.25
             t2 = (a2 * b2 * c2 * d2 * e2)**0.25
             t3 = (a3 * b3 * c3 * d3 * e3)**0.25
+
+            a1 = mean_luminance_ratio(get_upper_part(right_B), get_right_part(front_B), M1)
+            a2 = mean_luminance_ratio(get_upper_part(right_G), get_right_part(front_G), M1)
+            a3 = mean_luminance_ratio(get_upper_part(right_R), get_right_part(front_R), M1)
+
+            b1 = mean_luminance_ratio(get_right_part(back_B), get_lower_part(right_B), M3)
+            b2 = mean_luminance_ratio(get_right_part(back_G), get_lower_part(right_G), M3)
+            b3 = mean_luminance_ratio(get_right_part(back_R), get_lower_part(right_R), M3)
+
+            c1 = mean_luminance_ratio(get_lower_part(left_B), get_left_part(back_B), M2)
+            c2 = mean_luminance_ratio(get_lower_part(left_G), get_left_part(back_G), M2)
+            c3 = mean_luminance_ratio(get_lower_part(left_R), get_left_part(back_R), M2)
+
+            d1 = mean_luminance_ratio(get_left_part(front_B), get_upper_part(left_B), M0)
+            d2 = mean_luminance_ratio(get_left_part(front_G), get_upper_part(left_G), M0)
+            d3 = mean_luminance_ratio(get_left_part(front_R), get_upper_part(left_R), M0)
+
+            t1 = (a1 * b1 * c1 * d1)**0.25
+            t2 = (a2 * b2 * c2 * d2)**0.25
+            t3 = (a3 * b3 * c3 * d3)**0.25
 
             ###
 
@@ -188,13 +273,11 @@ class BirdsEyeView():
 
             ###
 
-            self.frames = [
-                cv2.merge((left_B, left_G, left_R)), 
-                cv2.merge((front_B, front_G, front_R)), 
-                cv2.merge((front_blind_B, front_blind_G, front_blind_R)), 
-                cv2.merge((right_B, right_G, right_R)), 
-                cv2.merge((back_B, back_G, back_R)), 
-            ]
+            self.frames['camera_front_left'][0] = cv2.merge((left_B, left_G, left_R))
+            self.frames['camera_front'][0] = cv2.merge((front_B, front_G, front_R))
+            self.frames['camera_front_blind'][0] = cv2.merge((front_blind_B, front_blind_G, front_blind_R))
+            self.frames['camera_front_right'][0] = cv2.merge((right_B, right_G, right_R))
+            self.frames['camera_rear'][0] = cv2.merge((back_B, back_G, back_R))
 
     @property
     def front_left(self): return self.image[:yt, :xl]
@@ -227,20 +310,29 @@ class BirdsEyeView():
     def stitch(self):
         if self.frames:
             left, front, front_blind, right, back = self.extract_frames()
+            # left, front, right, back = self.extract_frames()
 
-            np.copyto(self.back_central, fb_get_central_part(back[0]))
+            np.copyto(self.back_central, b_get_central_part(back))
 
-            np.copyto(self.left_central, lr_get_central_part(left[0]))
-            np.copyto(self.right_central, lr_get_central_part(right[0]))
+            np.copyto(self.left_central, lr_get_central_part(left))
+            np.copyto(self.right_central, lr_get_central_part(right))
 
-            np.copyto(self.front_left, self.merge(get_left_part(front[0]), get_upper_part(left[0]), 0))
-            np.copyto(self.front_right, self.merge(get_right_part(front[0]), get_upper_part(right[0]), 2))
+            np.copyto(self.front_left, self.merge(get_left_part(front), get_upper_part(left), 0))
+            np.copyto(self.front_right, self.merge(get_right_part(front), get_upper_part(right), 2))  # 1
 
-            np.copyto(self.front_central, f_get_central_part(front[0]))
-            np.copyto(self.front_central_blind, self.merge(f_get_central_part_blind(front[0]), f_get_central_part_blind(front_blind[0]), 1)[295 : - 13, 103 : - 100])
+            np.copyto(self.front_central, f_get_central_part(front))
 
-            np.copyto(self.back_left, self.merge(get_left_part(back[0]), get_lower_part(left[0]), 3))
-            np.copyto(self.back_right, self.merge(get_right_part(back[0]), get_lower_part(right[0]), 4))
+            np.copyto(
+                self.front_central_blind, 
+                self.merge(
+                    f_get_central_part_blind(front), 
+                    f_get_central_part_blind(front_blind), 
+                    1
+                )[295 : - 13, 103 : - 100]
+            )
+
+            np.copyto(self.back_left, self.merge(get_left_part(back), get_lower_part(left), 3))       # 2
+            np.copyto(self.back_right, self.merge(get_right_part(back), get_lower_part(right), 4))    # 3
 
     def white_balance(self):
         self.image = make_white_balance(self.image)
@@ -259,7 +351,7 @@ class BirdsEyeView():
             mask_image_rgb = blind_area_mask_image[:, :, :3]
             mask_image_alpha = blind_area_mask_image[:, :, 3] / 255.0
 
-            center_y, center_x = bev_parameters.total_height // 2, bev_parameters.total_width // 2
+            center_y, center_x = self.bev_total_height // 2, self.bev_total_width // 2
 
             start_y = center_y - blind_area_mask_image.shape[0] // 2
             end_y = start_y + blind_area_mask_image.shape[0]
@@ -278,11 +370,8 @@ class BirdsEyeView():
         np.copyto(self.central, cv2.resize(ego_vehicle_image, (xr - xl, (yb + 5) - (yt - 10))))
 
         if self.frames:
-            max_perceived_distance = 20.0  # Метры
-            local_costmap = np.zeros(self.image.shape[:2], dtype=np.uint8)
-
             for camera_name in self.frames:
-                if self.frames[camera_name][1] and self.frames[camera_name][2] and self.frames[camera_name][3]:
+                if len(self.frames[camera_name]) == 4:
                     obstacle_corners = self.frames[camera_name][1]
                     obstacle_centers = self.frames[camera_name][2]
                     obstacle_distances_m = self.frames[camera_name][3]
@@ -300,12 +389,7 @@ class BirdsEyeView():
                                     xy_corners_rotated.append([x_rotated, y_rotated])
 
                                 xy_corners_warped = np.array(xy_corners_rotated).reshape((-1, 1, 2))
-
-                                distance = obstacle_distances_m[i]
-                                cost = int(127 * (1.0 - min(distance / max_perceived_distance, 1.0)))
-
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
-                                cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
 
                             for i, obstacle_center in enumerate(obstacle_centers):
                                 center_y, center_x = self.image.shape[0] - obstacle_center[2], obstacle_center[3]
@@ -324,12 +408,7 @@ class BirdsEyeView():
                             for i, bbox_corners in enumerate(obstacle_corners):
                                 x1, y1, x2, y2, xy_corners_warped = bbox_corners
                                 xy_corners_warped = np.array(xy_corners_warped).reshape((-1, 1, 2))
-
-                                distance = obstacle_distances_m[i]
-                                cost = int(127 * (1.0 - min(distance / max_perceived_distance, 1.0)))
-
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
-                                cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
 
                             for i, obstacle_center in enumerate(obstacle_centers):
                                 center_x, center_y = obstacle_center[2], obstacle_center[3]
@@ -348,12 +427,7 @@ class BirdsEyeView():
                             for i, bbox_corners in enumerate(obstacle_corners):
                                 x1, y1, x2, y2, xy_corners_warped = bbox_corners
                                 xy_corners_warped = np.array(xy_corners_warped).reshape((-1, 1, 2))
-
-                                distance = obstacle_distances_m[i]
-                                cost = int(127 * (1.0 - min(distance / max_perceived_distance, 1.0)))
-
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
-                                cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
 
                             for i, obstacle_center in enumerate(obstacle_centers):
                                 center_x, center_y = obstacle_center[2], obstacle_center[3]
@@ -380,12 +454,7 @@ class BirdsEyeView():
                                     xy_corners_rotated.append([x_rotated, y_rotated])
 
                                 xy_corners_warped = np.array(xy_corners_rotated).reshape((-1, 1, 2))
-
-                                distance = obstacle_distances_m[i]
-                                cost = int(127 * (1.0 - min(distance / max_perceived_distance, 1.0)))
-
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
-                                cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
 
                             for i, obstacle_center in enumerate(obstacle_centers):
                                 center_y, center_x = obstacle_center[2], self.image.shape[1] - obstacle_center[3]
@@ -412,12 +481,7 @@ class BirdsEyeView():
                                     xy_corners_rotated.append([x_rotated, y_rotated])
 
                                 xy_corners_warped = np.array(xy_corners_rotated).reshape((-1, 1, 2))
-
-                                distance = obstacle_distances_m[i]
-                                cost = int(127 * (1.0 - min(distance / max_perceived_distance, 1.0)))
-
                                 cv2.polylines(self.image, [xy_corners_warped], True, (255, 0, 0), 1)
-                                cv2.drawContours(local_costmap, [xy_corners_warped], -1, (cost, cost, cost), -1)
 
                             for i, obstacle_center in enumerate(obstacle_centers):
                                 center_x, center_y = self.image.shape[1] - obstacle_center[2], self.image.shape[0] - obstacle_center[3]
@@ -431,11 +495,3 @@ class BirdsEyeView():
                                     (255, 255, 255), 
                                     1, 
                                 )
-
-            # cv2.imshow('local_costmap', local_costmap)
-            # cv2.waitKey(1)
-
-            local_costmap = (local_costmap.astype(np.int16) - 128).astype(np.int8)
-            local_costmap[local_costmap == -128] = 0
-
-            return local_costmap

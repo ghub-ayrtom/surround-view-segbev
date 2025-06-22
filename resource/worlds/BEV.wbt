@@ -31,8 +31,8 @@ MercedesBenzSprinter {
   hidden position2_0_1 9.455965426861852e-06
   hidden position_0_2 -0.001097289103121994
   hidden position_0_3 -0.0010972907864425514
-  hidden rotation_1 5.947028576458017e-12 -0.9999999999694908 -7.811412258478703e-06 9.498295171220437e-06
-  hidden rotation_2 5.996466468346553e-12 0.9999999999686238 7.921653719379951e-06 9.498108150887242e-06
+  hidden rotation_1 5.976564132515048e-12 -0.999999999969442 -7.817668975559423e-06 9.498295171220437e-06
+  hidden rotation_2 6.000673811731321e-12 0.9999999999686165 7.922545008846347e-06 9.498108150887242e-06
   hidden rotation_3 0 -0.9999999999999999 0 0.0008154782270045729
   hidden rotation_4 0 1 0 0.0008154732942274523
   translation -1.12716e-05 1.77769 0.503254
@@ -51,7 +51,7 @@ MercedesBenzSprinter {
           fieldOfView 1.9198621771937625
           width 1305
           height 640
-          minRange 0.2
+          minRange 0.3
           maxRange 20
         }
         Transform {
@@ -91,7 +91,7 @@ MercedesBenzSprinter {
           fieldOfView 1.9198621771937625
           width 1305
           height 640
-          minRange 0.2
+          minRange 0.3
           maxRange 20
         }
         Transform {
@@ -131,7 +131,7 @@ MercedesBenzSprinter {
           fieldOfView 1.9198621771937625
           width 1305
           height 640
-          minRange 0.2
+          minRange 0.3
           maxRange 20
         }
         Transform {
@@ -171,7 +171,7 @@ MercedesBenzSprinter {
           fieldOfView 1.9198621771937625
           width 1305
           height 640
-          minRange 0.2
+          minRange 0.3
           maxRange 20
         }
         Transform {
@@ -213,7 +213,7 @@ MercedesBenzSprinter {
           fieldOfView 1.9198621771937625
           width 1305
           height 640
-          minRange 0.2
+          minRange 0.3
           maxRange 20
         }
         Transform {

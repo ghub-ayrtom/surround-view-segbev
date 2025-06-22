@@ -39,7 +39,7 @@ class AckermannKeyboardTeleopNode(Node):
         self.message = AckermannDrive()
         self.cmd_ackermann_publisher = self.create_publisher(AckermannDrive, '/cmd_ackermann', qos_profiles.cmd_qos)
 
-        self._logger.info(
+        self.get_logger().info(
             f'\n\n* * * * * * * * * * * * * * * * * * * * * * * * *\n'
             f'*                                               *\n'
             f'*   <WASD> to change speed and steering angle   *\n'
@@ -49,18 +49,15 @@ class AckermannKeyboardTeleopNode(Node):
             f'\n* * * * * * * * * * * * * * * * * * * * * * * * *\n'
         )
 
-        self._logger.info('Successfully launched!')
+        self.get_logger().info('Successfully launched!')
 
-        # if global_settings.CONTROL_MODE == 'Manual':
-        #     self.print_current_values()
-        #     self.key_loop()
-        # elif global_settings.CONTROL_MODE == 'Auto':
-        #     self._logger.warning('Switch control mode from "Auto" to "Manual" first')
-        # else:
-        #     self._logger.error('Undefined control mode!')
-
-        self.print_current_values()
-        self.key_loop()
+        if global_settings.EGO_VEHICLE_CONTROL_MODE == 'Manual':
+            self.print_current_values()
+            self.key_loop()
+        elif global_settings.EGO_VEHICLE_CONTROL_MODE == 'Auto':
+            self.get_logger().warning('Switch control mode from "Auto" to "Manual" first')
+        else:
+            self.get_logger().error('Undefined control mode!')
 
     def publisher_callback(self):
         self.message.speed = self.current_speed
@@ -70,7 +67,7 @@ class AckermannKeyboardTeleopNode(Node):
     def print_current_values(self):
         sys.stderr.write('\x1b[2J\x1b[H')
 
-        self._logger.info(
+        self.get_logger().info(
             f'\n\033[34;1mSpeed: \033[32;1m{self.current_speed:.1f} Km/h '
             f'\033[34;1mAngle: \033[32;1m{self.current_steering_angle:.1f} Degrees\033[0m'
         )
@@ -109,7 +106,7 @@ class AckermannKeyboardTeleopNode(Node):
                 elif pressed_key in ('\x03', '\x71'):  # Ctrl-C, Q
                     break
         except Exception as e:
-            self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+            self.get_logger().error(''.join(traceback.TracebackException.from_exception(e).format()))
         finally:
             sys.exit(0)
 

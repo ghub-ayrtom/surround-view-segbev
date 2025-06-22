@@ -1,16 +1,18 @@
 from rclpy.node import Node
 import rclpy
-from sensor_msgs.msg import NavSatFix, MagneticField
+from sensor_msgs.msg import Imu, MagneticField
 import traceback
 import math
 from ackermann_msgs.msg import AckermannDrive
 from configs import global_settings, qos_profiles
 from .scripts.utils import *
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import Quaternion, PoseStamped, PointStamped, TransformStamped
 from std_msgs.msg import Int8, Bool, Header
 from nav2_msgs.srv import GetCostmap
 from rclpy.action import ActionClient
 from nav2_msgs.action import NavigateToPose
+from nav_msgs.msg import Odometry
+from tf2_ros import TransformBroadcaster
 
 
 class Nav2PathPlanningNode(Node):
@@ -67,8 +69,27 @@ class Nav2PathPlanningNode(Node):
                 [False, 15.694846690561448, 0.04872481437466736, 0.0],  # Конечная точка обратного маршрута
             ]
 
+            self.imu_data = Quaternion()
+            self.create_subscription(Imu, '/ego_vehicle/imu', self.__imu_callback, qos_profiles.imu_qos)
+
             self.ego_vehicle_position = []
-            self.create_subscription(NavSatFix, '/gps', self.__gps_callback, qos_profiles.gps_qos)
+            self.create_subscription(PointStamped, '/ego_vehicle/gps', self.__gps_callback, qos_profiles.gps_qos)
+
+            self.tfs = TransformStamped()
+            self.tfs.header.frame_id = 'odom'
+            self.tfs.child_frame_id = 'base_link'
+
+            self.tf_broadcaster = TransformBroadcaster(self)
+
+            self.odom = Odometry()
+            self.odom.header.frame_id = 'odom'
+            self.odom.child_frame_id = 'base_link'
+
+            # В течение нескольких секунд после запуска решения, эго-автомобиль будет находиться в центре глобального фрейма, 
+            # однако, из-за его смещения, данные одометрии в этот момент не будут соответствовать фактическому месторасположению робота на карте
+            self.skip_odom_publishes_count = 100
+
+            self.odom_publisher = self.create_publisher(Odometry, '/odom', qos_profiles.odometry_qos)
 
             self.drive_command = AckermannDrive()
             self.cmd_ackermann_publisher = self.create_publisher(AckermannDrive, '/cmd_ackermann', qos_profiles.cmd_qos)
@@ -85,7 +106,7 @@ class Nav2PathPlanningNode(Node):
 
             self.current_goal = PoseStamped()
             self.current_goal.header = Header()
-            self.current_goal.header.frame_id = 'map'
+            self.current_goal.header.frame_id = 'map'  # 'odom'
 
             self.global_costmap = None
             self.global_costmap_width = 0.0
@@ -107,9 +128,9 @@ class Nav2PathPlanningNode(Node):
                 'gps': False, 
             }
 
-            self._logger.info('Successfully launched!')
+            self.get_logger().info('Successfully launched!')
         except Exception as e:
-            self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+            self.get_logger().error(''.join(traceback.TracebackException.from_exception(e).format()))
 
     def __compass_callback(self, message):
         x, y, z = message.magnetic_field.x, message.magnetic_field.y, message.magnetic_field.z
@@ -119,13 +140,35 @@ class Nav2PathPlanningNode(Node):
             self.yaw += 2.0 * math.pi  # [0, 2π]
         self.ego_vehicle_vector = [math.cos(self.yaw), math.sin(self.yaw)]
 
-        if not self.callbacks_status['compass']:
+        if not math.isnan(self.yaw) and not self.callbacks_status['compass']:
             self.callbacks_status['compass'] = True
 
-    def __gps_callback(self, message):
-        self.ego_vehicle_position = [message.latitude, message.longitude]  # y, x
+    def __imu_callback(self, message):
+        self.imu_data = message.orientation
 
-        # self._logger.info(f'{self.ego_vehicle_position}')
+    def __gps_callback(self, message):
+        self.ego_vehicle_position = [message.point.y, message.point.x]  # y, x
+
+        # self.get_logger().info(f'[False, {self.ego_vehicle_position[0]}, {self.ego_vehicle_position[1]}, 0.0], ')
+
+        self.tfs.header.stamp = self.get_clock().now().to_msg()
+
+        self.tfs.transform.translation.x = message.point.x
+        self.tfs.transform.translation.y = message.point.y
+        self.tfs.transform.rotation = self.imu_data
+
+        self.tf_broadcaster.sendTransform(self.tfs)
+
+        self.odom.header.stamp = self.get_clock().now().to_msg()
+
+        self.odom.pose.pose.position.x = message.point.x
+        self.odom.pose.pose.position.y = message.point.y
+        self.odom.pose.pose.orientation = self.imu_data
+
+        if self.skip_odom_publishes_count == 0:
+            self.odom_publisher.publish(self.odom)
+        else:
+            self.skip_odom_publishes_count -= 1
 
         if not self.callbacks_status['gps']:
             self.callbacks_status['gps'] = True
@@ -137,7 +180,7 @@ class Nav2PathPlanningNode(Node):
 
     def __get_global_costmap_request(self):
         if not self.get_global_costmap_client.wait_for_service(timeout_sec=3.0):
-            self._logger.error("The service GetMap not available!")
+            self.get_logger().error("The service GetMap not available!")
             return False
 
         request = GetCostmap.Request()
@@ -147,7 +190,7 @@ class Nav2PathPlanningNode(Node):
     def __get_global_costmap_response(self, future):
         try:
             if not future.result():
-                self._logger.error('GetMap request error!')
+                self.get_logger().error('GetMap request error!')
             else:
                 self.global_costmap = future.result().map
 
@@ -158,7 +201,7 @@ class Nav2PathPlanningNode(Node):
                     # self.global_costmap_origin = self.global_costmap.metadata.origin.position
                     self.global_costmap_resolution = self.global_costmap.metadata.resolution
         except Exception as e:
-            self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+            self.get_logger().error(''.join(traceback.TracebackException.from_exception(e).format()))
 
     def __check_goal_pose_obstacle_collision(self, goal_pose):
         '''
@@ -175,13 +218,13 @@ class Nav2PathPlanningNode(Node):
             my = round((goal_pose.pose.position.y - self.global_costmap_origin[1]) / self.global_costmap_resolution)  # self.global_costmap_origin.y
 
             if mx < 0 or my < 0 or mx >= self.global_costmap_width or my >= self.global_costmap_height:
-                self._logger.warning('The current Goal Pose is outside the global costmap')
+                self.get_logger().warning('The current Goal Pose is outside the global costmap')
                 return 2
 
             index = my * self.global_costmap_width + mx
             cost = self.global_costmap.data[index]
 
-            # self._logger.info(f'[{goal_pose.pose.position.x}, {goal_pose.pose.position.y}] -> {cost}')
+            # self.get_logger().info(f'[{goal_pose.pose.position.x}, {goal_pose.pose.position.y}] -> {cost}')
 
             if cost >= 100:
                 return 1
@@ -205,19 +248,19 @@ class Nav2PathPlanningNode(Node):
     def __send_goal_pose_response(self, future):
         try:
             if not future.result():
-                self._logger.error('NavigateToPose request error!')
+                self.get_logger().error('NavigateToPose request error!')
             else:
                 self.goal_handle = future.result()
 
                 if not self.goal_handle.accepted:
                     self.current_goal_pose_requested = False
-                    self._logger.warning('The current Goal Pose was rejected by the server')
+                    self.get_logger().warning('The current Goal Pose was rejected by the server')
                 else:
-                    status_code = self.__check_goal_pose_obstacle_collision(self.current_goal)
+                    status_code = self.__check_goal_pose_obstacle_collision(self.current_goal)  # 0
 
                     if status_code == 0:
                         self.current_goal_pose_requested = True
-                        self._logger.info('The current Goal Pose was accepted by the server')
+                        self.get_logger().info('The current Goal Pose was accepted by the server')
                     elif self.goal_handle:
                         self.current_goal_pose_requested = False
 
@@ -239,23 +282,23 @@ class Nav2PathPlanningNode(Node):
                                 self.route[self.current_route_point_index][1] -= 1.0  # Также смещаем её на себя 
                                 self.route[self.current_route_point_index][2] -= 1.0  # и вправо
                     else:
-                        self._logger.warning('No active Goal Pose to cancel')
+                        self.get_logger().warning('No active Goal Pose to cancel')
         except Exception as e:
-            self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+            self.get_logger().error(''.join(traceback.TracebackException.from_exception(e).format()))
 
     def __cancel_goal_pose_response(self, future):
         try:
             if not future.result():
-                self._logger.error('ActionClient request error!')
+                self.get_logger().error('ActionClient request error!')
             else:
                 response = future.result()
 
                 if response:
-                    self._logger.info('The current Goal Pose has been successfully canceled!')
+                    self.get_logger().info('The current Goal Pose has been successfully canceled!')
                 else:
-                    self._logger.warning('Failed to cancel current Goal Pose')
+                    self.get_logger().warning('Failed to cancel current Goal Pose')
         except Exception as e:
-            self._logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
+            self.get_logger().error(''.join(traceback.TracebackException.from_exception(e).format()))
 
     def set_distance_tolerance(self, distance):
         self.target_route_point_distance_tolerance = distance
@@ -263,7 +306,7 @@ class Nav2PathPlanningNode(Node):
     def __navigate(self):
         command_time = self.get_clock().now().to_msg().sec
 
-        if self.callbacks_status['gps']:
+        if self.callbacks_status['compass'] and self.callbacks_status['gps']:
             # Если достигли конца маршрута движения
             if self.current_route_point_index >= len(self.route):
                 self.__stop_ego_vehicle()
@@ -325,7 +368,7 @@ class Nav2PathPlanningNode(Node):
 
                 return
 
-            self.speed_factor.data = 6
+            self.speed_factor.data = 6  # 14
             self.speed_factor_publisher.publish(self.speed_factor)
 
             # Манёвр разворота и завершение маршрута жёстко заданы без использования Nav2

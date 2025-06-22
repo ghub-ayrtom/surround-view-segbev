@@ -1,0 +1,12 @@
+# https://www.kaggle.com/code/ayrtom/yolo-model-training
+# https://www.kaggle.com/datasets/ayrtom/webots-plastic-barrels-detection
+
+nc: 1
+names:
+  0: plastic_barrel
+
+path: /kaggle/input/webots-plastic-barrels-detection/YOLO11/data
+
+train: train/images
+val: val/images
+test: test/images

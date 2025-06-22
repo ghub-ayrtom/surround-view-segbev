@@ -1,7 +1,14 @@
 <?xml version="1.0"?>
-<robot name="/home/ayrtom/Computer Vision/dev/FQW_ws/src/surround_view_segbev/resource/descriptions/EgoVehicle.urdf" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="/home/ayrtom/ROS2/dev/FQW_ws/src/surround_view_segbev/resource/descriptions/EgoVehicle.urdf" xmlns:xacro="http://ros.org/wiki/xacro">
   <webots>
     <plugin type="surround_view_segbev.plugins.EgoVehicleDriver.EgoVehicleDriver"/>
+    <plugin type="webots_ros2_driver::Ros2IMU">
+      <frameName>imu</frameName>
+      <topicName>/ego_vehicle/imu</topicName>
+      <inertialUnitName>imu</inertialUnitName>
+      <accelerometerName>accelerometer</accelerometerName>
+      <gyroName>gyroscope</gyroName>
+    </plugin>
   </webots>
   <link name="base_link">
     <visual>
@@ -41,13 +48,13 @@
       </geometry>
     </collision>
   </link>
+  <link name="base_footprint">
+  </link>
   <joint name="base_footprint_joint" type="fixed">
     <parent link="base_link"/>
     <child link="base_footprint"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
-  <link name="base_footprint">
-  </link>
   <link name="backwards_lights">
   </link>
   <joint name="base_link_backwards_lights_joint" type="fixed">
@@ -137,7 +144,7 @@
   <joint name="base_link_camera_front_blind_joint" type="fixed">
     <parent link="base_link"/>
     <child link="camera_front_blind"/>
-    <origin xyz="5.3622 0.01 0.732" rpy="-1.570796 0.695 -1.570796"/>
+    <origin xyz="5.3622 0.01 0.732" rpy="0 0 0"/> <!-- rpy="-1.570796 0.695 -1.570796" -->
   </joint>
   <link name="camera_front_blind_depth">
   </link>
@@ -188,11 +195,25 @@
     <child link="imu"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
+  <link name="gyroscope">
+  </link>
+  <joint name="base_link_gyroscope_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="gyroscope"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
   <link name="compass">
   </link>
   <joint name="base_link_compass_joint" type="fixed">
     <parent link="base_link"/>
     <child link="compass"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="accelerometer">
+  </link>
+  <joint name="base_link_accelerometer_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="accelerometer"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
   <link name="engine_speaker">

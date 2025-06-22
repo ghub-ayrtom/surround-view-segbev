@@ -6,10 +6,16 @@ amcl:
     update_min_a: 0.05 # Обновлять локализацию каждые 0.05 рад (около 2.8°) поворота
     update_min_d: 0.1  # Обновлять локализацию каждые 10 см движения
     always_reset_initial_pose: true
-    scan_topic: /scan_reliable
+    scan_topic: '/scan_reliable'
+
+# bt_navigator:
+#   ros__parameters:
+#     global_frame: 'odom'
+#     robot_base_frame: 'camera_front_blind'
 
 controller_server:
   ros__parameters:
+    controller_frequency: 10.0
     progress_checker_plugins: ['progress_checker']
     goal_checker_plugins: ['goal_checker']
     controller_plugins: ['FollowPath']
@@ -20,83 +26,138 @@ controller_server:
       xy_goal_tolerance: 10.0  # Допуск по отклонению в положении (м)
       yaw_goal_tolerance: 3.14 # Допуск по отклонению в ориентации (рад)
     FollowPath:
-      plugin: 'nav2_mppi_controller::MPPIController' # 'nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController'
+      plugin: 'nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController' # 'nav2_mppi_controller::MPPIController'
 
-      # lookahead_dist: 10.0          # Дистанция предсказания траектории движения (м)
-      # curvature_lookahead_dist: 0.6 # Дистанция предсказания кривизны траектории (м)
+      lookahead_dist: 10.0          # 5.0 / Дистанция предсказания траектории движения (м)
+      curvature_lookahead_dist: 0.6 # Дистанция предсказания кривизны траектории (м)
 
-      # # Задействовать curvature_lookahead_dist 
-      # # вместо зависимости расстояния от скорости
-      # use_fixed_curvature_lookahead: true
+      # Задействовать curvature_lookahead_dist 
+      # вместо зависимости расстояния от скорости
+      use_fixed_curvature_lookahead: true
 
-      # use_rotate_to_heading: false  # Разрешить вращение на месте
-      # allow_reversing: true         # Разрешить движение задним ходом
+      use_rotate_to_heading: false  # Разрешить вращение на месте
+      allow_reversing: true         # Разрешить движение задним ходом
 
-      motion_model: 'Ackermann'
-      AckermannConstraints:
-        min_turning_r: 2.5
+      # motion_model: 'Ackermann'
+      # AckermannConstraints:
+      #   min_turning_r: 2.5
 
-      batch_size: 2000
-      time_steps: 125
+      # batch_size: 2000
+      # time_steps: 125
     
-      vx_min: -1.5
-      vx_max: 1.5
-      vy_max: 0.0
-      wz_max: 0.5
-      wz_std: 0.4
+      # vx_min: -1.5
+      # vx_max: 1.5
+      # vy_max: 0.0
+      # wz_max: 0.5
+      # wz_std: 0.4
 
-      visualize: true
+      # visualize: true
 
-      prune_distance: 7.5
+      # prune_distance: 7.5
 
-      TrajectoryVisualizer:
-        trajectory_step: 100
-        time_step: 10
+      # TrajectoryVisualizer:
+      #   trajectory_step: 100
+      #   time_step: 10
 
-      critics: [
-        'ConstraintCritic', 
-        'GoalAngleCritic', 
-        'GoalCritic', 
-        'ObstaclesCritic', 
-        'CostCritic', 
-        'PathAlignCritic', 
-        'PathAngleCritic', 
-        'PathFollowCritic', 
-        'PreferForwardCritic', 
-        'VelocityDeadbandCritic', 
-      ]
+      # critics: [
+      #   'ConstraintCritic', 
+      #   'GoalAngleCritic', 
+      #   'GoalCritic', 
+      #   'ObstaclesCritic', 
+      #   'CostCritic', 
+      #   'PathAlignCritic', 
+      #   'PathAngleCritic', 
+      #   'PathFollowCritic', 
+      #   'PreferForwardCritic', 
+      #   'VelocityDeadbandCritic', 
+      # ]
 
-      ObstaclesCritic:
-        consider_footprint: true
-        cost_scaling_factor: 1.5
-        inflation_radius: 3.0
-      CostCritic:
-        consider_footprint: true
-        near_goal_distance: 1.0
-      PathAlignCritic:
-        cost_weight: 14.0
-        max_path_occupancy_ratio: 0.05
-        trajectory_point_step: 3
-      PathAngleCritic:
-        cost_weight: 2.0
-        offset_from_furthest: 4
-        max_angle_to_furthest: 1.0
-      PathFollowCritic:
-        offset_from_furthest: 5
-      PreferForwardCritic:
-        cost_weight: 0.0
+      # ObstaclesCritic:
+      #   consider_footprint: true
+      #   cost_scaling_factor: 1.5
+      #   inflation_radius: 3.0
+      # CostCritic:
+      #   consider_footprint: true
+      #   near_goal_distance: 1.0
+      # PathAlignCritic:
+      #   cost_weight: 14.0
+      #   max_path_occupancy_ratio: 0.05
+      #   trajectory_point_step: 3
+      # PathAngleCritic:
+      #   cost_weight: 2.0
+      #   offset_from_furthest: 4
+      #   max_angle_to_furthest: 1.0
+      # PathFollowCritic:
+      #   offset_from_furthest: 5
+      # PreferForwardCritic:
+      #   cost_weight: 0.0
+
+# local_costmap:
+#   local_costmap:
+#     ros__parameters:
+#       publish_frequency: 10.0
+#       update_frequency: 20.0
+
+#       global_frame: 'odom'
+#       height: 200
+#       width: 50
+#       resolution: 0.05
+
+#       rolling_window: true
+
+#       robot_radius: 0.0
+#       robot_base_frame: 'camera_front_blind' # 'base_link'
+
+#       # Углы эго-автомобиля: правый задний, правый передний, левый передний, левый задний
+#       footprint: '[ [-7.0, -1.0], [2.0, -1.0], [2.0, 1.0], [-7.0, 1.0] ]'     # x, y (camera_front_blind)
+#       # # Углы эго-автомобиля: левый задний, левый передний, правый передний, правый задний
+#       # footprint: '[ [-2.0,  1.0], [6.0,  1.0], [6.0, -1.0], [-2.0, -1.0] ]' # y, x (base_link)
+
+#       plugins: [
+#         'obstacle_layer', 
+#         'inflation_layer', 
+#       ]
+
+#       obstacle_layer:
+#         plugin: 'nav2_costmap_2d::ObstacleLayer'
+#         combination_method: 1
+#         observation_sources: 'scan'
+#         scan:
+#           topic: '/scan_reliable'
+#           sensor_frame: 'lidar'
+#           data_type: 'LaserScan'
+#           min_obstacle_height: -1.14
+#           max_obstacle_height: 1.5
+#           marking: true
+#           obstacle_min_range: 0.75
+#           obstacle_max_range: 100.0
+#           clearing: true
+#           raytrace_min_range: 0.75
+#           raytrace_max_range: 100.0
+#       inflation_layer:
+#         plugin: 'nav2_costmap_2d::InflationLayer'
+#         inflation_radius: 3.0
+#         cost_scaling_factor: 1.5
 
 global_costmap:
   global_costmap:
     ros__parameters:
+      publish_frequency: 10.0
+      update_frequency: 20.0
+
+      # global_frame: 'odom' # 'map'
+      # height: 200
+      # width: 50
       resolution: 0.05
-      track_unknown_space: true
+
+      # rolling_window: true
 
       robot_radius: 0.0
       robot_base_frame: 'camera_front_blind' # 'base_link'
 
-      # Углы эго-автомобиля: левый задний, левый передний, правый передний, правый задний
-      footprint: '[ [-1.0, -7.0], [-1.0, 2.0], [1.0, 2.0], [1.0, -7.0] ]'     # x, y (camera_front_blind)
+      # Углы эго-автомобиля: правый задний, правый передний, левый передний, левый задний
+      footprint: '[ [-7.0, -1.0], [2.0, -1.0], [2.0, 1.0], [-7.0, 1.0] ]'     # x, y (camera_front_blind)
+      # # Углы эго-автомобиля: левый задний, левый передний, правый передний, правый задний
       # footprint: '[ [-2.0,  1.0], [6.0,  1.0], [6.0, -1.0], [-2.0, -1.0] ]' # y, x (base_link)
 
       plugins: [
@@ -113,21 +174,21 @@ global_costmap:
         # 0 - частично перезаписывать глобальную карту стоимости каждым валидным наблюдением
         # 1 - добавлять препятствия из наблюдения с максимальными значениями параметров ниже
         combination_method: 1
-        observation_sources: scan
+        observation_sources: 'scan'
         scan:
-          topic: /scan_reliable
-          sensor_frame: lidar
+          topic: '/scan_reliable'
+          sensor_frame: 'lidar'
           data_type: 'LaserScan'
-          min_obstacle_height: 0.0
+          min_obstacle_height: -1.14 # Спускаем origin z (base_link_lidar_joint) из EgoVehicle.urdf на уровень земли
           max_obstacle_height: 1.5
-          marking: false
+          marking: true
           # Наносим на карту новые препятствия на расстоянии (м)
-          obstacle_min_range: 1.5
-          obstacle_max_range: 3.0 # 10.0
-          clearing: false
+          obstacle_min_range: 0.75
+          obstacle_max_range: 100.0
+          clearing: true
           # Очищаем на карте старые препятствия на расстоянии
-          raytrace_min_range: 1.5
-          raytrace_max_range: 1.5 # 10.0
+          raytrace_min_range: 0.75
+          raytrace_max_range: 100.0
       inflation_layer:
         plugin: 'nav2_costmap_2d::InflationLayer'
         inflation_radius: 3.0
@@ -135,4 +196,4 @@ global_costmap:
 
 map_server:
   ros__parameters:
-    yaml_filename: '/home/ayrtom/ROS2/dev/FQW_ws/src/surround_view_segbev/configs/slam_toolbox/maps/main_wbt/main_wbt.yaml'
+    yaml_filename: '.../surround_view_segbev/configs/slam_toolbox/maps/main_wbt/main_wbt.yaml'

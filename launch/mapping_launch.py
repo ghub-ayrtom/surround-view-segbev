@@ -32,6 +32,7 @@ config_rviz = os.path.join(
     pathlib.Path(os.path.join(package_dir, 'configs/rviz/mapping.rviz')), 
 )
 
+
 def get_ros2_nodes():
     with open(ego_vehicle_urdf, 'r') as urdf:
         ego_vehicle_description = urdf.read()
@@ -52,7 +53,10 @@ def get_ros2_nodes():
         executable='pointcloud_to_laserscan_node', 
         package='pointcloud_to_laserscan', 
         name='pointcloud_to_laserscan', 
-        parameters=[pointcloud_to_laserscan_params_yaml, {'use_sim_time': USE_SIM_TIME}], 
+        parameters=[
+            pointcloud_to_laserscan_params_yaml, 
+            {'use_sim_time': USE_SIM_TIME}
+        ], 
         output='screen', 
     )
     pointcloud_to_laserscan_bridge_node = Node(

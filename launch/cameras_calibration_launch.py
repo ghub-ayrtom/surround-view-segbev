@@ -60,7 +60,7 @@ def get_ros2_nodes():
 # Генерирует описание (параметры) процесса запуска
 def generate_launch_description():
     world = LaunchConfiguration('world')
-    webots = WebotsLauncher(world=PathJoinSubstitution([package_dir, 'resource/worlds', world]), stream=True)  # Инициализация симулятора Webots
+    webots = WebotsLauncher(world=PathJoinSubstitution([package_dir, 'resource/worlds', world]))  # Инициализация симулятора Webots
 
     return LaunchDescription([
         # Аргумент для указания мира симуляции

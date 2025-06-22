@@ -15,7 +15,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.5775434603850044 -0.5779320755963162 0.5765744248260141 4.188117258153761
-  position -0.009509261429130333 0.5590885297399355 26.05855296963925
+  position -0.00783452928437281 0.5050251143821047 57.275867521074616
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -40,7 +40,7 @@ MercedesBenzSprinter {
           fieldOfView 1.9198621771937625
           width 1305
           height 640
-          minRange 0.2
+          minRange 0.3
           maxRange 20
         }
         Transform {
@@ -83,7 +83,7 @@ MercedesBenzSprinter {
           fieldOfView 1.9198621771937625
           width 1305
           height 640
-          minRange 0.2
+          minRange 0.3
           maxRange 20
         }
         Transform {
@@ -126,7 +126,7 @@ MercedesBenzSprinter {
           fieldOfView 1.9198621771937625
           width 1305
           height 640
-          minRange 0.2
+          minRange 0.3
           maxRange 20
         }
         Transform {
@@ -169,7 +169,7 @@ MercedesBenzSprinter {
           fieldOfView 1.9198621771937625
           width 1305
           height 640
-          minRange 0.2
+          minRange 0.3
           maxRange 20
         }
         Transform {
@@ -214,7 +214,7 @@ MercedesBenzSprinter {
           fieldOfView 1.9198621771937625
           width 1305
           height 640
-          minRange 0.2
+          minRange 0.3
           maxRange 20
         }
         Transform {

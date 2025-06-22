@@ -1,4 +1,4 @@
-from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
+from rclpy.qos import QoSProfile, HistoryPolicy, ReliabilityPolicy
 
 
 '''
@@ -22,7 +22,7 @@ default_qos = QoSProfile(
 image_qos = QoSProfile(
     reliability=ReliabilityPolicy.BEST_EFFORT, 
     history=HistoryPolicy.KEEP_LAST, 
-    depth=2, 
+    depth=1, 
 )
 
 costmap_qos = QoSProfile(
@@ -90,9 +90,9 @@ bridge_qos = QoSProfile(
 )
 
 lidar_qos = QoSProfile(
-    reliability=ReliabilityPolicy.RELIABLE, 
+    reliability=ReliabilityPolicy.BEST_EFFORT, 
     history=HistoryPolicy.KEEP_LAST, 
-    depth=10, 
+    depth=1, 
 )
 
 pose_qos = QoSProfile(

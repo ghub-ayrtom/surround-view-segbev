@@ -1,14 +1,21 @@
 pointcloud_to_laserscan:
   ros__parameters:
-    min_height: 0.0
-    max_height: 0.75
-    angle_min: -1.57
-    angle_max: 1.57
-    angle_increment: 0.00153
-    queue_size: 100
-    scan_time: 0.01
-    range_min: 0.75
-    range_max: 100.0
-    target_frame: 'base_link'
+    min_height: -1.14 # Мин. и макс. высота в метрах, ниже и выше которой точки из PointCloud2 будут 
+    max_height: 1.5   # игнорироваться
+    angle_min: -1.57  # Мин. и макс. углы сканирования в радианах, которые определяют левую и правую 
+    angle_max: 1.57   # границы поля обзора относительно лидара соответственно
+    angle_increment: 0.00153 # Количество радиан на один лазерный луч - разрешение итогового LaserScan
+    queue_size: 1     # Размер очереди входящих сообщений в формате PointCloud2
+    scan_time: 0.033  # Время сканирования в секундах (обычно равно частоте обновления лидара)
+    range_min: 0.75   # Мин. и макс. дистанция сканирования в метрах, ближе и дальше которой точки 
+    range_max: 100.0  # из PointCloud2 будут игнорироваться
+    # Фрейм, в который будет преобразован PointCloud2 перед его обработкой в LaserScan 
+    # (если не задан, то LaserScan будет генерироваться в том же фрейме, что и PointCloud2)
+    # target_frame: 'base_link'
+    concurrency_level: 4 # Количество потоков, одновременно обрабатывающих облака точек с лидара
+    # Допуск по времени в секундах для ожидания трансформации между фреймами 
+    # (учитывается только если задан target_frame (по умолчанию: none))
     transform_tolerance: 0.01
-    use_inf: true
+    # Использовать значение inf или range_max + 1 для диапазонов сканирования без объектов 
+    # (связан с параметром inf_is_valid в obstacle_layer из costmap_2d)
+    use_inf: false

@@ -15,6 +15,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Rubber.proto"
 
 WorldInfo {
+  basicTimeStep 10
   contactProperties [
     ContactProperties {
       softCFM 1e-05
@@ -24,6 +25,8 @@ WorldInfo {
 Viewpoint {
   orientation -0.5773881545374432 -0.5776922755489732 0.5769701498092383 4.188616183078236
   position -0.2269559615539301 14.850750142222662 61.7909642946529
+  follow "ego_vehicle"
+  followType "Mounted Shot"
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -63,8 +66,9 @@ MercedesBenzSprinter {
       minRange 0.1
       maxRange 100
       noise 0.03
-      minFrequency 10
-      maxFrequency 10
+      defaultFrequency 30
+      minFrequency 30
+      maxFrequency 30
     }
     Camera {
       translation -3.5721 0.836 1.66828
@@ -275,9 +279,15 @@ MercedesBenzSprinter {
     }
   ]
   sensorsSlotCenter [
+    Accelerometer {
+    }
     Compass {
     }
+    Gyro {
+      name "gyroscope"
+    }
     InertialUnit {
+      rotation 0 0 -1 -5.307179586466759e-06
       name "imu"
     }
   ]

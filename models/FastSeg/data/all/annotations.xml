@@ -1,0 +1,2061 @@
+<!--
+
+	https://www.kaggle.com/code/ayrtom/fastseg-model-training
+	https://www.kaggle.com/datasets/ayrtom/webots-road-segmentation
+
+-->
+
+<?xml version="1.0" encoding="utf-8"?>
+<annotations>
+  <version>1.1</version>
+  <meta>
+    <job>
+      <id>1920897</id>
+      <size>500</size>
+      <mode>annotation</mode>
+      <overlap>0</overlap>
+      <bugtracker></bugtracker>
+      <created>2025-01-07 12:56:47.587200+00:00</created>
+      <updated>2025-01-09 08:19:56.571765+00:00</updated>
+      <subset>default</subset>
+      <start_frame>0</start_frame>
+      <stop_frame>499</stop_frame>
+      <frame_filter></frame_filter>
+      <segments>
+        <segment>
+          <id>1923365</id>
+          <start>0</start>
+          <stop>499</stop>
+          <url>https://app.cvat.ai/api/jobs/1920897</url>
+        </segment>
+      </segments>
+      <owner>
+        <username>Ayrtom</username>
+        <email>molchanovlive@gmail.com</email>
+      </owner>
+      <assignee></assignee>
+      <labels>
+        <label>
+          <name>road</name>
+          <color>#00ff00</color>
+          <type>polygon</type>
+          <attributes>
+          </attributes>
+        </label>
+      </labels>
+    </job>
+    <dumped>2025-01-09 08:20:24.483275+00:00</dumped>
+  </meta>
+  <image id="0" name="cf_1.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,451.70;561.95,340.96;771.62,339.28;1305.00,450.00;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="1" name="cf_10.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,422.30;399.20,338.40;595.50,338.40;1305.00,455.00;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="2" name="cf_100.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,455.90;230.70,412.20;229.80,405.50;299.40,393.80;331.30,394.60;527.60,358.60;648.40,361.10;648.30,382.00;993.10,390.40;1107.90,420.70;1163.30,422.30;1239.60,440.80;1239.60,455.90;1305.00,473.50;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="3" name="cf_11.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,391.30;382.50,338.50;567.10,339.30;1305.00,540.60;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="4" name="cf_12.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,456.70;486.50,369.50;695.30,335.10;890.00,340.10;1305.00,431.60;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="5" name="cf_13.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.80,589.20;668.50,390.50;859.60,341.00;1102.20,339.20;1305.00,366.20;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="6" name="cf_14.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="647.50,385.50;768.20,336.80;957.90,335.80;1305.00,383.00;1305.00,640.00;62.10,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="7" name="cf_15.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="609.80,384.70;700.40,335.90;850.50,336.70;925.10,346.80;1305.00,394.70;1305.00,640.00;258.40,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="8" name="cf_16.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,446.80;385.00,340.10;589.70,338.40;1305.00,434.90;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="9" name="cf_17.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,474.31;349.80,390.40;564.50,341.80;764.20,339.20;1305.00,429.90;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="10" name="cf_18.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="932.60,338.50;1179.40,334.10;1305.00,350.20;1305.00,640.00;101.51,639.53;687.80,422.30" z_order="0">
+    </polygon>
+  </image>
+  <image id="11" name="cf_19.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="773.30,359.41;790.10,340.10;972.10,341.00;1305.00,377.00;1305.00,640.00;693.60,640.00;752.30,403.90" z_order="0">
+    </polygon>
+  </image>
+  <image id="12" name="cf_2.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="583.80,337.60;764.10,335.90;863.10,357.70;1305.00,448.30;1305.00,640.00;0.00,640.00;0.00,452.50" z_order="0">
+    </polygon>
+  </image>
+  <image id="13" name="cf_20.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="426.92,367.79;503.20,335.10;647.50,335.00;1305.00,413.90;1305.00,640.00;0.00,640.00;0.00,610.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="14" name="cf_21.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="457.90,336.00;635.80,336.60;1305.00,436.50;1305.00,640.00;0.00,640.00;0.00,455.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="15" name="cf_22.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="424.30,340.20;624.00,338.20;1305.00,463.30;1305.00,640.00;0.00,640.00;0.00,424.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="16" name="cf_23.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="564.30,336.00;733.90,336.80;895.70,372.80;1305.00,455.02;1305.00,640.00;0.00,640.00;0.00,443.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="17" name="cf_24.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="571.00,339.30;754.00,339.30;895.70,370.30;1305.00,455.00;1305.00,640.00;0.00,640.00;0.80,447.40" z_order="0">
+    </polygon>
+  </image>
+  <image id="18" name="cf_25.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="602.80,343.50;834.40,343.50;1305.00,430.70;1305.00,640.00;0.00,640.00;0.00,472.50" z_order="0">
+    </polygon>
+  </image>
+  <image id="19" name="cf_26.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="602.80,345.10;869.60,346.90;1305.00,424.00;1305.00,640.00;0.00,640.00;0.00,481.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="20" name="cf_27.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="559.20,350.10;872.90,353.60;1304.20,431.60;1305.00,640.00;0.00,640.00;0.00,479.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="21" name="cf_28.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="470.50,361.00;494.90,360.20;549.30,346.80;771.70,344.30;855.50,361.90;879.00,361.90;1302.50,435.80;1305.00,640.00;0.00,640.00;0.00,464.90" z_order="0">
+    </polygon>
+  </image>
+  <image id="22" name="cf_29.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="380.80,379.50;416.90,379.50;519.90,354.30;691.10,354.40;690.30,346.80;788.40,346.00;947.70,379.60;975.40,379.50;1302.50,435.80;1305.00,640.00;0.00,640.00;0.00,464.90" z_order="0">
+    </polygon>
+  </image>
+  <image id="23" name="cf_3.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="612.20,337.50;778.30,335.10;1304.20,437.50;1305.00,640.00;0.00,640.00;0.00,462.40" z_order="0">
+    </polygon>
+  </image>
+  <image id="24" name="cf_30.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="169.50,428.20;224.00,428.20;387.50,386.20;385.00,377.80;399.30,377.00;423.60,378.70;475.50,366.10;703.70,364.40;702.80,352.70;822.80,351.90;1168.30,424.80;1218.60,424.80;1305.00,438.30;1305.00,640.00;0.00,640.00;1.40,465.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="25" name="cf_31.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="120.00,453.30;119.90,438.20;215.60,418.10;261.70,419.80;384.90,388.80;729.70,389.60;727.90,364.40;877.30,363.60;928.50,374.50;955.30,375.40;969.60,377.00;972.90,384.60;1138.10,417.20;1185.90,415.60;1291.60,434.90;1289.90,445.80;1305.00,450.00;1305.00,640.00;0.00,640.00;0.00,484.30" z_order="0">
+    </polygon>
+  </image>
+  <image id="26" name="cf_32.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="161.00,445.80;789.10,447.50;789.10,382.80;969.50,381.20;1081.00,404.60;1125.50,405.60;1196.70,416.40;1195.10,429.80;1305.00,446.60;1305.00,640.00;0.00,640.00;0.00,485.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="27" name="cf_33.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="285.90,401.30;662.50,402.20;662.50,411.30;1132.20,411.40;1305.00,446.60;1305.00,640.00;1126.40,640.00;1125.60,542.20;979.60,469.30;0.90,464.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="28" name="cf_34.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="329.50,401.30;709.40,409.70;709.50,419.70;1259.70,427.30;1305.00,437.40;1305.00,575.50;1181.00,522.00;0.03,483.53;0.00,476.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="29" name="cf_35.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="61.90,513.70;78.70,537.20;465.50,440.60;1305.00,631.10;1305.00,640.00;0.00,640.00;0.00,525.40" z_order="0">
+    </polygon>
+    <polygon label="road" source="manual" occluded="0" points="642.30,384.20;679.70,377.50;1010.60,405.40;1016.90,413.10;1305.00,438.60;1305.00,447.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="30" name="cf_36.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="516.40,420.50;515.80,432.40;796.00,428.20;793.40,415.60;881.50,415.60;910.80,424.80;1092.84,419.79;1304.19,463.40;1305.00,640.00;0.00,640.00;0.00,431.50" z_order="0">
+    </polygon>
+  </image>
+  <image id="31" name="cf_37.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="316.20,337.60;567.90,356.90;1125.60,409.80;1130.50,417.30;1305.00,434.00;1305.00,640.00;0.00,640.00;0.00,338.40" z_order="0">
+    </polygon>
+  </image>
+  <image id="32" name="cf_38.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="254.10,342.60;1107.90,423.20;1123.90,436.60;1305.00,453.40;1304.20,640.00;0.00,640.00;0.00,340.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="33" name="cf_39.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="232.30,346.00;578.70,391.20;1305.00,493.60;1305.00,640.00;0.00,640.00;0.00,344.30" z_order="0">
+    </polygon>
+  </image>
+  <image id="34" name="cf_4.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="616.50,340.20;835.40,341.00;1305.00,423.20;1305.00,640.00;0.00,640.00;0.00,485.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="35" name="cf_40.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,346.80;136.80,347.70;319.60,387.90;1166.60,640.00;0.00,640.00;0.00,485.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="36" name="cf_41.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,357.70;184.50,337.60;390.00,336.00;419.40,345.10;471.40,383.70;764.90,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="37" name="cf_42.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,378.60;336.30,341.80;536.00,340.90;565.40,405.50;615.70,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="38" name="cf_43.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,420.60;659.20,343.50;917.50,342.60;1305.00,504.40;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="39" name="cf_44.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,440.70;721.30,340.10;941.80,341.00;1305.00,429.70;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="40" name="cf_45.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,470.00;739.70,341.80;952.70,339.30;1305.00,400.40;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="41" name="cf_46.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,523.70;768.20,339.30;987.90,341.00;1305.00,385.30;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="42" name="cf_47.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,578.20;713.70,339.30;924.10,341.00;1305.00,392.00;1305.00,640.00;0.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="43" name="cf_48.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="721.10,339.30;903.90,337.70;1305.00,383.60;1305.00,640.00;151.83,639.53;586.27,417.28;698.70,355.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="44" name="cf_49.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="811.60,338.50;1305.00,396.30;1305.00,640.00;102.40,640.00;536.00,398.00;628.20,337.50" z_order="0">
+    </polygon>
+  </image>
+  <image id="45" name="cf_5.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="560.90,337.70;1305.00,485.20;1305.00,640.00;0.00,640.00;0.00,393.80;338.80,339.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="46" name="cf_50.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="779.00,341.90;1305.00,407.20;1305.00,640.00;47.80,640.00;577.00,342.50" z_order="0">
+    </polygon>
+  </image>
+  <image id="47" name="cf_51.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="608.70,339.40;1305.00,434.80;1305.00,640.00;0.00,640.00;0.00,454.20;380.80,339.30" z_order="0">
+    </polygon>
+  </image>
+  <image id="48" name="cf_52.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="564.20,338.60;1304.20,461.60;1305.00,640.00;0.00,640.00;0.00,413.90;337.90,339.30" z_order="0">
+    </polygon>
+  </image>
+  <image id="49" name="cf_53.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="611.10,338.60;1305.00,472.60;1305.00,640.00;0.00,640.00;0.00,427.30;425.10,339.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="50" name="cf_54.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="613.95,338.44;803.50,377.10;1305.00,491.08;1305.00,640.00;0.00,640.00;0.00,412.20;419.30,338.40" z_order="0">
+    </polygon>
+  </image>
+  <image id="51" name="cf_55.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="616.50,338.40;801.00,383.80;1305.00,517.10;1305.00,640.00;0.00,640.00;0.00,411.40;420.90,340.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="52" name="cf_56.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="942.80,340.10;1305.00,402.20;1305.00,640.00;0.00,640.00;0.00,479.30;691.00,344.30" z_order="0">
+    </polygon>
+  </image>
+  <image id="53" name="cf_57.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1024.20,343.50;1305.00,379.60;1305.00,640.00;0.00,640.00;0.00,545.50;774.10,341.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="54" name="cf_58.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="947.90,341.80;1305.00,388.80;1305.00,640.00;0.00,640.00;0.03,628.63;629.80,382.90;728.00,341.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="55" name="cf_59.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="947.90,341.00;1305.00,380.40;1305.00,640.00;269.30,640.00;659.20,394.70;732.20,341.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="56" name="cf_6.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="572.10,350.20;574.60,369.50;588.79,415.60;683.50,640.00;0.00,640.00;0.00,382.20;351.40,344.30" z_order="0">
+    </polygon>
+  </image>
+  <image id="57" name="cf_60.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="899.20,342.60;1305.00,387.90;1305.00,640.00;296.09,639.53;563.63,428.18;639.11,366.96;660.80,341.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="58" name="cf_61.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="825.40,343.40;1305.00,400.50;1305.00,640.00;257.50,640.00;519.20,426.50;587.10,364.40;607.10,341.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="59" name="cf_62.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="803.70,345.00;1305.00,403.90;1305.00,640.00;66.30,640.00;453.00,403.80;541.70,346.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="60" name="cf_63.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="786.10,345.00;1305.00,408.10;1305.00,640.00;0.03,639.53;0.00,603.50;409.30,404.70;521.60,347.60" z_order="0">
+    </polygon>
+  </image>
+  <image id="61" name="cf_64.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="773.50,345.00;1305.00,412.30;1305.00,640.00;0.03,639.53;0.00,557.40;395.00,394.60;509.00,345.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="62" name="cf_65.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="739.10,342.60;1305.00,420.70;1305.00,640.00;0.03,639.53;0.00,516.30;384.10,384.50;495.60,343.40" z_order="0">
+    </polygon>
+  </image>
+  <image id="63" name="cf_66.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="722.30,342.60;1305.00,427.40;1305.00,640.00;0.03,639.53;0.00,487.80;368.20,378.70;478.90,343.40" z_order="0">
+    </polygon>
+  </image>
+  <image id="64" name="cf_67.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="689.60,341.00;1305.00,438.30;1305.00,640.00;0.03,639.53;0.00,462.60;358.10,372.00;469.60,340.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="65" name="cf_68.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="672.00,340.20;1305.00,449.20;1305.00,640.00;0.03,639.53;0.00,444.10;336.30,368.60;452.00,340.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="66" name="cf_69.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="679.60,337.70;1305.00,449.20;1305.00,640.00;0.03,639.53;0.00,450.80;359.00,370.30;488.10,340.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="67" name="cf_7.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,337.70;1305.00,640.00;0.03,639.53;0.03,451.66;664.30,377.90;1001.40,345.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="68" name="cf_70.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,455.90;1305.00,640.00;0.03,639.53;0.00,444.10;306.20,379.60;492.34,340.12;706.20,340.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="69" name="cf_71.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,464.30;1305.00,640.00;0.03,639.53;0.00,435.70;316.30,374.60;490.70,338.50;691.90,338.50" z_order="0">
+    </polygon>
+  </image>
+  <image id="70" name="cf_72.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,468.50;1305.00,640.00;0.03,639.53;0.00,432.30;316.30,374.60;493.20,339.30;691.90,338.50" z_order="0">
+    </polygon>
+  </image>
+  <image id="71" name="cf_73.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,446.70;1305.00,640.00;0.03,639.53;0.00,454.10;391.80,376.30;550.30,344.30;775.70,341.90" z_order="0">
+    </polygon>
+  </image>
+  <image id="72" name="cf_74.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,434.10;1305.00,640.00;0.03,639.53;0.00,466.70;443.80,371.20;579.70,341.80;813.40,341.90" z_order="0">
+    </polygon>
+  </image>
+  <image id="73" name="cf_75.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,451.70;1305.00,640.00;0.03,639.53;0.00,445.70;359.90,372.00;475.70,347.70;760.50,346.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="74" name="cf_76.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,455.90;1305.00,640.00;0.03,639.53;0.00,442.30;430.40,355.20;770.50,352.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="75" name="cf_77.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,466.80;1305.00,640.00;0.03,639.53;0.00,434.80;348.90,368.60;375.80,368.60;459.60,350.20;723.00,348.50;789.20,362.80;811.04,362.76" z_order="0">
+    </polygon>
+  </image>
+  <image id="76" name="cf_78.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,402.30;1305.00,640.00;0.03,639.53;0.00,495.20;519.20,377.80;546.90,378.70;644.10,354.40;1012.40,358.60;1232.80,401.30" z_order="0">
+    </polygon>
+  </image>
+  <image id="77" name="cf_79.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,390.60;1305.00,640.00;64.60,640.00;747.30,406.40;789.30,413.10;915.00,356.10;1159.90,365.30;1159.90,377.00;1173.40,383.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="78" name="cf_8.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,351.30;1305.00,640.00;0.00,640.00;0.00,524.70;749.00,402.30;1070.90,352.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="79" name="cf_80.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;1091.20,640.00;1117.20,556.50;1305.00,605.10" z_order="0">
+    </polygon>
+    <polygon label="road" source="manual" occluded="0" points="1305.00,439.10;1246.30,382.00;1231.20,381.20;1229.50,371.10;1305.00,377.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="80" name="cf_81.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;947.80,640.00;963.70,574.10;1140.60,606.80;1137.30,456.70;1063.40,369.50;1305.00,382.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="81" name="cf_82.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;1028.30,640.00;1028.30,583.30;889.80,393.00;874.80,391.30;869.70,367.00;1243.80,375.30;1243.80,405.50;1283.22,413.92;1305.00,413.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="82" name="cf_83.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;864.80,640.00;865.60,526.20;811.00,363.60;1131.40,370.30;1131.40,398.00;1161.60,403.00;1305.00,409.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="83" name="cf_84.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;470.60,640.00;675.20,449.80;744.00,455.00;791.70,355.20;1021.50,360.30;1021.50,377.80;1305.00,389.60" z_order="0">
+    </polygon>
+  </image>
+  <image id="84" name="cf_85.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;437.90,640.00;998.00,414.70;1059.20,423.20;1146.40,365.20;1305.00,374.50" z_order="0">
+    </polygon>
+  </image>
+  <image id="85" name="cf_86.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;0.00,640.00;0.00,520.40;757.30,374.40;785.88,376.18;910.00,346.90;1076.90,351.00;1076.90,362.80;1305.00,371.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="86" name="cf_87.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;0.00,640.00;0.00,451.60;565.30,361.80;586.30,361.90;691.90,342.20;778.40,343.60;778.40,350.00;960.30,353.50;1056.50,379.30;1095.40,379.70;1305.00,427.40" z_order="0">
+    </polygon>
+  </image>
+  <image id="87" name="cf_88.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;0.00,640.00;0.00,435.70;571.50,356.10;588.40,356.10;678.90,341.30;759.90,341.50;759.90,346.70;916.10,349.80;970.40,367.60;1001.00,368.10;1305.00,451.40" z_order="0">
+    </polygon>
+  </image>
+  <image id="88" name="cf_89.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;0.00,640.00;0.00,435.70;572.70,354.90;588.80,356.10;682.10,340.80;758.90,341.50;758.90,346.90;913.00,349.40;968.60,367.30;997.40,367.10;1305.00,453.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="89" name="cf_9.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;0.00,640.00;0.00,558.10;629.80,339.00;830.00,339.40;1305.00,411.90" z_order="0">
+    </polygon>
+  </image>
+  <image id="90" name="cf_90.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;0.00,640.00;0.00,439.80;533.00,359.80;552.60,360.70;631.90,347.60;908.50,353.40;983.50,375.20;1015.10,375.30;1305.00,450.60" z_order="0">
+    </polygon>
+  </image>
+  <image id="91" name="cf_91.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;0.00,640.00;0.00,423.00;290.00,378.00;320.80,378.80;505.30,346.40;600.90,346.30;601.00,354.10;773.80,354.30;856.10,381.00;887.90,380.60;1305.00,499.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="92" name="cf_92.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;0.00,640.00;0.00,423.40;51.20,415.20;100.87,415.71;294.34,382.68;294.00,376.61;321.64,372.57;347.93,373.58;473.99,350.66;581.90,351.30;581.90,363.20;804.40,363.30;839.80,374.70;869.00,374.00;869.00,384.00;984.90,419.50;1035.00,419.30;1305.00,494.90" z_order="0">
+    </polygon>
+  </image>
+  <image id="93" name="cf_93.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;0.00,640.00;0.00,453.90;207.30,415.10;207.20,406.10;280.40,394.20;314.30,395.10;434.30,371.90;434.10,367.30;450.00,365.00;470.70,365.30;514.20,357.20;639.98,358.21;640.00,379.20;984.30,385.10;1094.40,415.00;1153.60,415.80;1229.90,433.60;1230.00,450.20;1305.00,470.30" z_order="0">
+    </polygon>
+  </image>
+  <image id="94" name="cf_94.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,640.00;0.00,640.00;0.00,469.70;309.20,406.30;309.10,397.60;358.80,388.90;390.60,388.90;471.40,372.90;645.10,376.60;644.90,433.00;1305.00,462.60" z_order="0">
+    </polygon>
+  </image>
+  <image id="95" name="cf_95.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1305.00,639.80;0.00,640.00;0.00,483.20;55.50,470.60;55.20,455.20;208.80,424.60;253.40,427.00;405.70,391.80;790.00,403.90;790.00,396.70;1216.90,409.80;1305.00,427.10;1305.00,444.00;658.30,418.50;637.30,446.40;637.20,573.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="96" name="cf_96.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,473.00;54.10,461.80;110.60,466.30;358.40,409.80;826.40,428.20;826.30,416.90;1304.61,433.88;1305.00,562.60;664.30,514.90;618.70,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="97" name="cf_97.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,468.30;168.70,434.20;216.40,436.70;390.60,397.30;800.40,411.20;800.40,402.50;1256.60,416.50;1305.00,426.70;1305.00,466.90;659.10,437.00;633.30,477.80;633.10,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="98" name="cf_98.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,471.60;285.60,412.30;285.50,403.20;342.70,392.40;376.30,393.20;464.20,375.60;644.70,379.00;645.20,443.30;1305.00,476.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="99" name="cf_99.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,458.70;101.20,439.60;101.10,429.10;218.50,409.20;256.40,410.10;414.30,380.60;414.20,374.70;435.00,371.50;459.40,371.80;509.90,361.90;648.00,364.40;648.10,392.10;1065.18,403.94;1254.20,452.70;1305.00,454.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="100" name="cfb_1.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,30.10;211.50,0.00;1108.70,0.00;1305.00,28.30;1304.20,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="101" name="cfb_10.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,153.40;463.10,0.00;1305.00,0.00;1304.20,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="102" name="cfb_100.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,343.80;232.30,262.10;324.60,371.10;837.00,104.40;1305.00,196.20;1304.20,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="103" name="cfb_11.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,150.10;473.00,0.00;1305.00,0.00;1304.20,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="104" name="cfb_12.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,6.20;37.50,0.00;1007.70,0.00;1305.00,32.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="105" name="cfb_13.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;972.40,0.00;1305.00,40.90;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="106" name="cfb_14.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,53.70;293.60,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="107" name="cfb_15.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,70.50;377.40,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="108" name="cfb_16.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,79.70;392.50,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="109" name="cfb_17.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,110.80;473.00,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="110" name="cfb_18.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,130.10;491.50,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="111" name="cfb_19.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,154.40;521.70,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="112" name="cfb_2.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,31.60;222.30,0.00;1101.50,0.00;1305.00,29.50;1304.11,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="113" name="cfb_20.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,183.10;550.60,0.00;1305.00,0.00;1304.11,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="114" name="cfb_21.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,215.80;591.70,0.00;1305.00,0.00;1304.11,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="115" name="cfb_22.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,256.20;595.50,0.00;1305.00,0.00;1304.11,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="116" name="cfb_23.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,172.70;465.90,0.00;1305.00,0.00;1304.11,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="117" name="cfb_24.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,0.00;941.30,0.00;1305.00,39.80;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="118" name="cfb_25.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,0.00;642.00,0.00;1305.00,127.60;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="119" name="cfb_26.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.03,639.53;0.00,0.00;674.00,0.00;1305.00,217.50;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="120" name="cfb_27.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,636.76;0.00,7.20;72.10,0.00;971.10,0.00;1305.00,83.00;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="121" name="cfb_28.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,9.70;85.60,0.00;993.20,0.00;1305.00,72.50;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="122" name="cfb_29.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,12.30;118.10,0.00;1017.90,0.00;1305.00,62.00;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="123" name="cfb_3.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,31.30;220.30,0.00;1098.60,0.00;1305.00,28.60;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="124" name="cfb_30.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,23.50;196.60,0.00;1097.80,0.00;1305.00,36.10;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="125" name="cfb_31.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,27.20;226.70,0.00;1124.10,0.00;1305.00,29.40;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="126" name="cfb_32.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,32.30;251.50,0.00;1159.20,0.00;1305.00,22.70;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="127" name="cfb_33.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,46.10;322.60,0.00;1223.40,0.00;1305.00,10.80;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="128" name="cfb_34.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,55.40;357.70,0.00;1267.20,0.00;1305.00,5.50;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="129" name="cfb_35.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,4.80;39.60,0.00;950.70,0.00;1305.00,51.20;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="130" name="cfb_36.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,24.40;168.10,0.00;1100.20,0.00;1305.00,28.70;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="131" name="cfb_37.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;1061.70,0.00;1305.00,36.30;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="132" name="cfb_38.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,22.90;168.90,0.00;1063.70,0.00;1305.00,36.90;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="133" name="cfb_39.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,22.60;38.30,17.20;97.40,17.70;219.90,0.00;1017.11,0.00;1118.70,16.90;1176.91,16.78;1305.00,38.90;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="134" name="cfb_4.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,31.50;223.20,0.00;1105.10,0.00;1305.00,29.10;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="135" name="cfb_40.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;1068.90,0.00;1110.90,6.70;1106.70,15.70;1305.00,48.80;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="136" name="cfb_41.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,29.10;11.70,30.10;234.10,0.00;1022.30,0.00;1185.50,28.30;1250.70,28.20;1305.00,35.90;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="137" name="cfb_42.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,38.30;33.20,32.70;705.40,36.10;706.60,0.00;1066.20,0.00;1097.90,6.40;1149.70,5.90;1206.50,14.30;1200.70,23.10;1305.00,39.80;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="138" name="cfb_43.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,81.40;207.40,45.10;1121.40,113.50;1184.90,11.40;1305.00,15.10;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="139" name="cfb_44.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,128.50;397.00,53.00;1305.00,197.00;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="140" name="cfb_45.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,150.00;466.20,57.90;1305.00,218.70;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="141" name="cfb_46.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,118.70;206.80,87.90;236.00,109.50;599.80,44.50;1305.00,173.70;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="142" name="cfb_47.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,130.40;319.20,90.90;311.50,69.80;536.00,47.00;571.30,61.00;812.70,30.90;1305.00,114.80;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="143" name="cfb_48.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,49.70;360.10,38.70;364.50,54.40;765.20,41.30;766.40,29.50;889.00,27.20;930.50,37.30;1160.40,30.00;1305.00,52.20;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="144" name="cfb_49.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,8.70;631.80,10.70;632.10,18.80;924.60,19.90;926.20,12.60;1038.50,13.90;1071.80,21.30;1305.00,22.10;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="145" name="cfb_5.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,112.20;594.70,0.00;1305.00,0.00;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="146" name="cfb_50.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,3.90;579.80,0.00;579.80,5.80;829.70,4.00;829.70,0.00;937.80,0.00;952.90,3.90;1148.60,2.60;1305.00,21.90;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="147" name="cfb_51.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,5.00;598.70,4.00;598.70,8.90;852.90,9.40;852.90,3.80;953.20,4.10;975.90,9.20;1183.50,9.30;1305.00,25.70;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="148" name="cfb_52.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;738.90,8.80;738.70,15.80;1042.60,21.80;1044.80,14.50;1170.40,17.00;1211.10,25.50;1305.00,27.00;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="149" name="cfb_53.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;482.00,0.00;1078.10,32.20;1093.00,43.80;1305.00,57.10;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="150" name="cfb_54.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;641.80,0.00;1305.00,66.20;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="151" name="cfb_55.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;891.50,0.00;1305.00,54.00;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="152" name="cfb_56.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,54.70;326.00,0.00;1223.20,0.00;1305.00,9.90;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="153" name="cfb_57.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,52.80;305.80,0.00;1188.40,0.00;1305.00,14.10;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="154" name="cfb_58.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;1192.30,0.00;1305.00,12.50;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="155" name="cfb_59.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,54.50;305.20,0.00;1193.80,0.00;1305.00,12.00;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="156" name="cfb_6.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,172.20;688.70,0.00;1305.00,0.00;1305.00,639.53" z_order="0">
+    </polygon>
+  </image>
+  <image id="157" name="cfb_60.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,55.40;307.20,0.00;1199.70,0.00;1305.00,11.90;1305.00,638.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="158" name="cfb_61.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,55.40;300.50,0.00;1199.20,0.00;1305.00,12.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="159" name="cfb_62.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,68.40;350.50,0.00;1255.90,0.00;1305.00,5.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="160" name="cfb_63.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,123.30;517.10,0.00;1305.00,0.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="161" name="cfb_64.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,165.90;525.70,0.00;1305.00,0.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="162" name="cfb_65.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,91.80;348.80,0.00;1252.50,0.00;1305.00,4.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="163" name="cfb_66.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,86.10;348.90,0.00;1244.00,0.00;1305.00,5.20;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="164" name="cfb_67.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,55.20;267.30,0.00;1172.50,0.00;1305.00,14.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="165" name="cfb_68.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,39.50;222.20,0.00;1126.20,0.00;1305.00,20.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="166" name="cfb_69.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,44.20;246.70,0.00;1153.90,0.00;1305.00,17.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="167" name="cfb_7.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,215.50;666.70,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="168" name="cfb_70.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,48.10;263.90,0.00;1174.30,0.00;1305.00,15.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="169" name="cfb_71.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,46.00;263.70,0.00;1153.90,0.00;1305.00,17.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="170" name="cfb_72.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,43.30;253.60,0.00;1150.50,0.00;1305.00,18.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="171" name="cfb_73.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,40.50;248.70,0.00;1144.30,0.00;1305.00,21.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="172" name="cfb_74.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,37.50;237.50,0.00;1132.80,0.00;1305.00,21.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="173" name="cfb_75.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,34.20;223.70,0.00;1113.50,0.00;1305.00,24.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="174" name="cfb_76.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,27.90;192.50,0.00;1084.60,0.00;1305.00,29.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="175" name="cfb_77.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,25.60;179.90,0.00;1078.50,0.00;1305.00,31.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="176" name="cfb_78.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,37.10;239.00,0.00;1124.30,0.00;1305.00,23.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="177" name="cfb_79.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,82.30;426.60,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="178" name="cfb_8.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,305.20;682.80,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="179" name="cfb_80.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,87.60;431.00,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="180" name="cfb_81.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,100.50;439.60,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="181" name="cfb_82.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,100.60;418.70,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="182" name="cfb_83.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,26.80;150.90,0.00;1074.40,0.00;1305.00,27.10;1304.49,638.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="183" name="cfb_84.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,8.60;62.40,0.00;981.10,0.00;1305.00,42.70;1304.49,638.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="184" name="cfb_85.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,0.00;930.80,0.00;1305.00,54.20;1304.49,638.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="185" name="cfb_86.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,0.00;918.30,0.00;1305.00,68.30;1304.49,638.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="186" name="cfb_87.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,0.00;837.10,0.00;1305.00,80.50;1304.49,638.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="187" name="cfb_88.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.44;0.00,0.00;808.80,0.00;1305.00,100.70;1304.49,638.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="188" name="cfb_89.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,18.40;158.70,0.00;1099.20,0.00;1305.00,35.00;1304.49,638.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="189" name="cfb_9.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,166.60;462.40,0.00;1305.00,0.00;1304.49,638.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="190" name="cfb_90.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,22.70;143.70,5.90;190.80,6.70;236.60,0.00;1046.10,0.00;1148.60,18.70;1212.50,19.90;1305.00,36.00;1304.49,638.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="191" name="cfb_91.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,14.70;76.60,5.40;73.00,0.00;995.20,0.00;994.80,6.20;1249.40,56.10;1305.00,55.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="192" name="cfb_92.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,18.10;141.40,0.00;940.60,0.00;1032.20,18.30;1088.60,17.90;1167.60,32.20;1160.80,44.50;1305.00,73.00;1305.00,638.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="193" name="cfb_93.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,17.10;12.60,15.00;7.80,8.00;76.60,0.00;437.10,0.00;441.60,19.30;1014.80,16.10;1251.30,65.20;1305.00,65.00;1305.00,638.50" z_order="0">
+    </polygon>
+  </image>
+  <image id="194" name="cfb_94.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,17.30;141.50,0.00;354.20,0.00;371.50,52.80;1177.50,48.10;1305.00,75.00;1305.00,638.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="195" name="cfb_95.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,28.40;76.00,19.70;126.60,20.50;274.60,0.00;462.40,0.00;482.30,91.60;1305.00,126.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="196" name="cfb_96.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,76.50;205.10,45.80;199.80,35.20;324.90,18.60;366.20,21.60;506.80,0.00;834.10,15.70;802.20,166.90;1305.00,246.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="197" name="cfb_97.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,114.10;387.50,51.00;383.50,37.30;496.20,21.90;536.90,26.90;679.00,3.80;1305.00,52.20;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="198" name="cfb_98.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,176.80;317.30,110.30;305.70,84.50;497.80,51.50;551.40,62.30;736.40,23.50;1305.00,83.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="199" name="cfb_99.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,228.00;403.20,126.50;482.00,158.90;783.90,59.70;1305.00,136.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="200" name="cfl_1.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,234.10;273.30,78.40;515.70,77.60;527.50,59.20;665.20,58.90;667.10,76.80;971.30,75.70;978.10,57.80;1305.00,58.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="201" name="cfl_10.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="1.10,640.00;0.00,0.00;699.80,0.00;1305.00,143.20;1305.00,639.90" z_order="0">
+    </polygon>
+  </image>
+  <image id="202" name="cfl_100.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;178.80,0.00;1044.00,40.90;1067.40,57.10;1305.00,67.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="203" name="cfl_11.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,208.70;1305.00,6.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="204" name="cfl_12.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,100.30;902.40,0.00;1305.00,0.00;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="205" name="cfl_13.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,22.30;1305.00,44.80;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="206" name="cfl_14.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,54.50;1305.00,294.80;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="207" name="cfl_15.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,199.24;514.80,294.10;1305.00,453.70;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="208" name="cfl_16.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,367.00;871.10,150.30;1305.00,52.00;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="209" name="cfl_17.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;60.67,0.00;447.20,73.30;1305.00,247.00;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="210" name="cfl_18.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,184.70;522.30,463.90;834.30,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="211" name="cfl_19.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="54.30,640.00;1305.00,292.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="212" name="cfl_2.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,75.90;47.20,60.10;128.00,60.40;140.70,78.10;443.60,77.70;461.50,59.00;1305.00,60.70;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="213" name="cfl_20.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,174.30;1305.00,18.40;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="214" name="cfl_21.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,81.50;1305.00,43.50;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="215" name="cfl_22.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,65.90;1305.00,50.70;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="216" name="cfl_23.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,60.70;1305.00,94.70;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="217" name="cfl_24.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,68.40;1305.00,112.10;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="218" name="cfl_25.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,96.30;1305.00,75.90;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="219" name="cfl_26.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,84.60;1305.00,73.60;1305.00,639.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="220" name="cfl_27.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,78.90;1013.30,75.00;1052.50,98.10;1305.00,98.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="221" name="cfl_28.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,78.20;621.90,75.80;623.60,98.80;959.40,98.90;968.90,76.90;1083.50,77.00;1128.30,99.90;1305.00,100.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="222" name="cfl_29.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,76.50;78.40,76.70;97.00,99.00;433.20,98.50;454.20,75.80;599.40,75.80;601.10,98.90;871.30,99.30;1305.00,574.70;1305.00,640.00" z_order="0">
+    </polygon>
+    <polygon label="road" source="manual" occluded="0" points="1083.10,76.40;1305.00,76.70;1305.00,187.50" z_order="0">
+    </polygon>
+  </image>
+  <image id="223" name="cfl_3.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,59.60;1305.00,65.20;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="224" name="cfl_30.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,43.80;298.90,59.10;309.50,81.10;608.30,99.30;623.30,78.00;777.80,86.40;779.20,110.90;1089.60,129.60;1305.00,309.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="225" name="cfl_31.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;524.90,0.00;801.80,59.20;797.50,80.20;1211.40,180.50;1235.90,154.40;1305.00,169.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="226" name="cfl_32.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,182.80;389.40,0.00;1225.30,0.00;1305.00,22.20;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="227" name="cfl_33.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;348.60,420.70;291.40,343.60;955.60,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="228" name="cfl_34.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,617.20;315.00,407.40;247.60,338.60;864.00,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="229" name="cfl_35.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,473.90;124.50,406.60;82.80,338.00;829.60,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="230" name="cfl_36.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,205.90;694.60,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="231" name="cfl_37.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,95.80;476.80,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="232" name="cfl_38.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,43.40;424.20,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="233" name="cfl_39.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="234" name="cfl_4.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,60.40;1305.00,72.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="235" name="cfl_40.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;987.80,0.00;1305.00,19.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="236" name="cfl_41.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;803.90,0.00;1305.00,47.90;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="237" name="cfl_42.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;566.60,0.00;1305.00,85.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="238" name="cfl_43.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;343.20,0.00;1305.00,136.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="239" name="cfl_44.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;96.50,0.00;1305.00,221.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="240" name="cfl_45.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,99.50;484.60,180.10;1305.00,300.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="241" name="cfl_46.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,240.80;1305.00,305.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="242" name="cfl_47.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,276.50;579.20,304.90;1305.00,324.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="243" name="cfl_48.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,312.24;935.70,135.50;1305.00,59.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="244" name="cfl_49.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,188.77;692.70,88.80;1257.80,0.00;1305.00,0.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="245" name="cfl_5.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,70.30;1305.00,98.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="246" name="cfl_50.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,122.02;807.50,43.50;1211.01,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="247" name="cfl_51.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,82.90;850.10,31.60;1282.90,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="248" name="cfl_52.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,64.10;1068.20,0.00;1282.90,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="249" name="cfl_53.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;95.77,0.00;107.85,0.00;526.10,29.80;1305.00,74.34;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="250" name="cfl_54.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;287.95,0.00;687.20,61.70;1304.44,154.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="251" name="cfl_55.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,3.69;222.20,52.80;567.99,125.30;1305.00,270.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="252" name="cfl_56.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,121.60;475.80,211.20;1305.00,352.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="253" name="cfl_57.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,279.50;1305.00,412.90;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="254" name="cfl_58.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,377.96;297.20,404.70;516.90,417.80;1305.00,460.90;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="255" name="cfl_59.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,411.30;1305.00,307.90;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="256" name="cfl_6.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,84.00;681.40,102.60;1305.00,124.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="257" name="cfl_60.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,343.39;655.20,297.10;1305.00,236.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="258" name="cfl_61.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,292.00;1305.00,184.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="259" name="cfl_62.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,238.28;893.00,173.80;1305.00,138.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="260" name="cfl_63.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,199.40;590.90,158.10;1305.00,101.20;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="261" name="cfl_64.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,162.80;1050.30,90.40;1305.00,69.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="262" name="cfl_65.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,133.92;650.10,93.30;1305.00,45.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="263" name="cfl_66.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,109.40;847.30,55.20;1305.00,22.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="264" name="cfl_67.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,80.30;877.90,59.00;1305.00,44.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="265" name="cfl_68.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,73.00;845.90,52.30;1305.00,36.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="266" name="cfl_69.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,62.60;845.40,45.30;1305.00,33.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="267" name="cfl_7.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,142.97;902.20,39.70;1284.16,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="268" name="cfl_70.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,54.03;628.20,47.70;1305.00,34.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="269" name="cfl_71.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,31.16;572.70,54.40;1305.00,76.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="270" name="cfl_72.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,59.60;637.90,60.90;1305.00,58.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="271" name="cfl_73.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,70.70;637.90,60.50;1305.00,43.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="272" name="cfl_74.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,67.40;693.40,52.20;1305.00,34.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="273" name="cfl_75.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,27.40;678.00,60.10;1305.00,84.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="274" name="cfl_76.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;367.99,0.00;762.70,101.90;1305.00,234.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="275" name="cfl_77.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;185.30,0.00;476.80,139.50;1305.00,501.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="276" name="cfl_78.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;138.21,0.00;295.70,130.10;996.40,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="277" name="cfl_79.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,209.40;800.60,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="278" name="cfl_8.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,21.50;281.80,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="279" name="cfl_80.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,421.40;530.70,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="280" name="cfl_81.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,370.40;709.80,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="281" name="cfl_82.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,226.30;1305.00,578.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="282" name="cfl_83.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;335.98,0.00;740.70,218.10;1305.00,508.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="283" name="cfl_84.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;635.80,0.00;1305.00,206.20;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="284" name="cfl_85.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;507.10,0.00;1305.00,80.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="285" name="cfl_86.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;674.80,0.00;1305.00,53.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="286" name="cfl_87.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;739.80,0.00;1305.00,45.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="287" name="cfl_88.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;689.80,0.00;1305.00,51.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="288" name="cfl_89.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;440.00,0.00;1305.00,35.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="289" name="cfl_9.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;862.40,0.00;1305.00,53.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="290" name="cfl_90.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,6.87;627.30,17.10;1305.00,21.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="291" name="cfl_91.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,13.40;470.90,19.30;1113.80,23.30;1148.40,35.70;1305.00,35.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="292" name="cfl_92.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;48.42,0.00;249.30,12.10;896.10,42.00;907.80,57.80;1222.20,71.80;1234.00,56.50;1305.00,59.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="293" name="cfl_93.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,11.20;591.40,41.90;592.40,58.20;882.20,73.20;887.70,56.10;1020.90,62.80;1045.00,81.60;1305.00,95.20;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="294" name="cfl_94.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,20.50;381.70,41.70;387.50,59.20;659.80,73.90;668.70,56.60;810.00,63.10;813.60,82.50;1165.50,101.30;1180.10,81.60;1305.00,87.90;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="295" name="cfl_95.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,23.80;303.70,41.30;312.00,59.50;577.80,73.80;593.40,56.60;729.10,63.60;728.30,82.20;1071.10,101.40;1082.50,81.50;1217.30,88.40;1266.90,113.70;1305.00,114.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="296" name="cfl_96.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,21.10;357.60,41.00;363.80,58.60;634.40,73.30;645.60,56.10;784.70,62.90;785.90,82.10;1136.50,100.40;1149.70,82.20;1279.70,88.30;1305.00,100.20;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="297" name="cfl_97.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,11.90;558.10,41.70;560.50,58.70;847.20,72.70;851.70,55.80;988.00,62.70;1008.80,82.00;1305.00,96.90;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="298" name="cfl_98.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;44.96,0.01;220.60,10.00;862.27,42.36;869.80,57.50;1181.70,73.20;1192.80,57.70;1305.00,62.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="299" name="cfl_99.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;167.43,0.00;398.90,12.60;1015.40,41.70;1038.30,58.90;1305.00,70.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="300" name="cfr_1.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,632.00;0.00,55.80;327.20,57.50;335.40,76.90;639.00,77.10;639.40,58.60;777.40,58.60;789.70,77.30;1092.10,77.60;1103.10,59.80;1191.00,59.80;1242.80,78.50;1305.00,78.10;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="301" name="cfr_10.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,0.00;265.58,0.00;663.10,171.10;1305.00,431.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="302" name="cfr_100.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,60.40;14.00,57.50;48.30,59.10;70.20,84.80;355.60,106.00;394.90,82.70;1305.00,152.00;1305.00,431.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="303" name="cfr_11.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,0.00;677.80,0.00;1305.00,168.10;1305.00,431.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="304" name="cfr_12.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,0.00;611.70,0.00;1305.00,52.00;1305.00,431.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="305" name="cfr_13.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,70.50;766.40,0.00;1305.00,0.00;1305.00,431.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="306" name="cfr_14.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,143.28;642.80,62.00;1090.00,0.00;1305.00,0.00;1305.00,431.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="307" name="cfr_15.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,72.73;581.10,98.60;1305.00,119.50;1305.00,431.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="308" name="cfr_16.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,0.00;546.40,0.00;1305.00,98.90;1305.00,431.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="309" name="cfr_17.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,0.00;693.60,0.00;1305.00,51.70;1305.00,431.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="310" name="cfr_18.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,0.00;994.50,0.00;1305.00,14.80;1305.00,431.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="311" name="cfr_19.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,68.40;972.70,0.00;1305.00,0.00;1305.00,431.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="312" name="cfr_2.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,52.90;823.50,58.00;839.70,76.60;1142.10,77.30;1153.80,59.60;1237.70,60.00;1292.30,78.30;1305.00,77.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="313" name="cfr_20.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,0.00;728.50,0.00;1305.00,68.40;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="314" name="cfr_21.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,0.00;1030.20,0.00;1305.00,26.00;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="315" name="cfr_22.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,11.60;267.20,0.00;1305.00,0.00;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="316" name="cfr_23.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,38.30;571.90,0.00;1305.00,0.00;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="317" name="cfr_24.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,70.70;903.40,0.00;1305.00,0.00;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="318" name="cfr_25.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,65.16;626.40,55.30;1305.00,38.90;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="319" name="cfr_26.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,62.50;665.90,59.70;1305.00,52.20;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="320" name="cfr_27.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,20.60;669.80,42.20;1305.00,58.60;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="321" name="cfr_28.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,10.60;690.50,34.90;1305.00,51.70;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="322" name="cfr_29.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,40.40;674.80,36.70;1305.00,29.60;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="323" name="cfr_3.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,44.80;708.10,55.60;1305.00,59.50;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="324" name="cfr_30.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,41.70;678.70,40.60;1305.00,34.40;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="325" name="cfr_31.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,41.40;679.70,42.70;1305.00,39.70;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="326" name="cfr_32.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,55.60;280.10,57.90;311.70,42.00;1305.00,43.00;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="327" name="cfr_33.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,54.70;252.10,55.60;283.60,40.90;374.60,41.70;380.70,56.70;656.20,58.50;656.20,43.30;1305.00,44.70;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="328" name="cfr_34.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,53.20;143.90,54.00;183.00,38.70;263.70,39.80;270.60,55.30;544.90,56.80;554.00,41.60;673.90,42.60;674.30,57.90;951.70,59.50;958.00,44.60;1305.00,45.40;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="329" name="cfr_35.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,74.40;47.90,58.40;270.00,57.70;299.30,42.90;393.10,42.80;397.60,57.70;672.90,59.00;673.00,43.00;790.60,44.00;802.70,59.50;1079.50,58.70;1087.40,44.20;1305.00,42.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="330" name="cfr_36.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,45.80;37.30,40.10;44.90,50.30;380.80,0.00;632.40,0.00;652.10,4.10;652.30,16.60;852.50,61.40;876.10,49.70;1001.20,75.30;993.20,92.00;1305.00,162.00;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="331" name="cfr_37.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,80.50;114.40,45.20;610.40,51.40;614.90,38.80;612.90,0.00;919.40,0.00;944.90,14.00;985.90,14.20;999.20,20.10;991.30,38.10;1172.10,134.20;1248.40,135.20;1305.00,160.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="332" name="cfr_38.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,52.90;271.20,8.80;266.20,0.00;657.70,0.00;823.40,34.60;845.80,24.20;852.00,0.00;1133.10,0.00;1305.00,21.30;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="333" name="cfr_39.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,50.40;184.30,18.90;178.60,8.30;230.10,0.00;598.40,0.00;771.10,33.70;793.40,22.10;797.30,0.00;1125.40,0.00;1273.90,17.90;1305.00,59.40;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="334" name="cfr_4.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,39.18;618.40,51.00;1305.00,58.20;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="335" name="cfr_40.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,78.60;259.50,29.80;254.90,19.80;351.10,3.40;372.20,9.20;419.70,0.00;594.70,0.00;837.10,43.20;854.70,33.10;863.20,0.00;1083.20,0.00;1305.00,24.60;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="336" name="cfr_41.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,120.90;197.00,77.10;218.80,90.60;488.70,27.00;486.50,13.90;545.40,2.10;572.80,6.90;604.60,0.00;778.40,0.00;1081.70,44.40;1107.50,0.00;1252.20,0.00;1305.00,5.80;1305.00,633.90" z_order="0">
+    </polygon>
+  </image>
+  <image id="337" name="cfr_42.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,633.41;0.00,270.50;553.70,76.80;598.40,90.70;761.30,27.80;764.20,6.00;776.50,2.50;813.30,8.30;833.10,0.00;999.30,0.00;1305.00,37.50;1305.00,633.90" z_order="0">
+    </polygon>
+  </image>
+  <image id="338" name="cfr_43.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,632.30;0.00,477.20;1179.50,95.40;1266.10,118.10;1305.00,103.00;1305.00,634.40" z_order="0">
+    </polygon>
+  </image>
+  <image id="339" name="cfr_44.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="710.90,633.20;1004.20,516.60;1305.00,398.30;1305.00,634.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="340" name="cfr_45.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.50;0.00,252.50;1186.30,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="341" name="cfr_46.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.50;0.00,15.56;535.80,144.10;1305.00,342.80;1305.00,634.20" z_order="0">
+    </polygon>
+  </image>
+  <image id="342" name="cfr_47.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.50;0.00,0.00;153.38,0.00;555.20,68.40;1305.00,202.90;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="343" name="cfr_48.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.60;0.00,0.00;400.30,0.00;1305.00,120.30;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="344" name="cfr_49.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;536.90,0.00;1305.00,71.80;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="345" name="cfr_5.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,20.40;631.10,36.70;1305.00,49.70;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="346" name="cfr_50.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;734.60,0.00;1305.00,36.50;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="347" name="cfr_51.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;1049.20,0.00;1305.00,7.00;1305.00,634.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="348" name="cfr_52.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="349" name="cfr_53.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,38.40;550.90,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="350" name="cfr_54.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,103.62;599.50,44.20;1084.40,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="351" name="cfr_55.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,109.20;1305.00,27.70;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="352" name="cfr_56.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,143.90;1305.00,46.30;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="353" name="cfr_57.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,12.60;1305.00,137.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="354" name="cfr_58.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;462.50,0.00;1305.00,107.60;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="355" name="cfr_59.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;682.10,0.00;1305.00,63.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="356" name="cfr_6.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,8.20;648.20,28.10;1305.00,42.70;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="357" name="cfr_60.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;836.60,0.00;1305.00,30.20;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="358" name="cfr_61.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;1145.50,0.00;1305.00,6.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="359" name="cfr_62.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="360" name="cfr_63.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,3.50;126.63,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="361" name="cfr_64.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,7.00;253.27,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="362" name="cfr_65.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,10.50;379.90,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="363" name="cfr_66.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,19.40;653.80,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="364" name="cfr_67.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,29.80;916.90,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="365" name="cfr_68.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,41.90;1151.40,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="366" name="cfr_69.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,58.80;620.40,29.90;1305.00,3.60;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="367" name="cfr_7.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,82.76;622.10,38.10;1095.99,0.73;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="368" name="cfr_70.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,75.90;1305.00,12.40;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="369" name="cfr_71.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,63.00;1305.00,41.90;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="370" name="cfr_72.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,78.50;1305.00,57.50;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="371" name="cfr_73.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,76.50;1305.00,67.90;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="372" name="cfr_74.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,33.50;1305.00,83.20;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="373" name="cfr_75.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,54.80;1305.00,60.50;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="374" name="cfr_76.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,66.50;1305.00,48.60;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="375" name="cfr_77.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,75.60;1305.00,52.10;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="376" name="cfr_78.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,32.80;1305.00,83.30;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="377" name="cfr_79.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;723.40,0.00;1305.00,88.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="378" name="cfr_8.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,342.72;725.50,87.10;963.90,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="379" name="cfr_80.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;1013.40,0.00;1305.00,39.10;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="380" name="cfr_81.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;1098.30,0.00;1305.00,24.80;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="381" name="cfr_82.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;1185.60,0.00;1305.00,9.20;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="382" name="cfr_83.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;37.90,0.00;55.10,21.60;87.10,24.90;198.10,0.00;1305.00,0.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="383" name="cfr_84.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,8.80;50.80,0.00;1060.60,0.00;1305.00,15.40;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="384" name="cfr_85.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;895.70,0.00;1305.00,62.70;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="385" name="cfr_86.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;754.00,0.00;1305.00,121.30;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="386" name="cfr_87.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,0.00;93.37,0.00;605.80,74.50;1304.18,185.12;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="387" name="cfr_88.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,30.69;508.50,118.70;1305.00,262.50;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="388" name="cfr_89.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,44.20;1305.00,295.50;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="389" name="cfr_9.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="422.11,632.26;904.90,413.00;1303.02,211.42;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="390" name="cfr_90.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,632.10;0.00,73.10;1305.00,193.70;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="391" name="cfr_91.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,632.10;0.00,113.22;632.50,126.40;1305.00,147.00;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="392" name="cfr_92.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,632.10;0.00,108.60;1305.00,133.10;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="393" name="cfr_93.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,632.60;0.00,70.00;87.50,76.20;145.00,57.60;204.30,61.10;219.90,85.60;521.10,106.80;544.90,82.80;1305.00,135.90;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="394" name="cfr_94.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.70;0.00,150.10;235.00,62.10;447.40,76.10;474.40,58.10;592.00,64.40;593.80,85.60;928.10,108.10;937.20,85.60;1305.00,110.30;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="395" name="cfr_95.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.90;0.00,379.70;472.70,63.10;699.10,77.00;705.00,58.70;848.50,66.80;856.50,87.10;1215.40,108.80;1231.20,89.90;1305.00,92.90;1305.00,634.10" z_order="0">
+    </polygon>
+    <polygon label="road" source="manual" occluded="0" points="0.00,55.50;123.30,24.70;276.40,33.80;0.00,129.70" z_order="0">
+    </polygon>
+  </image>
+  <image id="396" name="cfr_96.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.80;0.00,539.60;542.00,63.20;774.00,76.90;776.40,59.20;919.80,67.10;933.50,87.10;1305.00,109.80;1305.00,634.30" z_order="0">
+    </polygon>
+    <polygon label="road" source="manual" occluded="0" points="0.00,74.90;178.80,25.40;371.90,36.20;0.00,197.80" z_order="0">
+    </polygon>
+  </image>
+  <image id="397" name="cfr_97.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.60;0.00,190.60;300.50,62.70;516.80,76.20;538.60,58.00;666.70,65.70;666.40,85.80;1007.80,107.70;1018.50,87.60;1305.00,105.40;1305.00,634.10" z_order="0">
+    </polygon>
+    <polygon label="road" source="manual" occluded="0" points="0.00,25.30;46.40,28.70;0.00,40.40" z_order="0">
+    </polygon>
+  </image>
+  <image id="398" name="cfr_98.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.60;0.00,63.90;163.10,76.00;213.50,58.10;283.80,61.60;295.90,85.70;602.30,106.90;618.50,83.80;1305.00,131.50;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="399" name="cfr_99.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,631.60;0.00,70.50;45.20,58.20;85.40,60.30;104.00,84.70;393.50,106.50;429.00,83.10;1305.00,147.60;1305.00,634.10" z_order="0">
+    </polygon>
+  </image>
+  <image id="400" name="cr_1.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,118.90;203.00,39.70;702.00,39.80;702.30,26.60;1114.90,26.80;1305.00,93.80;1305.00,113.40;533.00,113.40;507.10,169.20;533.20,279.70;1305.00,279.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="401" name="cr_10.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,529.30;292.80,0.00;1107.10,0.00;1305.00,37.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="402" name="cr_100.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,214.60;482.50,0.00;1279.70,0.00;1305.00,6.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="403" name="cr_11.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="220.21,639.41;755.80,159.10;921.02,0.66;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="404" name="cr_12.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,232.60;912.20,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="405" name="cr_13.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,72.30;289.00,0.00;1077.70,0.00;1305.00,127.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="406" name="cr_14.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;661.90,0.00;1305.00,310.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="407" name="cr_15.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;811.60,0.00;1305.00,146.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="408" name="cr_16.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,167.06;270.80,46.10;367.90,0.00;1122.20,0.00;1305.00,52.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="409" name="cr_17.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,135.90;491.00,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="410" name="cr_18.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,76.40;325.30,0.00;1152.60,0.00;1305.00,82.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="411" name="cr_19.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,33.70;160.00,0.00;962.00,0.00;1305.00,329.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="412" name="cr_2.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,95.90;57.70,95.60;259.00,17.70;252.60,4.40;266.60,0.00;603.90,0.00;604.80,28.90;1074.10,28.90;1246.70,96.40;1305.00,96.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="413" name="cr_20.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;723.10,0.00;1305.00,238.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="414" name="cr_21.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,93.60;433.10,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="415" name="cr_22.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,42.80;246.60,0.00;1140.50,0.00;1178.20,44.70;1305.00,226.00;1305.00,639.19" z_order="0">
+    </polygon>
+  </image>
+  <image id="416" name="cr_23.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;512.90,0.00;627.60,183.30;883.50,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="417" name="cr_24.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;625.70,0.00;1305.00,433.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="418" name="cr_25.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;722.00,0.00;1305.00,260.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="419" name="cr_26.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,67.80;196.90,0.00;968.60,0.00;1305.00,120.20;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="420" name="cr_27.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,83.80;233.90,0.00;1008.00,0.00;1305.00,101.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="421" name="cr_28.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,99.00;290.40,0.00;1061.30,0.00;1305.00,86.90;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="422" name="cr_29.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,89.90;275.40,0.00;1048.30,0.00;1305.00,97.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="423" name="cr_3.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,93.30;55.10,73.40;116.70,73.90;284.60,7.80;281.70,0.00;1023.60,0.00;1019.00,7.90;1188.30,74.10;1249.40,73.50;1305.00,94.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="424" name="cr_30.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,79.70;261.30,0.00;1032.30,0.00;1305.00,110.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="425" name="cr_31.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,54.10;175.60,0.00;947.20,0.00;1305.00,144.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="426" name="cr_32.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,60.80;190.30,0.00;962.40,0.00;1305.00,133.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="427" name="cr_33.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,65.80;206.50,0.00;978.70,0.00;1305.00,126.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="428" name="cr_34.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,70.40;216.60,0.00;987.70,0.00;1305.00,120.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="429" name="cr_35.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,72.50;226.30,0.00;996.00,0.00;1305.00,119.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="430" name="cr_36.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,73.60;229.40,0.00;995.70,0.00;1305.00,119.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="431" name="cr_37.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,70.90;220.10,0.00;1001.60,0.00;1305.00,117.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="432" name="cr_38.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,217.10;258.70,143.70;244.10,119.70;707.80,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="433" name="cr_39.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,204.40;38.10,185.10;119.90,185.20;168.10,239.00;692.20,246.10;695.00,191.00;1305.00,192.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="434" name="cr_4.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,90.40;264.50,0.00;1036.60,0.00;1305.00,96.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="435" name="cr_40.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,35.60;105.80,22.40;148.80,63.40;161.80,62.30;184.80,97.00;328.80,235.00;428.40,195.30;473.10,225.30;417.80,250.40;468.50,368.30;752.60,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="436" name="cr_41.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,35.30;11.00,35.20;61.60,78.10;76.60,76.90;104.80,111.70;276.40,255.50;382.70,208.50;433.10,239.40;373.50,270.10;434.80,387.40;739.20,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="437" name="cr_42.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,39.70;81.00,27.20;137.40,61.00;162.20,57.00;183.90,89.20;346.90,188.50;428.00,155.30;449.30,164.80;484.90,272.80;1089.40,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="438" name="cr_43.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,19.30;145.80,0.00;258.20,0.00;287.20,9.80;323.90,3.90;333.00,25.60;469.10,71.40;517.30,57.70;561.60,70.90;565.30,103.80;921.60,225.80;950.30,185.10;1305.00,287.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="439" name="cr_44.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,54.60;128.10,34.30;103.50,0.00;603.40,0.00;603.40,8.70;788.90,44.10;810.90,33.60;1305.00,120.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="440" name="cr_45.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,164.40;42.60,157.30;146.50,51.60;129.30,27.00;174.40,23.10;197.30,0.00;956.70,0.00;985.90,5.70;1010.90,2.20;1305.00,59.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="441" name="cr_46.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="86.20,640.00;358.80,21.80;407.80,17.60;411.00,0.00;1214.50,0.00;1305.00,15.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="442" name="cr_47.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="456.10,640.00;715.20,192.90;839.60,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="443" name="cr_48.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,532.70;703.50,59.90;800.30,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="444" name="cr_49.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,287.20;679.20,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="445" name="cr_5.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,86.30;260.80,0.00;1031.10,0.00;1305.00,102.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="446" name="cr_50.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,101.10;391.50,0.00;1252.40,0.00;1305.00,24.20;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="447" name="cr_51.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,56.40;250.90,0.00;1061.20,0.00;1305.00,162.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="448" name="cr_52.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,23.40;107.40,0.00;868.00,0.00;1031.00,151.70;1304.06,390.53;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="449" name="cr_53.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,13.10;63.30,0.00;838.10,0.00;1305.00,466.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="450" name="cr_54.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;621.65,0.00;893.40,193.10;1305.00,472.86;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="451" name="cr_55.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;814.10,0.00;1305.00,179.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="452" name="cr_56.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,55.10;155.00,0.00;937.90,0.00;1305.00,123.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="453" name="cr_57.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,81.00;201.60,0.00;984.10,0.00;1305.00,93.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="454" name="cr_58.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,189.60;470.20,0.00;1239.70,0.00;1305.00,21.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="455" name="cr_59.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,148.80;518.40,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="456" name="cr_6.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,79.00;251.70,0.00;1022.40,0.00;1305.00,111.80;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="457" name="cr_60.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,89.30;387.60,0.00;1264.40,0.00;1305.00,21.90;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="458" name="cr_61.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,49.80;231.80,0.00;1044.70,0.00;1305.00,198.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="459" name="cr_62.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,21.10;103.90,0.00;872.40,0.00;968.10,117.00;1305.00,488.90;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="460" name="cr_63.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,9.00;44.40,0.00;807.40,0.00;1247.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="461" name="cr_64.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;708.80,0.00;826.20,155.50;1222.40,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="462" name="cr_65.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;722.31,0.00;797.40,78.40;1305.00,585.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="463" name="cr_66.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;745.50,0.00;1026.40,237.50;1305.00,465.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="464" name="cr_67.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;769.30,0.00;892.90,88.60;1305.00,368.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="465" name="cr_68.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;792.90,0.00;925.80,78.50;1305.00,301.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="466" name="cr_69.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,12.60;48.10,0.00;826.50,0.00;975.80,76.90;1305.00,242.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="467" name="cr_7.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,68.60;234.70,0.00;1006.30,0.00;1305.00,129.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="468" name="cr_70.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,22.50;81.60,0.00;858.90,0.00;1305.00,194.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="469" name="cr_71.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,34.40;109.60,0.00;892.90,0.00;1305.00,159.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="470" name="cr_72.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,69.50;213.90,0.00;983.80,0.00;1305.00,121.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="471" name="cr_73.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,92.00;255.60,0.00;1026.40,0.00;1305.00,94.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="472" name="cr_74.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,106.10;285.90,0.00;1058.20,0.00;1160.60,35.30;1305.00,83.10;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="473" name="cr_75.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,123.00;355.90,0.00;1134.90,0.00;1305.00,59.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="474" name="cr_76.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,95.30;280.90,0.00;1062.10,0.00;1305.00,88.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="475" name="cr_77.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,80.00;234.70,0.00;1005.10,0.00;1305.00,107.20;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="476" name="cr_78.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,85.40;241.60,0.00;1013.50,0.00;1305.00,100.70;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="477" name="cr_79.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,123.00;355.30,0.00;1128.20,0.00;1305.00,63.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="478" name="cr_8.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;785.30,0.00;1305.00,200.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="479" name="cr_80.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,119.90;551.70,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="480" name="cr_81.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,56.00;371.00,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="481" name="cr_82.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,40.20;287.50,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="482" name="cr_83.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,24.80;153.80,0.00;1080.41,0.00;1166.10,169.60;1304.06,406.36;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="483" name="cr_84.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,7.00;37.90,0.00;921.00,0.00;944.80,86.30;1156.80,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="484" name="cr_85.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,31.70;170.60,0.00;985.10,0.00;1167.50,244.10;1305.00,415.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="485" name="cr_86.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,81.10;477.60,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="486" name="cr_87.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,158.40;801.80,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="487" name="cr_88.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,264.00;632.70,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="488" name="cr_89.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,392.90;430.70,144.70;691.73,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="489" name="cr_9.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,640.00;0.00,0.00;767.10,0.00;1305.00,102.50;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="490" name="cr_90.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.28;0.00,452.92;441.50,171.30;718.45,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="491" name="cr_91.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.28;0.00,275.80;529.60,0.00;1305.00,0.00;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="492" name="cr_92.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.28;0.00,217.20;431.00,0.00;1207.50,0.00;1305.00,27.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="493" name="cr_93.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.28;0.00,197.30;413.40,0.00;1186.60,0.00;1305.00,32.90;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="494" name="cr_94.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.28;0.00,197.40;464.00,0.00;1253.70,0.00;1305.00,15.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="495" name="cr_95.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.28;0.00,158.60;421.90,0.00;1205.40,0.00;1305.00,32.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="496" name="cr_96.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.28;0.00,136.00;390.90,0.00;1172.20,0.00;1305.00,45.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="497" name="cr_97.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.28;0.00,159.30;76.50,130.00;57.40,110.00;382.60,0.00;1162.40,0.00;1305.00,49.60;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="498" name="cr_98.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.28;0.00,153.60;415.10,0.00;1198.00,0.00;1305.00,35.30;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+  <image id="499" name="cr_99.png" width="1305" height="640">
+    <polygon label="road" source="manual" occluded="0" points="0.00,639.28;0.00,187.60;452.80,0.00;1251.40,0.00;1305.00,16.40;1305.00,640.00" z_order="0">
+    </polygon>
+  </image>
+</annotations>

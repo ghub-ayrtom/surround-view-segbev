@@ -3,14 +3,13 @@ from ackermann_msgs.msg import AckermannDrive
 import traceback
 import time
 from configs import global_settings, qos_profiles
-from sensor_msgs.msg import NavSatFix, MagneticField, PointCloud2
+from sensor_msgs.msg import MagneticField, PointCloud2
 from rclpy.executors import MultiThreadedExecutor
-import numpy as np
-from geometry_msgs.msg import Twist, Quaternion, Vector3, TransformStamped, PoseWithCovarianceStamped
-from std_msgs.msg import Int8, Bool, Float32MultiArray
+from geometry_msgs.msg import Twist, PoseWithCovarianceStamped
+from std_msgs.msg import Int8, Bool
 from nav_msgs.msg import Odometry
-from tf2_ros import TransformBroadcaster
 import rclpy.wait_for_message
+from rosgraph_msgs.msg import Clock
 
 
 class EgoVehicleDriver:
@@ -21,6 +20,11 @@ class EgoVehicleDriver:
         self.__node_executor = MultiThreadedExecutor()
         self.__node_executor.add_node(self.__node)
         
+        self.__clock = Clock()
+
+        self.__clock_publisher = self.__node.create_publisher(Clock, '/clock', 10)
+        self.__node.create_timer(0.01, self.__publish_clock)  # basicTimeStep в Webots равен 10 мс (100 Гц)
+
         self.__robot = webots_node.robot
         self.__drive_command = AckermannDrive()
 
@@ -28,66 +32,19 @@ class EgoVehicleDriver:
         self.__compass_message = MagneticField()
         self.__compass.enable(200)  # Обновление каждые 200 мс (5 Гц)
 
-        self.__imu = self.__robot.getDevice('imu')
-        self.__quaternion_message = Quaternion()
-        self.__imu.enable(32)
-
-        # Датчики угловой скорости (энкодеры) задних колёс
-        self.__left_rear_sensor = self.__robot.getDevice('left_rear_sensor')
-        self.__encoders_message = Float32MultiArray()
-        self.__right_rear_sensor = self.__robot.getDevice('right_rear_sensor')
-
-        self.__left_rear_sensor.enable(32)
-        self.__right_rear_sensor.enable(32)
-
-        self.__gps = self.__robot.getDevice('gps')
-        self.__gps_mesage = NavSatFix()
-        self.__gps.enable(256)
-
-        self.__lidar = self.__robot.getDevice('lidar')
-        self.__lidar.enable(100)
-
         self.__node.create_subscription(PointCloud2, '/ego_vehicle/lidar/point_cloud', self.__point_cloud_callback, qos_profiles.lidar_qos)
         self.__point_cloud_publisher = self.__node.create_publisher(PointCloud2, '/cloud_in', qos_profiles.lidar_qos)
 
         self.__compass_publisher = self.__node.create_publisher(MagneticField, '/compass', qos_profiles.compass_qos)
         self.__node.create_timer(0.2, self.__compass_publisher_callback)
 
-        self.__tfs = TransformStamped()
-        self.__tfs.header.frame_id = 'odom'
-        self.__tfs.child_frame_id = 'base_link'
-
-        self.__tf_broadcaster = TransformBroadcaster(self.__node)
-
-        self.__odom = Odometry()
-        self.__odom.header.frame_id = 'odom'
-        self.__odom.child_frame_id = 'base_link'
-
-        # В течение нескольких секунд после запуска решения эго-автомобиль будет находиться в центре глобального фрейма map, 
-        # однако, из-за его смещения данные одометрии в этот момент не будут соответствовать 
-        # фактическому месторасположению робота на карте
-        self.__skip_odom_publishes_count = 10
-
-        self.__odom_publisher = self.__node.create_publisher(Odometry, '/odom', qos_profiles.odometry_qos)
-        self.__odom_subscriber = self.__node.create_subscription(Odometry, '/odom', self.__odom_callback, qos_profiles.odometry_qos)
-
         self.__initial_pose_publisher = self.__node.create_publisher(PoseWithCovarianceStamped, '/initialpose', qos_profiles.pose_qos)
-
-        self.__imu_euler_publisher = self.__node.create_publisher(Vector3, '/imu_euler', qos_profiles.imu_qos)
-        self.__imu_quaternion_publisher = self.__node.create_publisher(Quaternion, '/imu_quaternion', qos_profiles.imu_qos)
-        
-        self.__node.create_timer(0.032, self.__imu_odom_publisher_callback)
-
-        # self.__wheel_encoders_publisher = self.__node.create_publisher(Float32MultiArray, '/wheel_encoders', qos_profiles.encoders_qos)
-        # self.__node.create_timer(0.032, self.__wheel_encoders_publisher_callback)
-
-        self.__gps_publisher = self.__node.create_publisher(NavSatFix, '/gps', qos_profiles.gps_qos)
-        self.__node.create_timer(0.256, self.__gps_publisher_callback)
+        self.__odom_subscriber = self.__node.create_subscription(Odometry, '/odom', self.__odom_callback, qos_profiles.odometry_qos)
 
         self.__last_cmd_ackermann_callback_time = 0.0
         self.__node.create_subscription(AckermannDrive, '/cmd_ackermann', self.__cmd_ackermann_callback, qos_profiles.cmd_qos)
 
-        self.__speed_factor = 6
+        self.__speed_factor = 6  # 14
         self.__node.create_subscription(Int8, '/speed_factor', self.__speed_factor_callback, qos_profiles.cmd_qos)
 
         self.__node.create_subscription(Twist, '/cmd_vel', self.__cmd_vel_callback, qos_profiles.cmd_qos)
@@ -97,7 +54,20 @@ class EgoVehicleDriver:
 
         self.__node.create_timer(1.0, self.__dipped_beams_callback)
 
-        self.__node._logger.info('Successfully launched!')
+        self.__node.get_logger().info('Successfully launched!')
+
+        self.__start_clock = time.time()
+
+    def __publish_clock(self):
+        now = time.time() - self.__start_clock
+        
+        sec = int(now)
+        nanosec = int((now - sec) * 1e9)
+
+        self.__clock.clock.sec = sec
+        self.__clock.clock.nanosec = nanosec
+
+        self.__clock_publisher.publish(self.__clock)
 
     def __point_cloud_callback(self, message):
         message.header.stamp = self.__node.get_clock().now().to_msg()
@@ -127,73 +97,6 @@ class EgoVehicleDriver:
         if rclpy.wait_for_message.wait_for_message(PoseWithCovarianceStamped, self.__node, '/amcl_pose', time_to_wait=5.0):
             self.__initial_pose_publisher.publish(initial_pose)
             self.__node.destroy_subscription(self.__odom_subscriber)
-
-    def __imu_odom_publisher_callback(self):
-        # orientation_euler = self.__imu.getRollPitchYaw()
-        orientation_quaternion = self.__imu.getQuaternion()
-
-        # if any(np.isnan(orientation_euler)):
-        #     orientation_euler = [0.0, 0.0, 0.0]
-        if any(np.isnan(orientation_quaternion)):
-            orientation_quaternion = [0.0, 0.0, 0.0, 1.0]
-
-        self.__quaternion_message.x = orientation_quaternion[0]
-        self.__quaternion_message.y = orientation_quaternion[1]
-        self.__quaternion_message.z = orientation_quaternion[2]
-        self.__quaternion_message.w = orientation_quaternion[3]
-
-        self.__tfs.header.stamp = self.__node.get_clock().now().to_msg()
-
-        self.__tfs.transform.translation.x = self.__gps_mesage.longitude
-        self.__tfs.transform.translation.y = self.__gps_mesage.latitude
-        self.__tfs.transform.translation.z = 0.0
-
-        self.__tfs.transform.rotation.x = self.__quaternion_message.x
-        self.__tfs.transform.rotation.y = self.__quaternion_message.y
-        self.__tfs.transform.rotation.z = self.__quaternion_message.z
-        self.__tfs.transform.rotation.w = self.__quaternion_message.w
-
-        self.__tf_broadcaster.sendTransform(self.__tfs)
-
-        self.__odom.header.stamp = self.__node.get_clock().now().to_msg()
-
-        self.__odom.pose.pose.position.x = self.__gps_mesage.longitude
-        self.__odom.pose.pose.position.y = self.__gps_mesage.latitude
-        self.__odom.pose.pose.position.z = 0.0
-
-        self.__odom.pose.pose.orientation.x = self.__quaternion_message.x
-        self.__odom.pose.pose.orientation.y = self.__quaternion_message.y
-        self.__odom.pose.pose.orientation.z = self.__quaternion_message.z
-        self.__odom.pose.pose.orientation.w = self.__quaternion_message.w
-
-        if self.__skip_odom_publishes_count == 0:
-            self.__odom_publisher.publish(self.__odom)
-        else:
-            self.__skip_odom_publishes_count -= 1
-
-        # self.__imu_euler_publisher.publish(orientation_euler)
-        self.__imu_quaternion_publisher.publish(self.__quaternion_message)
-
-    def __wheel_encoders_publisher_callback(self):
-        ω_left = self.__left_rear_sensor.getValue()    # Получаем угловые скорости (рад/с) задних колёс
-        ω_right = self.__right_rear_sensor.getValue()  #
-
-        if np.isnan(ω_left) or self.__drive_command.speed == 0.0:
-            ω_left = 0.0
-        if np.isnan(ω_right) or self.__drive_command.speed == 0.0:
-            ω_right = 0.0
-
-        self.__encoders_message.data = [ω_left, ω_right]
-        self.__wheel_encoders_publisher.publish(self.__encoders_message)
-
-    def __gps_publisher_callback(self):
-        coordinates = self.__gps.getValues()
-
-        if not any(np.isnan(coordinate) for coordinate in coordinates):
-            self.__gps_mesage.latitude = coordinates[1]
-            self.__gps_mesage.longitude = coordinates[0]
-
-            self.__gps_publisher.publish(self.__gps_mesage)
 
     def __cmd_ackermann_callback(self, message):
         self.__last_cmd_ackermann_callback_time = time.time()
@@ -237,7 +140,7 @@ class EgoVehicleDriver:
                 * 2  - Model Predictive Path Integral
                 * 10 - Regulated Pure Pursuit
             '''
-            drive_command.steering_angle = (-message.angular.z * 180 / 3.14) * 2  # Градусы
+            drive_command.steering_angle = (-message.angular.z * 180 / 3.14) * 10  # Градусы
 
             self.__cmd_ackermann_callback(drive_command)
 
