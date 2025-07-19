@@ -2,11 +2,10 @@ import rclpy
 from ackermann_msgs.msg import AckermannDrive
 import traceback
 import time
-from configs import global_settings, qos_profiles
-from sensor_msgs.msg import MagneticField, PointCloud2
+from surround_view_segbev.configs import global_settings, qos_profiles
+from sensor_msgs.msg import MagneticField
 from rclpy.executors import MultiThreadedExecutor
 from geometry_msgs.msg import Twist, PoseWithCovarianceStamped
-from std_msgs.msg import Int8, Bool
 from nav_msgs.msg import Odometry
 import rclpy.wait_for_message
 from rosgraph_msgs.msg import Clock
@@ -32,35 +31,25 @@ class EgoVehicleDriver:
         self.__compass_message = MagneticField()
         self.__compass.enable(200)  # Обновление каждые 200 мс (5 Гц)
 
-        self.__node.create_subscription(PointCloud2, '/ego_vehicle/lidar/point_cloud', self.__point_cloud_callback, qos_profiles.lidar_qos)
-        self.__point_cloud_publisher = self.__node.create_publisher(PointCloud2, '/cloud_in', qos_profiles.lidar_qos)
-
         self.__compass_publisher = self.__node.create_publisher(MagneticField, '/compass', qos_profiles.compass_qos)
         self.__node.create_timer(0.2, self.__compass_publisher_callback)
 
         self.__initial_pose_publisher = self.__node.create_publisher(PoseWithCovarianceStamped, '/initialpose', qos_profiles.pose_qos)
         self.__odom_subscriber = self.__node.create_subscription(Odometry, '/odom', self.__odom_callback, qos_profiles.odometry_qos)
 
+        self.__speed_factor = 14  # 6
         self.__last_cmd_ackermann_callback_time = 0.0
-        self.__node.create_subscription(AckermannDrive, '/cmd_ackermann', self.__cmd_ackermann_callback, qos_profiles.cmd_qos)
-
-        self.__speed_factor = 6  # 14
-        self.__node.create_subscription(Int8, '/speed_factor', self.__speed_factor_callback, qos_profiles.cmd_qos)
 
         self.__node.create_subscription(Twist, '/cmd_vel', self.__cmd_vel_callback, qos_profiles.cmd_qos)
-
-        self.__switch_nav2 = False
-        self.__node.create_subscription(Bool, '/nav2_switch', self.__nav2_switch_callback, qos_profiles.default_qos)
+        self.__node.create_subscription(AckermannDrive, '/cmd_ackermann', self.__cmd_ackermann_callback, qos_profiles.cmd_qos)
 
         self.__node.create_timer(1.0, self.__dipped_beams_callback)
 
         self.__node.get_logger().info('Successfully launched!')
 
-        self.__start_clock = time.time()
-
     def __publish_clock(self):
-        now = time.time() - self.__start_clock
-        
+        now = time.time()
+
         sec = int(now)
         nanosec = int((now - sec) * 1e9)
 
@@ -68,11 +57,6 @@ class EgoVehicleDriver:
         self.__clock.clock.nanosec = nanosec
 
         self.__clock_publisher.publish(self.__clock)
-
-    def __point_cloud_callback(self, message):
-        message.header.stamp = self.__node.get_clock().now().to_msg()
-        message.header.frame_id = 'lidar'
-        self.__point_cloud_publisher.publish(message)
 
     def __compass_publisher_callback(self):
         coordinates = self.__compass.getValues()
@@ -127,25 +111,18 @@ class EgoVehicleDriver:
         self.__drive_command.speed = 0.0
         self.__drive_command.steering_angle = 0.0
 
-    def __speed_factor_callback(self, message):
-        self.__speed_factor = message.data
-
     def __cmd_vel_callback(self, message):
-        if not self.__switch_nav2:
-            drive_command = AckermannDrive()
+        self.__drive_command.speed = message.linear.x * self.__speed_factor  # message.linear.x = (-)0.5
+        '''
+            * 2  - Model Predictive Path Integral
+            * 10 - Regulated Pure Pursuit
+        '''
+        self.__drive_command.steering_angle = (-message.angular.z * 180 / 3.14) * 10  # Градусы
 
-            drive_command.speed = message.linear.x * self.__speed_factor
+        if self.__drive_command.speed < 0.0:
+            self.__drive_command.steering_angle *= -1
 
-            '''
-                * 2  - Model Predictive Path Integral
-                * 10 - Regulated Pure Pursuit
-            '''
-            drive_command.steering_angle = (-message.angular.z * 180 / 3.14) * 10  # Градусы
-
-            self.__cmd_ackermann_callback(drive_command)
-
-    def __nav2_switch_callback(self, message):
-        self.__switch_nav2 = message.data
+        self.__cmd_ackermann_callback(self.__drive_command)
 
     def __dipped_beams_callback(self):
         if self.__drive_command.speed != 0:

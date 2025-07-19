@@ -1,13 +1,15 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>surround_view_segbev</name>
+  <name>pointcloud_preprocessing</name>
   <version>0.0.1</version>
-  <description>Segmented local map for unmanned ground vehicles path planning based on a two-dimensional surround view system</description>
+  <description>No description</description>
   <maintainer email="molchanovlive@gmail.com">ghub-ayrtom</maintainer>
   <license>No license</license>
 
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
   <export>
-    <build_type>ament_python</build_type>
+    <build_type>ament_cmake</build_type>
   </export>
 </package>

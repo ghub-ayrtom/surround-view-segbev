@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from cv_bridge import CvBridge
 import cv2
 from rclpy.node import Node
@@ -6,11 +8,11 @@ import rclpy
 from sensor_msgs.msg import Image
 from message_filters import Subscriber, TimeSynchronizer, ApproximateTimeSynchronizer
 import traceback
-from .scripts.CameraModel import CameraModel
-from .scripts.BirdsEyeView import BirdsEyeView
+from surround_view_segbev.scripts.CameraModel import CameraModel
+from surround_view_segbev.scripts.BirdsEyeView import BirdsEyeView
 import os
 import time
-from configs import global_settings, qos_profiles
+from surround_view_segbev.configs import global_settings, qos_profiles
 import torch
 from ultralytics import YOLO
 from fastseg import MobileV3Large

@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import os
-from configs import global_settings
+from surround_view_segbev.configs import global_settings
 import time
 import math
 

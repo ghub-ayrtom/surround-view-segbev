@@ -36,8 +36,8 @@ class BEVFormer:
 
         self.bev_parameters = None
         self.bev_parameters_path = os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))), os.pardir)), 
-            'surround_view_segbev/scripts/BEVFormer/bev_parameters.yaml', 
+            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+            'scripts/BEVFormer/bev_parameters.yaml', 
         )
 
         with open(self.bev_parameters_path, 'r') as bev_parameters_yaml:

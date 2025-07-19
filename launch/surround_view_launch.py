@@ -43,8 +43,8 @@ def get_ros2_nodes():
         ego_vehicle_description = urdf.read()
 
     ego_vehicle_state_publisher_node = Node(
-        package='robot_state_publisher', 
         executable='robot_state_publisher', 
+        package='robot_state_publisher', 
         name='robot_state_publisher', 
         parameters=[{
             'use_sim_time': USE_SIM_TIME, 
@@ -54,19 +54,27 @@ def get_ros2_nodes():
         output='screen', 
     )
 
-    surround_view_node = Node(
+    ego_vehicle_odometry_node = Node(
+        executable='ego_vehicle_odometry_node', 
         package=PACKAGE_NAME, 
-        executable='surround_view_node', 
-        name='surround_view_node', 
+        name='ego_vehicle_odometry_node', 
         parameters=[{'use_sim_time': USE_SIM_TIME}], 
         output='screen', 
     )
 
     gps_path_planning_node = Node(
-        package=PACKAGE_NAME, 
         executable='gps_path_planning_node', 
+        package=PACKAGE_NAME, 
         name='gps_path_planning_node', 
         parameters=[configured_params], 
+        output='screen', 
+    )
+
+    surround_view_node = Node(
+        executable='surround_view_node', 
+        package=PACKAGE_NAME, 
+        name='surround_view_node', 
+        parameters=[{'use_sim_time': USE_SIM_TIME}], 
         output='screen', 
     )
 
@@ -101,8 +109,9 @@ def get_ros2_nodes():
 
     return [
         ego_vehicle_state_publisher_node, 
-        # surround_view_node, 
+        ego_vehicle_odometry_node, 
         gps_path_planning_node, 
+        surround_view_node, 
     ] + static_transform_nodes
 
 

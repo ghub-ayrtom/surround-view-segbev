@@ -21,11 +21,11 @@ package_dir = get_package_share_directory(PACKAGE_NAME)
 
 map_yaml = os.path.join(
     package_dir, 
-    pathlib.Path(os.path.join(package_dir, 'configs/slam_toolbox/maps/main_wbt/main_wbt.yaml'))
+    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/slam_toolbox/maps/main_wbt/main_wbt.yaml'))
 )
 nav2_params_yaml = os.path.join(
     package_dir, 
-    pathlib.Path(os.path.join(package_dir, 'configs/nav2_params.yaml'))
+    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/nav2/nav2_params.yaml'))
 )
 ego_vehicle_urdf = os.path.join(
     package_dir, 
@@ -33,14 +33,14 @@ ego_vehicle_urdf = os.path.join(
 )
 pointcloud_to_laserscan_params_yaml = os.path.join(
     package_dir, 
-    pathlib.Path(os.path.join(package_dir, 'configs/pointcloud_to_laserscan_params.yaml')), 
+    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/pointcloud_to_laserscan_params.yaml')), 
 )
 mapper_params_online_async_yaml = os.path.join(
     package_dir, 
-    pathlib.Path(os.path.join(package_dir, 'configs/slam_toolbox/mapper_params_online_async.yaml')), 
+    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/slam_toolbox/mapper_params_online_async.yaml')), 
 )
 config_rviz = os.path.join(
-    pathlib.Path(os.path.join(package_dir, 'configs/rviz/navigation.rviz')), 
+    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/rviz/navigation.rviz')), 
 )
 
 
@@ -286,6 +286,20 @@ def generate_launch_description():
                     'robot_description': ego_vehicle_description, 
                 }], 
                 arguments=[ego_vehicle_urdf], 
+                output='screen', 
+            ), 
+            Node(
+                executable='async_pointcloud_merge_node', 
+                package='pointcloud_preprocessing', 
+                name='async_pointcloud_merge_node', 
+                parameters=[{'use_sim_time': USE_SIM_TIME}], 
+                output='screen', 
+            ), 
+            Node(
+                executable='ego_vehicle_odometry_node', 
+                package=PACKAGE_NAME, 
+                name='ego_vehicle_odometry_node', 
+                parameters=[{'use_sim_time': USE_SIM_TIME}], 
                 output='screen', 
             ), 
             Node(

@@ -3,7 +3,7 @@ from rclpy.node import Node
 from ackermann_msgs.msg import AckermannDrive
 import sys, select, termios, tty
 from numpy import clip
-from configs import global_settings, qos_profiles
+from surround_view_segbev.configs import global_settings, qos_profiles
 import traceback
 
 

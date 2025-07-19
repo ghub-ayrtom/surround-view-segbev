@@ -125,6 +125,13 @@
     <child link="camera_rear_depth"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
+  <link name="lidar_rear">
+  </link>
+  <joint name="base_link_lidar_rear_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_rear"/>
+    <origin xyz="-1.67 0.000005 0.14" rpy="0 0 3.1415"/>
+  </joint>
   <link name="camera_front_right">
   </link>
   <joint name="base_link_camera_front_right_joint" type="fixed">
@@ -181,11 +188,11 @@
     <child link="camera_front_left_depth"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
-  <link name="lidar">
+  <link name="lidar_front">
   </link>
-  <joint name="base_link_lidar_joint" type="fixed">
+  <joint name="base_link_lidar_front_joint" type="fixed">
     <parent link="base_link"/>
-    <child link="lidar"/>
+    <child link="lidar_front"/>
     <origin xyz="4.6 0 1.14" rpy="0 0 0"/>
   </joint>
   <link name="imu">

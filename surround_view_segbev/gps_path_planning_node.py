@@ -4,8 +4,8 @@ from sensor_msgs.msg import Image, MagneticField
 import traceback
 import math
 from ackermann_msgs.msg import AckermannDrive
-from configs import global_settings, qos_profiles
-from .scripts.utils import *
+from surround_view_segbev.configs import global_settings, qos_profiles
+from surround_view_segbev.scripts.utils import *
 from cv_bridge import CvBridge
 from geometry_msgs.msg import PointStamped
 
@@ -136,9 +136,7 @@ class GPSPathPlanningNode(Node):
         self.route = route_splitted
 
     def __gps_callback(self, message):
-        self.ego_vehicle_position = [message.point.y, message.point.x]  # y, x
-
-        # self.get_logger().info(f'[False, {self.ego_vehicle_position[0]}, {self.ego_vehicle_position[1]}, 0.0], ')
+        self.ego_vehicle_position = [message.point.y, message.point.x]
 
         if not self.callbacks_status['gps']:
             self.callbacks_status['gps'] = True

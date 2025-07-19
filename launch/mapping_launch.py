@@ -22,14 +22,14 @@ ego_vehicle_urdf = os.path.join(
 )
 pointcloud_to_laserscan_params_yaml = os.path.join(
     package_dir, 
-    pathlib.Path(os.path.join(package_dir, 'configs/pointcloud_to_laserscan_params.yaml')), 
+    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/pointcloud_to_laserscan_params.yaml')), 
 )
 mapper_params_online_async_yaml = os.path.join(
     package_dir, 
-    pathlib.Path(os.path.join(package_dir, 'configs/slam_toolbox/mapper_params_online_async.yaml')), 
+    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/slam_toolbox/mapper_params_online_async.yaml')), 
 )
 config_rviz = os.path.join(
-    pathlib.Path(os.path.join(package_dir, 'configs/rviz/mapping.rviz')), 
+    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/rviz/mapping.rviz')), 
 )
 
 
@@ -46,6 +46,22 @@ def get_ros2_nodes():
             'robot_description': ego_vehicle_description, 
         }], 
         arguments=[ego_vehicle_urdf], 
+        output='screen', 
+    )
+
+    async_pointcloud_merge_node = Node(
+        executable='async_pointcloud_merge_node', 
+        package='pointcloud_preprocessing', 
+        name='async_pointcloud_merge_node', 
+        parameters=[{'use_sim_time': USE_SIM_TIME}], 
+        output='screen', 
+    )
+
+    ego_vehicle_odometry_node = Node(
+        executable='ego_vehicle_odometry_node', 
+        package=PACKAGE_NAME, 
+        name='ego_vehicle_odometry_node', 
+        parameters=[{'use_sim_time': USE_SIM_TIME}], 
         output='screen', 
     )
 
@@ -93,6 +109,8 @@ def get_ros2_nodes():
 
     return [
         ego_vehicle_state_publisher_node, 
+        async_pointcloud_merge_node, 
+        ego_vehicle_odometry_node, 
         pointcloud_to_laserscan_node, 
         pointcloud_to_laserscan_bridge_node, 
         async_slam_toolbox_node, 

@@ -11,8 +11,10 @@ slam_toolbox:
     map_frame: map
     base_frame: base_footprint
     scan_topic: /scan_reliable
-    mode: localization # mapping
+    mode: mapping # localization
 
-    map_file_name: '.../surround_view_segbev/configs/slam_toolbox/maps/main_wbt/main_wbt'
-    map_start_pose: [0.0, 5.75, -1.57]
+    # map_file_name: '.../surround_view_segbev/configs/slam_toolbox/maps/main_wbt/main_wbt'
+    # map_start_pose: [0.0, 5.75, -1.57]
     # map_start_at_dock: true
+
+    map_update_interval: 3.0

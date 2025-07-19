@@ -1,5 +1,5 @@
 import cv2
-from configs import global_settings
+from surround_view_segbev.configs import global_settings
 import numpy as np
 import os
 import time
@@ -83,14 +83,14 @@ class CameraModel:
 
     def load_camera_parameters(self):
         camera_parameters_file_path = os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__))), os.pardir), 
             f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml', 
         )
 
         if self.load_parameters and os.path.isfile(camera_parameters_file_path):
             try:
                 fs = cv2.FileStorage(os.path.join(
-                    os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+                    os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__))), os.pardir), 
                     f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml', 
                 ), cv2.FILE_STORAGE_READ)
 
@@ -105,7 +105,7 @@ class CameraModel:
                 self.node_logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
         else:
             with open(os.path.join(
-                os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+                os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
                 f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/webots_settings.yaml'
             )) as webots_settings_yaml_file:
                 try:
@@ -116,8 +116,8 @@ class CameraModel:
                     self.node_logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 
         with open(os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-            'surround_view_segbev/scripts/BEVFormer/bev_parameters.yaml', 
+            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+            'scripts/BEVFormer/bev_parameters.yaml', 
         )) as bev_parameters_yaml:
             try:
                 bev_parameters = yaml.safe_load(bev_parameters_yaml)
@@ -160,7 +160,7 @@ class CameraModel:
 
             if self.optical_characteristics is None:
                 with open(os.path.join(
-                    os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+                    os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
                     f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/webots_settings.yaml', 
                 )) as webots_settings_yaml_file:
                     try:
@@ -244,7 +244,7 @@ class CameraModel:
                 ), calibration_image_undistorted)
 
             camera_parameters_file = cv2.FileStorage(os.path.join(
-                os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+                os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
                 f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
             ), cv2.FILE_STORAGE_WRITE)
 
@@ -265,7 +265,7 @@ class CameraModel:
                 error = cv2.norm(self.image_points_2D[i], image_points, cv2.NORM_L2) / len(image_points)  # Расчитываем абсолютную норму
                 mean_error += error
 
-            self.node_logger.info(f'[{self.device_name}] Successfully saved on the path "../../configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml"!\n')
+            self.node_logger.info(f'[{self.device_name}] Successfully saved on the path "../configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml"!\n')
             self.node_logger.info(f'[{self.device_name}] Re-projection Error: {mean_error / len(self.object_points_3D)}\n')
 
             self.calibrating = False

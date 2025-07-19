@@ -4,7 +4,7 @@ import shutil
 import cv2
 import numpy as np
 import xml.etree.ElementTree as ET
-from configs import global_settings
+from surround_view_segbev.configs import global_settings
 
 
 detector_all_images_folder_path = os.path.join(

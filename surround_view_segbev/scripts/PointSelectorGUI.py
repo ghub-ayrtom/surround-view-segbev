@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import os
 import yaml
-from configs import global_settings
+from surround_view_segbev.configs import global_settings
 import traceback
 
 
@@ -30,8 +30,8 @@ def display_and_tune_projected_image(camera_name, src, image, fixed_main_bev_par
     bev_parameters = None
 
     with open(os.path.join(
-        os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-        'surround_view_segbev/scripts/BEVFormer/bev_parameters.yaml', 
+        os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+        'scripts/BEVFormer/bev_parameters.yaml', 
     )) as bev_parameters_yaml:
         try:
             bev_parameters = yaml.safe_load(bev_parameters_yaml)
@@ -152,8 +152,8 @@ def display_and_tune_projected_image(camera_name, src, image, fixed_main_bev_par
             if key == 13:  # Enter
                 if not fixed_main_bev_parameters:
                     bev_parameters_yaml_path = os.path.join(
-                        os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-                        'surround_view_segbev/scripts/BEVFormer/bev_parameters.yaml', 
+                        os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+                        'scripts/BEVFormer/bev_parameters.yaml', 
                     )
 
                     bev_parameters['near_shift_width'] = near_shift_width
@@ -179,7 +179,7 @@ def display_and_tune_projected_image(camera_name, src, image, fixed_main_bev_par
                     i -= 1
 
                 camera_parameters_file_path = os.path.join(
-                    os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
+                    os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
                     f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{camera_name}.yaml', 
                 )
 

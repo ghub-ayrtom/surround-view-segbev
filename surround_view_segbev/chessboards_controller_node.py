@@ -1,11 +1,11 @@
-from configs import global_settings
+from surround_view_segbev.configs import global_settings
 from rclpy.node import Node
 import numpy as np
 import rclpy
 from controller import Supervisor
 import traceback
-from .scripts.CameraModel import CameraModel
-from .scripts.utils import image_bytes_to_numpy_array
+from surround_view_segbev.scripts.CameraModel import CameraModel
+from surround_view_segbev.scripts.utils import image_bytes_to_numpy_array
 
 
 CHESSBOARD_SQUARE_SIZE = 2.5  # Размеры квадрата шахматной доски в сантиметрах

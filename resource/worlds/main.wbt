@@ -13,6 +13,7 @@ EXTERNPROTO "../protos/PlasticBarrel.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/traffic/protos/Pole.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/traffic/protos/GenericTrafficLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Rubber.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/devices/velodyne/protos/VelodyneVLP-16.proto"
 
 WorldInfo {
   basicTimeStep 10
@@ -24,7 +25,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.5773881545374432 -0.5776922755489732 0.5769701498092383 4.188616183078236
-  position -0.2269559615539301 14.850750142222662 61.7909642946529
+  position -0.22695596155393005 14.850750142222662 61.7909642946529
   follow "ego_vehicle"
   followType "Mounted Shot"
 }
@@ -59,6 +60,7 @@ MercedesBenzSprinter {
           ]
         }
       ]
+      name "lidar_front"
       horizontalResolution 500
       fieldOfView 3.14159
       verticalFieldOfView 0.698132
@@ -66,9 +68,8 @@ MercedesBenzSprinter {
       minRange 0.1
       maxRange 100
       noise 0.03
-      defaultFrequency 30
-      minFrequency 30
-      maxFrequency 30
+      minFrequency 10
+      maxFrequency 20
     }
     Camera {
       translation -3.5721 0.836 1.66828
@@ -232,6 +233,25 @@ MercedesBenzSprinter {
     }
   ]
   sensorsSlotRear [
+    Lidar {
+      translation 0.05 0 -0.05
+      children [
+        VelodyneVLP-16 {
+          name "Ouster OS1-32"
+          enablePhysics FALSE
+        }
+      ]
+      name "lidar_rear"
+      fieldOfView 6.28319
+      verticalFieldOfView 0.785398
+      numberOfLayers 32
+      minRange 0.3
+      maxRange 120
+      type "rotating"
+      noise 0.03
+      minFrequency 10
+      maxFrequency 20
+    }
     Camera {
       translation -0.073 -0.008 1.92955
       rotation 0 1 0 0.785398

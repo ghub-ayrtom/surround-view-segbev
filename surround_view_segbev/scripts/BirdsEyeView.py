@@ -50,8 +50,8 @@ class BirdsEyeView():
         self.masks = None
 
         with open(os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-            'surround_view_segbev/scripts/BEVFormer/bev_parameters.yaml', 
+            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+            'scripts/BEVFormer/bev_parameters.yaml', 
         )) as bev_parameters_yaml:
             try:
                 self.bev_parameters = yaml.safe_load(bev_parameters_yaml)
@@ -86,12 +86,12 @@ class BirdsEyeView():
 
     def load_weights_and_masks(self):
         weights_file_path = os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-            'surround_view_segbev/scripts/BEVFormer/weights.npy', 
+            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+            'scripts/BEVFormer/weights.npy', 
         )
         masks_file_path = os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-            'surround_view_segbev/scripts/BEVFormer/masks.npy', 
+            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
+            'scripts/BEVFormer/masks.npy', 
         )
 
         Gmat = np.load(weights_file_path)

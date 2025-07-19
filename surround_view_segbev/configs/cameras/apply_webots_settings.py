@@ -1,6 +1,6 @@
 import sys
 import os
-from configs import global_settings
+from surround_view_segbev.configs import global_settings
 import yaml
 import traceback
 import math
