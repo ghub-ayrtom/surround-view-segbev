@@ -11,7 +11,7 @@
 
 # Stack
 
-![](https://github.com/user-attachments/assets/68ed44a0-1f9b-418c-b639-c75059722c78)
+![](https://github.com/user-attachments/assets/420f7102-9055-41ad-8494-42dadf1868ef)
 
 Left to right, top to bottom:
 - [Python](https://www.python.org/) 3.10.12
