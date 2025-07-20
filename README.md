@@ -4,7 +4,7 @@
 2. [Quick Overview](#quick-overview)
 3. [Architecture](#architecture)
 4. [Getting Started](#getting-started)
-5. [Documentation](#documentation)
+5. [Documentation (RU)](#documentation-ru)
 6. [Questions and Feedback](#questions-and-feedback)
 7. [Copyright and License](#copyright-and-license)
 8. [Disclaimer](#disclaimer)
@@ -12,6 +12,23 @@
 # Stack
 
 ![1](https://github.com/user-attachments/assets/68ed44a0-1f9b-418c-b639-c75059722c78)
+
+Left to right, top to bottom:
+- [Python](https://www.python.org/) 3.10.12
+- [OpenCV](https://opencv.org/) 4.10.0
+- [YOLO11](https://docs.ultralytics.com/models/yolo11/) nano from Ultralytics
+- [FastSeg](https://github.com/ekzhang/fastseg)
+- [ROS 2 Humble](https://docs.ros.org/en/humble/index.html)
+- [Webots](https://cyberbotics.com/) R2023b
+- [SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox/tree/humble)
+- [Nav2](https://github.com/ros-navigation/navigation2/tree/humble) + [AMCL](https://docs.nav2.org/configuration/packages/configuring-amcl.html)
+- [pointcloud_to_laserscan](https://github.com/ros-perception/pointcloud_to_laserscan/tree/humble)<br>
+
+System:
+- Linux [Ubuntu 22.04.5 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/) 64-bit
+- Memory – 16.0 GiB
+- Processor – AMD® Ryzen 7 4800hs with radeon graphics × 16
+- Graphics – RENOIR (renoir, LLVM 15.0.7, DRM 3.57, 6.8.0-60-generic). It's been tough, so a GPU is highly desirable
 
 # Quick Overview
 
@@ -77,9 +94,12 @@ https://github.com/user-attachments/assets/b75f0e0a-2d0e-4c79-865d-928f9d3c2b97
 
 ...
 
-# Documentation
+# Documentation (RU)
 
-...
+1. A brief excerpt in the form of an ![article](docs/1.pdf)
+2. Full text in the form of an ![explanatory note](docs/2.pdf)
+
+Sorry, foreign friends, but I'll go crazy trying to translate all of this stuff, so you'll have to figure it out yourselves.
 
 # Questions and Feedback
 
