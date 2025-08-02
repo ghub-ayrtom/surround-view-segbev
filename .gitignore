@@ -1,3 +1,5 @@
+venv/*
+
 resource/worlds/*.jpg
 resource/worlds/*.wbproj
 
