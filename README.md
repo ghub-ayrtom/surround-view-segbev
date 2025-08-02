@@ -93,7 +93,24 @@ https://github.com/user-attachments/assets/b75f0e0a-2d0e-4c79-865d-928f9d3c2b97
 
 # Getting Started
 
-...
+```bash
+mkdir -p <YOUR ROS 2 WORKSPACE DIRECTORY NAME>/src && cd <YOUR ROS 2 WORKSPACE DIRECTORY NAME>/src
+
+git clone https://github.com/ghub-ayrtom/surround-view-segbev.git && cd surround-view-segbev
+
+python3 -m venv ../../venv && source ../../venv/bin/activate && pip install -r requirements.txt && deactivate
+
+mv pointcloud_preprocessing .. && cd ../..
+
+colcon build && source install/setup.bash
+
+ros2 launch surround_view_segbev <LAUNCH FILE NAME (SEE HYPERLINK BELOW)>
+```
+
+[List](https://github.com/ghub-ayrtom/surround-view-segbev/tree/main/launch) of available launch files and their description.<br>
+
+> [!IMPORTANT]
+> The bash commands above do not cover the installation of frameworks, libraries, and tools used in this project. If you encounter errors during their separate installation and cannot resolve them, please refer to the «Questions and Feedback» section below.
 
 # Documentation (RU)
 
@@ -104,8 +121,8 @@ Sorry, foreign friends, but I'll go crazy trying to translate all of this stuff,
 
 # Questions and Feedback
 
-You are welcome to submit questions and bug reports as [GitHub Issues](https://github.com/ghub-ayrtom/surround-view-segbev/issues).<br>
-Feedback is accepted at the following email address: molchanovlive@gmail.com.
+You are welcome to submit bug reports as [GitHub Issues](https://github.com/ghub-ayrtom/surround-view-segbev/issues).<br>
+Questions and feedback are accepted at the following email address: molchanovlive@gmail.com.
 
 # Copyright and License
 
