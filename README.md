@@ -22,13 +22,14 @@ Left to right, top to bottom:
 - [Webots](https://cyberbotics.com/) R2023b
 - [SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox/tree/humble)
 - [Nav2](https://github.com/ros-navigation/navigation2/tree/humble) + [AMCL](https://docs.nav2.org/configuration/packages/configuring-amcl.html)
-- [pointcloud_to_laserscan](https://github.com/ros-perception/pointcloud_to_laserscan/tree/humble)<br>
+- [pointcloud_to_laserscan](https://github.com/ros-perception/pointcloud_to_laserscan/tree/humble)
+- [surround-view-system-introduction](https://github.com/hynpu/surround-view-system-introduction)<br>
 
 System:
 - Linux [Ubuntu 22.04.5 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/) 64-bit
-- Memory – 16.0 GiB
-- Processor – AMD® Ryzen 7 4800hs with radeon graphics × 16
-- Graphics – RENOIR (renoir, LLVM 15.0.7, DRM 3.57, 6.8.0-60-generic). It's been tough, so a GPU is highly desirable
+- Memory — 16.0 GiB
+- Processor — AMD® Ryzen 7 4800hs with radeon graphics × 16
+- Graphics — RENOIR (renoir, LLVM 15.0.7, DRM 3.57, 6.8.0-60-generic). It's been tough, so a GPU is highly desirable
 
 # Quick Overview
 
@@ -88,7 +89,7 @@ https://github.com/user-attachments/assets/b75f0e0a-2d0e-4c79-865d-928f9d3c2b97
 <br>
 
 ![](https://github.com/user-attachments/assets/3472a106-da02-4986-945a-af793d6c3ef8)
-<div align="center">«Navigation» module</div>
+<div align="center">«Navigation» module (pink — data, green — SLAM, blue — control)</div>
 
 # Getting Started
 
@@ -108,8 +109,15 @@ Feedback is accepted at the following email address: molchanovlive@gmail.com.
 
 # Copyright and License
 
-...
+This project is provided under the [MIT License](https://github.com/ghub-ayrtom/surround-view-segbev/blob/main/LICENSE).<br>
+This project includes [third-party software components](https://github.com/ghub-ayrtom/surround-view-segbev/blob/main/NOTICE).
 
 # Disclaimer
 
-...
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
