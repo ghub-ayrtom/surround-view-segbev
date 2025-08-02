@@ -9,15 +9,13 @@ message_filters==4.3.5
 nav2_common==1.1.18
 nav2_msgs==1.1.17
 nav_msgs==4.2.4
-numpy==2.3.1
+numpy==1.26.4
 opencv_python==4.10.0.84
 Pillow==11.2.1
-PyYAML==5.4.1
 PyYAML==6.0.2
 rclpy==3.3.15
 rosgraph_msgs==1.2.1
 sensor_msgs==4.2.4
-setuptools==75.6.0
 setuptools==59.6.0
 std_msgs==4.2.4
 tf2_ros_py==0.25.9
