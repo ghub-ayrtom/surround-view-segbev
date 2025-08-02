@@ -45,7 +45,7 @@ setup(
     maintainer='ghub-ayrtom', 
     maintainer_email='molchanovlive@gmail.com', 
     description='Segmented local map for unmanned ground vehicles path planning based on a two-dimensional surround view system', 
-    license='No license', 
+    license='MIT', 
     entry_points={
         'console_scripts': [
             'ackermann_keyboard_teleop_node = surround_view_segbev.ackermann_keyboard_teleop_node:main', 
