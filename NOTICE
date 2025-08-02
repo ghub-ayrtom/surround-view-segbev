@@ -1,14 +1,14 @@
 This project includes the following third-party software components distributed under their respective licenses:
 
-- Python 3.10.12 ([Python Software Foundation License 2](third_party_licenses/Python_3.10.12_LICENSE))
-- OpenCV 4.10.0 ([BSD-3-Clause License](third_party_licenses/OpenCV_4.10.0_LICENSE))
-- YOLO11 ([AGPL-3.0 License](third_party_licenses/YOLO11_LICENSE))
-- FastSeg ([MIT License](third_party_licenses/FastSeg_LICENSE))
-- ROS 2 Humble ([Apache License 2.0](third_party_licenses/ROS_2_Humble_LICENSE))
-- Webots R2023b ([Apache License 2.0](third_party_licenses/Webots_R2023b_LICENSE))
-- SLAM Toolbox ([LGPL-2.1 License](third_party_licenses/SLAM_Toolbox_LICENSE))
-- Nav2 + AMCL ([Multi-License](third_party_licenses/Nav2_AMCL_LICENSE))
-- pointcloud_to_laserscan ([BSD-3-Clause License](third_party_licenses/pointcloud_to_laserscan_LICENSE))
-- surround-view-system-introduction ([MIT License](third_party_licenses/surround-view-system-introduction_LICENSE))
+• Python 3.10.12 — Python Software Foundation License 2 (third_party_licenses/Python_3.10.12_LICENSE)
+• OpenCV 4.10.0 — BSD-3-Clause License (third_party_licenses/OpenCV_4.10.0_LICENSE)
+• YOLO11 — AGPL-3.0 License (third_party_licenses/YOLO11_LICENSE)
+• FastSeg — MIT License (third_party_licenses/FastSeg_LICENSE)
+• ROS 2 Humble — Apache License 2.0 (third_party_licenses/ROS_2_Humble_LICENSE)
+• Webots R2023b — Apache License 2.0 (third_party_licenses/Webots_R2023b_LICENSE)
+• SLAM Toolbox — LGPL-2.1 License (third_party_licenses/SLAM_Toolbox_LICENSE)
+• Nav2 + AMCL — Multi-License (third_party_licenses/Nav2_AMCL_LICENSE)
+• pointcloud_to_laserscan — BSD-3-Clause License (third_party_licenses/pointcloud_to_laserscan_LICENSE)
+• surround-view-system-introduction — MIT License (third_party_licenses/surround-view-system-introduction_LICENSE)
 
 Each license file contains the corresponding terms and conditions, including disclaimers and attribution requirements.
