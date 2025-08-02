@@ -98,7 +98,7 @@ mkdir -p <YOUR ROS 2 WORKSPACE DIRECTORY NAME>/src && cd <YOUR ROS 2 WORKSPACE D
 
 git clone https://github.com/ghub-ayrtom/surround-view-segbev.git && cd surround-view-segbev
 
-python3 -m venv ../../venv && source ../../venv/bin/activate && pip install -r requirements.txt && deactivate
+python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt && deactivate
 
 mv pointcloud_preprocessing .. && cd ../..
 
