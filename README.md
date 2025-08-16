@@ -61,7 +61,7 @@ https://github.com/user-attachments/assets/b88a7c71-9da9-44a2-ad96-ae44bef95eeb
 <div align="center">Merged point cloud from two lidars</div>
 <br>
 
-https://github.com/user-attachments/assets/e009eb21-ea28-4c0b-9559-37192536679f
+https://github.com/user-attachments/assets/4b33e4ab-ae5c-40d3-afa1-d5e75aaf52a4
 <div align="center">WASD ego vehicle control and global mapping</div>
 <br>
 
