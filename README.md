@@ -51,7 +51,7 @@ System:
 
 ![](https://github.com/user-attachments/assets/7a7ca0b8-681b-42b8-8886-700a7665eda0)
 
-https://github.com/user-attachments/assets/c632befd-78a3-4d4d-93bc-35605c59779f
+https://github.com/user-attachments/assets/b88a7c71-9da9-44a2-ad96-ae44bef95eeb
 <div align="center">Segmented local map</div>
 <br>
 
@@ -61,13 +61,13 @@ https://github.com/user-attachments/assets/c632befd-78a3-4d4d-93bc-35605c59779f
 <div align="center">Merged point cloud from two lidars</div>
 <br>
 
-https://github.com/user-attachments/assets/0b3ab847-4bed-4641-91da-c8fb87b6acd1
+https://github.com/user-attachments/assets/e009eb21-ea28-4c0b-9559-37192536679f
 <div align="center">WASD ego vehicle control and global mapping</div>
 <br>
 
-https://github.com/user-attachments/assets/8ca46624-f7cf-4f30-ae96-13ebaeda4784
+https://github.com/user-attachments/assets/2337a577-0540-4e89-933c-3c676f22bc5e
 
-https://github.com/user-attachments/assets/b75f0e0a-2d0e-4c79-865d-928f9d3c2b97
+https://github.com/user-attachments/assets/a9b2b8df-4dcf-4481-9f45-f23e54c0f1aa
 <div align="center">Autonomous navigation with Ackermann kinematics support</div>
 
 # Architecture
