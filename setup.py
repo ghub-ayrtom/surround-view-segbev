@@ -28,6 +28,7 @@ data_files.append(('share/' + PACKAGE_NAME, ['package.xml']))
 data_files += generate_data_files('share/' + PACKAGE_NAME + '/launch/', 'launch/')
 data_files += generate_data_files('share/' + PACKAGE_NAME + '/resource/', 'resource/')
 data_files += generate_data_files('share/' + PACKAGE_NAME + '/configs/', 'surround_view_segbev/configs/')
+data_files += generate_data_files('share/' + PACKAGE_NAME + '/scripts/', 'surround_view_segbev/scripts/')
 
 
 setup(

@@ -14,8 +14,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.5775434603850044 -0.5779320755963162 0.5765744248260141 4.188117258153761
-  position -0.00783452928437281 0.5050251143821047 57.275867521074616
+  orientation 0.5775337581569445 0.57791889684733 -0.5765973524530623 2.094965325233583
+  position -0.007834529284371339 0.5050251143821047 57.275867521074616
 }
 TexturedBackground {
   texture "noon_sunny_empty"
@@ -264,6 +264,17 @@ DEF chessboard_front_left Pose {
 DEF chessboard_front Pose {
   translation 0.1 -4 1.9925
   rotation -3.3905013482585576e-09 0.7071062811861719 0.7071072811865696 3.14159
+  children [
+    CadShape {
+      url [
+        "../models/chessboard/chessboard.dae"
+      ]
+    }
+  ]
+}
+DEF chessboard_front_blind Pose {
+  translation 0.1 -4.18421 0.181378
+  rotation 1 0 0 -0.695
   children [
     CadShape {
       url [

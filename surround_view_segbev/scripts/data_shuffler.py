@@ -102,12 +102,12 @@ def move_images_with_masks(images_subset, destination_folder_path):
 
 
 camera_images = {
-    'cf': [],   # camera_front
-    'cfb': [],  # camera_front_blind
-    'cfl': [],  # camera_front_left
-    'cfr': [],  # camera_front_right
-    'cr': [],   # camera_rear
-    # 'sv': [],     # surround_view
+    'cf': [],    # camera_front
+    'cfb': [],   # camera_front_blind
+    'cfl': [],   # camera_front_left
+    'cfr': [],   # camera_front_right
+    'cr': [],    # camera_rear
+    # 'sv': [],  # surround_view
 }
 
 # parse_segmentor_annotations_and_create_masks(segmentor_all_annotations_file_path)

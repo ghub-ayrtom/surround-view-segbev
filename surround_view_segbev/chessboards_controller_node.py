@@ -1,4 +1,3 @@
-from surround_view_segbev.configs import global_settings
 from rclpy.node import Node
 import numpy as np
 import rclpy
@@ -52,27 +51,34 @@ chessboards_movement_trajectory = {
     ], 
 
     'chessboard_front_blind': [ 
-        ['Y', -3.25], 
-        ['X', 0.6], 
+        ['X', 0.4], 
         ['X', 0.1], 
-        ['X', -0.4], 
+        ['X', -0.2], 
         ['X', 0.1], 
-        ['Z', [-0.0926917, -0.704062, -0.704063, -2.95674]], 
-        ['Z', [-0.186157, -0.694746, -0.694747, -2.7735]], 
-        ['Z', [-0.281085, -0.678598, -0.678599, -2.59357]], 
-        ['Z', [-0.186157, -0.694746, -0.694747, -2.7735]], 
-        ['Z', [-0.0926917, -0.704062, -0.704063, -2.95674]], 
-        ['Z', [-3.3905e-09, 0.707106, 0.707107, 3.14159]], 
-        ['Z', [-0.0926917, 0.704062, 0.704063, -2.95675]], 
-        ['Z', [0.186157, -0.694746, -0.694747, 2.7735]], 
-        ['Z', [0.281085, -0.678598, -0.678599, 2.59357]], 
-        ['Z', [0.186157, -0.694746, -0.694747, 2.7735]], 
-        ['Z', [-0.0926917, 0.704062, 0.704063, -2.95675]], 
-        ['Z', [-3.3905e-09, 0.707106, 0.707107, 3.14159]], 
-        ['Y', -4.0], 
+        ['YZ', [-4.06912, 0.319636]], 
+        ['X', -0.2], 
+        ['X', 0.1], 
+        ['X', 0.4], 
+        ['X', 0.1], 
+        ['YZ', [-4.18421, 0.181378]], 
+        ['X', 0.4], 
+        ['X', 0.1], 
+        ['X', -0.2], 
+        ['X', 0.1], 
     ], 
 
     'chessboard_front_right': [ 
+        ['X', -3.0], 
+        ['Z', [-0.677661, -0.519988, -0.519988, -1.95044]], 
+        ['Z', [-0.774596, -0.447214, -0.447214, -1.82348]], 
+        ['Z', [-0.677661, -0.519988, -0.519988, -1.95044]], 
+        ['Z', [0.57735, 0.57735, 0.57735, 2.0944]], 
+        ['Z', [0.476905, 0.621515, 0.621515, 2.25159]], 
+        ['Z', [0.377964, 0.654654, 0.654654, 2.41886]], 
+        ['Z', [0.476905, 0.621515, 0.621515, 2.25159]], 
+        ['Z', [0.57735, 0.57735, 0.57735, 2.0944]], 
+        ['Y', -2.9675], 
+        ['Y', -1.9675], 
         ['X', -3.0], 
         ['Z', [-0.677661, -0.519988, -0.519988, -1.95044]], 
         ['Z', [-0.774596, -0.447214, -0.447214, -1.82348]], 
@@ -138,7 +144,7 @@ class Chessboard:
 
     def update_position(self):
         current_translation_value = self.translation_field.getSFVec3f()  # x, y, z
-        current_rotation_value = self.rotation_field.getSFRotation()  # x, y, z, angle
+        current_rotation_value = self.rotation_field.getSFRotation()     # x, y, z, angle
 
         if len(self.trajectory) > 0:
             match self.trajectory[0][0]:
@@ -208,6 +214,38 @@ class Chessboard:
                         return self.translation_field.setSFVec3f(current_translation_value)
                     else:
                         self.trajectory.pop(0)
+                
+                case 'YZ':
+                    ctv_x = round(current_translation_value[0], 1)
+                    ctv_y = round(current_translation_value[1], 1)
+                    ctv_z = round(current_translation_value[2], 1)
+
+                    trajectory_y = round(self.trajectory[0][1][0], 1)
+                    trajectory_z = round(self.trajectory[0][1][1], 1)
+
+                    if ctv_y != trajectory_y or ctv_z != trajectory_z:
+                        if ctv_y < trajectory_y:
+                            ctv_y += CHESSBOARDS_MOVEMENT_SENSITIVITY
+                        elif ctv_y > trajectory_y:
+                            ctv_y -= CHESSBOARDS_MOVEMENT_SENSITIVITY
+
+                        if ctv_z < trajectory_z:
+                            if trajectory_y > 0:
+                                ctv_y += 0.05
+                            else:
+                                ctv_y -= 0.05
+                            ctv_z += 0.0525
+                        elif ctv_z > trajectory_z:
+                            if trajectory_y > 0:
+                                ctv_y -= 0.05
+                            else:
+                                ctv_y += 0.05
+                            ctv_z -= 0.0525
+
+                        current_translation_value = [ctv_x, ctv_y, ctv_z]
+                        return self.translation_field.setSFVec3f(current_translation_value)
+                    else:
+                        self.trajectory.pop(0)
 
 
 class ChessboardsControllerNode(Node):
@@ -245,7 +283,7 @@ def main(args=None):
 
         node = ChessboardsControllerNode()
 
-        while supervisor.step(global_settings.SIMULATION_TIME_STEP) != -1:
+        while supervisor.step(32) != -1:
             cfl_image_color = image_bytes_to_numpy_array(node.camera_front_left.device.getImage(), node.camera_front_left.image_shape, camera_name=node.camera_front_left.device_name)
             cf_image_color = image_bytes_to_numpy_array(node.camera_front.device.getImage(), node.camera_front.image_shape, camera_name=node.camera_front.device_name)
             cfb_image_color = image_bytes_to_numpy_array(node.camera_front_blind.device.getImage(), node.camera_front_blind.image_shape, camera_name=node.camera_front_blind.device_name)
