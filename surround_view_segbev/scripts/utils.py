@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import os
 from surround_view_segbev.configs import global_settings
-import time
+from time import strftime
 import math
 
 
@@ -12,7 +12,7 @@ def image_bytes_to_numpy_array(image_bytes, image_shape, camera_name='', debug=F
     if debug:
         cv2.imwrite(os.path.join(
             os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/debug/{time.strftime("%Y%m%d-%H%M%S")}.png'
+            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/debug/{strftime("%Y%m%d-%H%M%S")}.png'
         ), cv2.cvtColor(image_array, cv2.COLOR_RGBA2RGB))
 
     return image_array

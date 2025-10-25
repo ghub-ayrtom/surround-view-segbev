@@ -1,7 +1,7 @@
 import rclpy
 from ackermann_msgs.msg import AckermannDrive
 import traceback
-import time
+from time import time
 from surround_view_segbev.configs import global_settings, qos_profiles
 from sensor_msgs.msg import MagneticField
 from rclpy.executors import MultiThreadedExecutor
@@ -11,7 +11,7 @@ import rclpy.wait_for_message
 from rosgraph_msgs.msg import Clock
 
 
-class EgoVehicleDriver:
+class EgoVehicleDriverNode:
     def init(self, webots_node, properties):
         rclpy.init(args=None)
         self.__node = rclpy.create_node('ego_vehicle_driver_node')
@@ -20,9 +20,8 @@ class EgoVehicleDriver:
         self.__node_executor.add_node(self.__node)
         
         self.__clock = Clock()
-
-        self.__clock_publisher = self.__node.create_publisher(Clock, '/clock', 10)
-        self.__node.create_timer(0.01, self.__publish_clock)  # basicTimeStep в Webots равен 10 мс (100 Гц)
+        self.__clock_publisher = self.__node.create_publisher(Clock, '/clock', qos_profiles.clock_qos)
+        self.__node.create_timer(global_settings.SIMULATION_TIME_STEP / 1000.0, self.__publish_clock)
 
         self.__robot = webots_node.robot
         self.__drive_command = AckermannDrive()
@@ -48,7 +47,7 @@ class EgoVehicleDriver:
         self.__node.get_logger().info('Successfully launched!')
 
     def __publish_clock(self):
-        now = time.time()
+        now = time()
 
         sec = int(now)
         nanosec = int((now - sec) * 1e9)
@@ -83,26 +82,20 @@ class EgoVehicleDriver:
             self.__node.destroy_subscription(self.__odom_subscriber)
 
     def __cmd_ackermann_callback(self, message):
-        self.__last_cmd_ackermann_callback_time = time.time()
+        self.__last_cmd_ackermann_callback_time = time()
 
         if isinstance(message.speed, float) and isinstance(message.steering_angle, float):
-            if message.speed > 0:
-                if message.speed > global_settings.EGO_VEHICLE_MAX_SPEED:
-                    message.speed = global_settings.EGO_VEHICLE_MAX_SPEED
-            elif message.speed < 0:
-                if message.speed < -global_settings.EGO_VEHICLE_MAX_SPEED:
-                    message.speed = -global_settings.EGO_VEHICLE_MAX_SPEED
-            else:
-                pass
+            if message.speed > 0 and message.speed > global_settings.EGO_VEHICLE_MAX_SPEED:
+                message.speed = global_settings.EGO_VEHICLE_MAX_SPEED
+            elif message.speed < 0 and message.speed < -global_settings.EGO_VEHICLE_MAX_SPEED:
+                message.speed = -global_settings.EGO_VEHICLE_MAX_SPEED
 
-            if message.steering_angle > 0:
-                if message.steering_angle > global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE:
-                    message.steering_angle = global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE
-            elif message.steering_angle < 0:
-                if message.steering_angle < -global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE:
-                    message.steering_angle = -global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE
+            if message.steering_angle > 0 and message.steering_angle > global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE:
+                message.steering_angle = global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE
+            elif message.steering_angle < 0 and message.steering_angle < -global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE:
+                message.steering_angle = -global_settings.EGO_VEHICLE_MAX_STEERING_ANGLE
+
             message.steering_angle *= 3.14 / 180  # Радианы
-
             self.__drive_command = message
         else:
             self.__stop()
@@ -133,9 +126,9 @@ class EgoVehicleDriver:
     def step(self):
         try:
             rclpy.spin_once(self.__node, timeout_sec=0.0)
-            current_step_time = time.time()
+            current_step_time = time()
 
-            if current_step_time - self.__last_cmd_ackermann_callback_time > 1:
+            if current_step_time - self.__last_cmd_ackermann_callback_time > 1.0:
                 self.__stop()
 
             self.__robot.setCruisingSpeed(self.__drive_command.speed)

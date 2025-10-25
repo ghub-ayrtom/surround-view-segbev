@@ -4,6 +4,7 @@ import os
 import yaml
 from surround_view_segbev.configs import global_settings
 import traceback
+from ament_index_python.packages import get_package_share_directory
 
 
 def display_and_tune_projected_image(camera_name, src, image, fixed_main_bev_parameters):
@@ -30,8 +31,8 @@ def display_and_tune_projected_image(camera_name, src, image, fixed_main_bev_par
     bev_parameters = None
 
     with open(os.path.join(
-        os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-        'scripts/BEVFormer/bev_parameters.yaml', 
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+        'src/surround-view-segbev/surround_view_segbev/scripts/BEVFormer/bev_parameters.yaml', 
     )) as bev_parameters_yaml:
         try:
             bev_parameters = yaml.safe_load(bev_parameters_yaml)
@@ -65,7 +66,7 @@ def display_and_tune_projected_image(camera_name, src, image, fixed_main_bev_par
     cv2.createTrackbar('dst_points_12_y_inc', window_title, 0, 500, do_nothing)
     cv2.setTrackbarPos('dst_points_12_y_inc', window_title, 0)
 
-    cv2.createTrackbar('dst_points_24_x_inc', window_title, 0, 500, do_nothing)
+    cv2.createTrackbar('dst_points_24_x_inc', window_title, 0, 1000, do_nothing)
     cv2.setTrackbarPos('dst_points_24_x_inc', window_title, 500)
 
     cv2.createTrackbar('dst_points_34_y_inc', window_title, 0, 500, do_nothing)
@@ -152,8 +153,8 @@ def display_and_tune_projected_image(camera_name, src, image, fixed_main_bev_par
             if key == 13:  # Enter
                 if not fixed_main_bev_parameters:
                     bev_parameters_yaml_path = os.path.join(
-                        os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                        'scripts/BEVFormer/bev_parameters.yaml', 
+                        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+                        'src/surround-view-segbev/surround_view_segbev/scripts/BEVFormer/bev_parameters.yaml', 
                     )
 
                     bev_parameters['near_shift_width'] = near_shift_width
@@ -179,8 +180,8 @@ def display_and_tune_projected_image(camera_name, src, image, fixed_main_bev_par
                     i -= 1
 
                 camera_parameters_file_path = os.path.join(
-                    os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                    f'configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{camera_name}.yaml', 
+                    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+                    f'src/surround-view-segbev/configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{camera_name}.yaml', 
                 )
 
                 if os.path.isfile(camera_parameters_file_path):

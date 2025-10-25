@@ -6,19 +6,19 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.substitutions.path_join_substitution import PathJoinSubstitution
 from webots_ros2_driver.webots_launcher import WebotsLauncher
+from surround_view_segbev.configs import global_settings
 
 
 USE_SIM_TIME = True  # Использовать симуляционное время
-PACKAGE_NAME = 'surround_view_segbev'
 
-package_dir = get_package_share_directory(PACKAGE_NAME)
+package_dir = get_package_share_directory(global_settings.PACKAGE_NAME)
 
 
 # Позволяет получить список запускаемых узлов
 def get_ros2_nodes():
     chessboards_controller_node = Node(
         executable='chessboards_controller_node', 
-        package=PACKAGE_NAME, 
+        package=global_settings.PACKAGE_NAME, 
         name='chessboards_controller_node', 
         parameters=[{'use_sim_time': USE_SIM_TIME}], 
         output='screen', 

@@ -67,6 +67,12 @@ cmd_qos = QoSProfile(
     depth=1, 
 )
 
+clock_qos = QoSProfile(
+    reliability=ReliabilityPolicy.RELIABLE, 
+    history=HistoryPolicy.KEEP_LAST, 
+    depth=1, 
+)
+
 goal_qos = QoSProfile(
     reliability=ReliabilityPolicy.BEST_EFFORT, 
     history=HistoryPolicy.KEEP_LAST, 

@@ -11,7 +11,7 @@ import traceback
 from surround_view_segbev.scripts.CameraModel import CameraModel
 from surround_view_segbev.scripts.BirdsEyeView import BirdsEyeView
 import os
-import time
+from time import strftime
 from surround_view_segbev.configs import global_settings, qos_profiles
 import torch
 from ultralytics import YOLO
@@ -120,7 +120,7 @@ class SurroundViewNode(Node):
                     if self.collect_models_training_data:
                         cv2.imwrite(os.path.join(
                             os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{strftime("%Y%m%d-%H%M%S")}.png'
                         ), image_color)
                     if self.camera_front_left.parameters_loaded and not self.camera_front_left.projected_image_with_obstacles_info_received:
                         self.images_projected_with_obstacles_info[camera_name] = self.camera_front_left.get_projected_image_with_obstacles_info(
@@ -142,7 +142,7 @@ class SurroundViewNode(Node):
                     if self.collect_models_training_data:
                         cv2.imwrite(os.path.join(
                             os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{strftime("%Y%m%d-%H%M%S")}.png'
                         ), image_color)
                     if self.camera_front.parameters_loaded and not self.camera_front.projected_image_with_obstacles_info_received:
                         self.images_projected_with_obstacles_info[camera_name] = self.camera_front.get_projected_image_with_obstacles_info(
@@ -164,7 +164,7 @@ class SurroundViewNode(Node):
                     if self.collect_models_training_data:
                         cv2.imwrite(os.path.join(
                             os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{strftime("%Y%m%d-%H%M%S")}.png'
                         ), image_color)
                     if self.camera_front_blind.parameters_loaded and not self.camera_front_blind.projected_image_with_obstacles_info_received:
                         self.images_projected_with_obstacles_info[camera_name] = self.camera_front_blind.get_projected_image_with_obstacles_info(
@@ -186,7 +186,7 @@ class SurroundViewNode(Node):
                     if self.collect_models_training_data:
                         cv2.imwrite(os.path.join(
                             os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{strftime("%Y%m%d-%H%M%S")}.png'
                         ), image_color)
                     if self.camera_front_right.parameters_loaded and not self.camera_front_right.projected_image_with_obstacles_info_received:
                         self.images_projected_with_obstacles_info[camera_name] = self.camera_front_right.get_projected_image_with_obstacles_info(
@@ -208,7 +208,7 @@ class SurroundViewNode(Node):
                     if self.collect_models_training_data:
                         cv2.imwrite(os.path.join(
                             os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                            f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{camera_name}/data/{strftime("%Y%m%d-%H%M%S")}.png'
                         ), image_color)
                     if self.camera_rear.parameters_loaded and not self.camera_rear.projected_image_with_obstacles_info_received:
                         self.images_projected_with_obstacles_info[camera_name] = self.camera_rear.get_projected_image_with_obstacles_info(
@@ -245,7 +245,7 @@ class SurroundViewNode(Node):
             if self.collect_models_training_data:
                 cv2.imwrite(os.path.join(
                     os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/surround_view/data/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                    f'resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/surround_view/data/{strftime("%Y%m%d-%H%M%S")}.png'
                 ), cv2.cvtColor(self.bev.image, cv2.COLOR_BGR2RGB))
 
             self.camera_front_left.projected_image_with_obstacles_info_received = False

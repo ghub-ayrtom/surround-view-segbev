@@ -12,20 +12,20 @@ from nav2_common.launch import RewrittenYaml
 from launch.conditions import IfCondition
 from launch import LaunchDescription
 import launch
+from surround_view_segbev.configs import global_settings
 
 
 USE_SIM_TIME = True
-PACKAGE_NAME = 'surround_view_segbev'
 
-package_dir = get_package_share_directory(PACKAGE_NAME)
+package_dir = get_package_share_directory(global_settings.PACKAGE_NAME)
 
 map_yaml = os.path.join(
     package_dir, 
-    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/slam_toolbox/maps/main_wbt/main_wbt.yaml'))
+    pathlib.Path(os.path.join(package_dir, f'{global_settings.PACKAGE_NAME}/configs/slam_toolbox/maps/main_wbt/main_wbt.yaml'))
 )
 nav2_params_yaml = os.path.join(
     package_dir, 
-    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/nav2/nav2_params.yaml'))
+    pathlib.Path(os.path.join(package_dir, f'{global_settings.PACKAGE_NAME}/configs/nav2/nav2_params.yaml'))
 )
 ego_vehicle_urdf = os.path.join(
     package_dir, 
@@ -33,14 +33,14 @@ ego_vehicle_urdf = os.path.join(
 )
 pointcloud_to_laserscan_params_yaml = os.path.join(
     package_dir, 
-    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/pointcloud_to_laserscan_params.yaml')), 
+    pathlib.Path(os.path.join(package_dir, f'{global_settings.PACKAGE_NAME}/configs/pointcloud_to_laserscan_params.yaml')), 
 )
 mapper_params_online_async_yaml = os.path.join(
     package_dir, 
-    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/slam_toolbox/mapper_params_online_async.yaml')), 
+    pathlib.Path(os.path.join(package_dir, f'{global_settings.PACKAGE_NAME}/configs/slam_toolbox/mapper_params_online_async.yaml')), 
 )
-config_rviz = os.path.join(
-    pathlib.Path(os.path.join(package_dir, f'{PACKAGE_NAME}/configs/rviz/navigation.rviz')), 
+rviz2_config = os.path.join(
+    pathlib.Path(os.path.join(package_dir, f'{global_settings.PACKAGE_NAME}/configs/rviz/navigation.rviz')), 
 )
 
 
@@ -60,7 +60,10 @@ def generate_launch_description():
 
     ego_vehicle_controller = WebotsController(
         respawn=True, 
-        parameters=[{'robot_description': ego_vehicle_urdf}], 
+        parameters=[{
+            'use_sim_time': USE_SIM_TIME, 
+            'robot_description': ego_vehicle_urdf, 
+        }], 
         robot_name='ego_vehicle', 
     )
 
@@ -289,22 +292,36 @@ def generate_launch_description():
                 output='screen', 
             ), 
             Node(
-                executable='async_pointcloud_merge_node', 
-                package='pointcloud_preprocessing', 
-                name='async_pointcloud_merge_node', 
-                parameters=[{'use_sim_time': USE_SIM_TIME}], 
+                executable='async_point_cloud_merge_node', 
+                package='point_cloud_preprocessing', 
+                name='async_point_cloud_merge_node', 
+                parameters=[{
+                    'use_sim_time': USE_SIM_TIME, 
+
+                    'lidar_first_frame': 'lidar_front', 
+                    'lidar_first_topic': '/ego_vehicle/lidar_front/point_cloud', 
+
+                    'rotating_lidar_second_frame': 'lidar_rear', 
+                    'rotating_lidar_second_topic': '/ego_vehicle/Ouster_OS1_32/point_cloud', 
+
+                    'target_frame': 'lidar_front', 
+                    'point_cloud_merged_topic': '/cloud_in', 
+
+                    'point_cloud_merged_ttl_sec': 0.1, 
+                    'lookup_transform_timeout_sec': 0.01, 
+                }], 
                 output='screen', 
             ), 
             Node(
                 executable='ego_vehicle_odometry_node', 
-                package=PACKAGE_NAME, 
+                package=global_settings.PACKAGE_NAME, 
                 name='ego_vehicle_odometry_node', 
                 parameters=[{'use_sim_time': USE_SIM_TIME}], 
                 output='screen', 
             ), 
             Node(
                 executable='nav2_path_planning_node', 
-                package=PACKAGE_NAME, 
+                package=global_settings.PACKAGE_NAME, 
                 name='nav2_path_planning_node', 
                 parameters=[configured_params], 
                 output='screen', 
@@ -321,7 +338,7 @@ def generate_launch_description():
             ), 
             Node(
                 executable='pointcloud_to_laserscan_bridge_node', 
-                package=PACKAGE_NAME, 
+                package=global_settings.PACKAGE_NAME, 
                 name='pointcloud_to_laserscan_bridge_node', 
                 parameters=[{'use_sim_time': USE_SIM_TIME}], 
                 output='screen', 
@@ -345,7 +362,7 @@ def generate_launch_description():
                 package='rviz2', 
                 name='rviz2', 
                 namespace='', 
-                arguments=['-d', config_rviz], 
+                arguments=['-d', rviz2_config], 
                 output='screen', 
             ), 
             # Node(

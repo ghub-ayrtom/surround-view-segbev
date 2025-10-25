@@ -2,14 +2,13 @@ import cv2
 from surround_view_segbev.configs import global_settings
 import numpy as np
 import os
-import time
+from time import strftime
 from controller import Supervisor
 import traceback
 import yaml
 from ament_index_python.packages import get_package_share_directory
+from surround_view_segbev.configs import global_settings
 
-
-PACKAGE_NAME = 'surround_view_segbev'
 
 if os.getenv('USING_EXTERN_CONTROLLER') is None:
     supervisor = Supervisor()
@@ -86,15 +85,15 @@ class CameraModel:
 
     def load_camera_parameters(self):
         camera_parameters_file_path = os.path.join(
-            get_package_share_directory(PACKAGE_NAME), 
-            f'{PACKAGE_NAME}/configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml', 
+            get_package_share_directory(global_settings.PACKAGE_NAME), 
+            f'{global_settings.PACKAGE_NAME}/configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml', 
         )
 
         if self.load_parameters and os.path.isfile(camera_parameters_file_path):
             try:
                 fs = cv2.FileStorage(os.path.join(
-                    get_package_share_directory(PACKAGE_NAME), 
-                    f'{PACKAGE_NAME}/configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml', 
+                    get_package_share_directory(global_settings.PACKAGE_NAME), 
+                    f'{global_settings.PACKAGE_NAME}/configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml', 
                 ), cv2.FILE_STORAGE_READ)
 
                 if fs.isOpened():
@@ -108,8 +107,8 @@ class CameraModel:
                 self.node_logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
         else:
             with open(os.path.join(
-                get_package_share_directory(PACKAGE_NAME), 
-                f'{PACKAGE_NAME}/configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/webots_settings.yaml'
+                get_package_share_directory(global_settings.PACKAGE_NAME), 
+                f'{global_settings.PACKAGE_NAME}/configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/webots_settings.yaml'
             )) as webots_settings_yaml_file:
                 try:
                     self.optical_characteristics = yaml.safe_load(webots_settings_yaml_file)
@@ -119,8 +118,8 @@ class CameraModel:
                     self.node_logger.error(''.join(traceback.TracebackException.from_exception(e).format()))
 
         with open(os.path.join(
-            get_package_share_directory(PACKAGE_NAME), 
-            f'{PACKAGE_NAME}/scripts/BEVFormer/bev_parameters.yaml', 
+            get_package_share_directory(global_settings.PACKAGE_NAME), 
+            f'{global_settings.PACKAGE_NAME}/scripts/BEVFormer/bev_parameters.yaml', 
         )) as bev_parameters_yaml:
             try:
                 bev_parameters = yaml.safe_load(bev_parameters_yaml)
@@ -163,8 +162,8 @@ class CameraModel:
 
             if self.optical_characteristics is None:
                 with open(os.path.join(
-                    get_package_share_directory(PACKAGE_NAME), 
-                    f'{PACKAGE_NAME}/configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/webots_settings.yaml', 
+                    get_package_share_directory(global_settings.PACKAGE_NAME), 
+                    f'{global_settings.PACKAGE_NAME}/configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/webots_settings.yaml', 
                 )) as webots_settings_yaml_file:
                     try:
                         self.optical_characteristics = yaml.safe_load(webots_settings_yaml_file)
@@ -212,8 +211,8 @@ class CameraModel:
                     calibration_image = cv2.cvtColor(calibration_image, cv2.COLOR_RGBA2RGB)
                     cv2.drawChessboardCorners(calibration_image, CHESSBOARD_PATTERN_SIZE, corners, found)
                     cv2.imwrite(os.path.join(
-                        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(PACKAGE_NAME))))), 
-                        f'src/surround-view-segbev/resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{self.device_name}/debug/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+                        f'src/surround-view-segbev/resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{self.device_name}/debug/{strftime("%Y%m%d-%H%M%S")}.png'
                     ), calibration_image)
         elif self.calibration_images_count == 0:
             self.calibration_images_count -= 1
@@ -242,12 +241,12 @@ class CameraModel:
                 calibration_image_undistorted = self.undistort(calibration_image)
                 
                 cv2.imwrite(os.path.join(
-                    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(PACKAGE_NAME))))), 
-                    f'src/surround-view-segbev/resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{self.device_name}/debug/{time.strftime("%Y%m%d-%H%M%S")}.png'
+                    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+                    f'src/surround-view-segbev/resource/images/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/{self.device_name}/debug/{strftime("%Y%m%d-%H%M%S")}.png'
                 ), calibration_image_undistorted)
 
             camera_parameters_file_path = os.path.join(
-                os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(PACKAGE_NAME))))), 
+                os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
                 f'src/surround-view-segbev/surround_view_segbev/configs/cameras/{global_settings.USED_CAMERA_MODEL_FOLDER_NAME}/parameters/{self.device_name}.yaml'
             )
             # camera_parameters_file = cv2.FileStorage(camera_parameters_file_path, cv2.FILE_STORAGE_WRITE)

@@ -7,6 +7,8 @@ import cv2
 from surround_view_segbev.scripts.BirdsEyeView import BirdsEyeView
 import os
 import yaml
+from ament_index_python.packages import get_package_share_directory
+from surround_view_segbev.configs import global_settings
 
 
 class BEVFormer:
@@ -36,8 +38,8 @@ class BEVFormer:
 
         self.bev_parameters = None
         self.bev_parameters_path = os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-            'scripts/BEVFormer/bev_parameters.yaml', 
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+            'src/surround-view-segbev/surround_view_segbev/scripts/BEVFormer/bev_parameters.yaml', 
         )
 
         with open(self.bev_parameters_path, 'r') as bev_parameters_yaml:
@@ -53,7 +55,7 @@ class BEVFormer:
         grid = tk.Frame(self.root)
         grid.pack(padx=15, pady=15)
 
-        ego_vehicle_image = ImageTk.PhotoImage(Image.open('../../../resource/images/ego_vehicle.png'))
+        ego_vehicle_image = ImageTk.PhotoImage(Image.open('../../../resource/images/buggy.png'))  # ego_vehicle.png
 
         ego_vehicle_panel = tk.Label(grid)
         ego_vehicle_panel.configure(image=ego_vehicle_image)
@@ -111,8 +113,8 @@ class BEVFormer:
             cv2.destroyAllWindows()
         if key == 13:  # Enter
             result_files_save_path = os.path.join(
-                os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-                'BEVFormer/', 
+                os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+                'src/surround-view-segbev/surround_view_segbev/scripts/BEVFormer/', 
             )
 
             np.save(result_files_save_path + 'weights.npy', Gmat)

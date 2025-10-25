@@ -100,7 +100,7 @@ git clone https://github.com/ghub-ayrtom/surround-view-segbev.git && cd surround
 
 python3 -m venv venv && touch venv/COLCON_IGNORE && source venv/bin/activate && pip install -r requirements.txt && deactivate
 
-mv pointcloud_preprocessing .. && cd ../..
+mv point_cloud_preprocessing .. && cd ../..
 
 colcon build && source install/setup.bash
 

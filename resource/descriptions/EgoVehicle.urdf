@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<robot name="/home/ayrtom/ROS2/dev/FQW_ws/src/surround_view_segbev/resource/descriptions/EgoVehicle.urdf" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name=".../surround_view_segbev/resource/descriptions/EgoVehicle.urdf" xmlns:xacro="http://ros.org/wiki/xacro">
   <webots>
-    <plugin type="surround_view_segbev.plugins.EgoVehicleDriver.EgoVehicleDriver"/>
+    <plugin type="surround_view_segbev.plugins.ego_vehicle_driver_node.EgoVehicleDriverNode"/>
     <plugin type="webots_ros2_driver::Ros2IMU">
       <frameName>imu</frameName>
       <topicName>/ego_vehicle/imu</topicName>

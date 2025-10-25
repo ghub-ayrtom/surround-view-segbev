@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+
 <package format="3">
   <name>surround_view_segbev</name>
-  <version>0.0.1</version>
+  <version>0.0.0</version>
   <description>Segmented local map for unmanned ground vehicles path planning based on a two-dimensional surround view system</description>
   <maintainer email="molchanovlive@gmail.com">ghub-ayrtom</maintainer>
   <license>MIT</license>

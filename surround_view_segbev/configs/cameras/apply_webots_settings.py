@@ -5,7 +5,7 @@ import yaml
 import traceback
 import math
 import shutil
-import time
+from time import strftime
 
 
 cameras_webots_settings = None
@@ -217,7 +217,7 @@ def main(args=None):
                                 ), 
                                 os.path.join(
                                     os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-                                    f'resource/worlds/backups/{time.strftime("%Y%m%d-%H%M%S")}_{args[1]}'
+                                    f'resource/worlds/backups/{strftime("%Y%m%d-%H%M%S")}_{args[1]}'
                                 )
                             )
 

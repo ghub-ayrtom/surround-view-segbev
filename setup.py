@@ -1,8 +1,6 @@
 import os
 from setuptools import setup
-
-
-PACKAGE_NAME = 'surround_view_segbev'
+from surround_view_segbev.configs import global_settings
 
 
 def generate_data_files(share_path, data_files_path):
@@ -19,26 +17,24 @@ def generate_data_files(share_path, data_files_path):
 
     return data_files_temp
 
-
 data_files = []
 
-data_files.append(('share/ament_index/resource_index/packages', ['resource/' + PACKAGE_NAME]))
-data_files.append(('share/' + PACKAGE_NAME, ['package.xml']))
+data_files.append(('share/ament_index/resource_index/packages', ['resource/' + global_settings.PACKAGE_NAME]))
+data_files.append(('share/' + global_settings.PACKAGE_NAME, ['package.xml']))
 
-data_files += generate_data_files('share/' + PACKAGE_NAME + '/launch/', 'launch/')
-data_files += generate_data_files('share/' + PACKAGE_NAME + '/resource/', 'resource/')
-data_files += generate_data_files('share/' + PACKAGE_NAME + '/configs/', 'surround_view_segbev/configs/')
-data_files += generate_data_files('share/' + PACKAGE_NAME + '/scripts/', 'surround_view_segbev/scripts/')
-
+data_files += generate_data_files('share/' + global_settings.PACKAGE_NAME + '/launch/', 'launch/')
+data_files += generate_data_files('share/' + global_settings.PACKAGE_NAME + '/resource/', 'resource/')
+data_files += generate_data_files('share/' + global_settings.PACKAGE_NAME + '/configs/', 'surround_view_segbev/configs/')
+data_files += generate_data_files('share/' + global_settings.PACKAGE_NAME + '/scripts/', 'surround_view_segbev/scripts/')
 
 setup(
-    name=PACKAGE_NAME, 
-    version='0.0.1', 
+    name=global_settings.PACKAGE_NAME, 
+    version='0.0.0', 
     packages=[
-        PACKAGE_NAME, 
-        f'{PACKAGE_NAME}.configs', 
-        f'{PACKAGE_NAME}.plugins', 
-        f'{PACKAGE_NAME}.scripts', 
+        global_settings.PACKAGE_NAME, 
+        f'{global_settings.PACKAGE_NAME}.configs', 
+        f'{global_settings.PACKAGE_NAME}.plugins', 
+        f'{global_settings.PACKAGE_NAME}.scripts', 
     ], 
     data_files=data_files, 
     install_requires=['setuptools'], 

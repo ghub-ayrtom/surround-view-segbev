@@ -1,4 +1,6 @@
-SIMULATION_TIME_STEP = 10  # Шаг (скорость) симуляции в Webots
+PACKAGE_NAME = 'surround_view_segbev'
+
+SIMULATION_TIME_STEP = 10  # Шаг (скорость) симуляции на запускаемой сцене в Webots
 
 # Название папки из ".../surround_view_segbev/configs/cameras/" с характеристиками используемой модели видеокамеры
 USED_CAMERA_MODEL_FOLDER_NAME = 'ZED_2'

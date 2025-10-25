@@ -4,6 +4,7 @@ resource/worlds/*.jpg
 resource/worlds/*.wbproj
 
 surround_view_segbev/__pycache__/
+surround_view_segbev/configs/__pycache__/
 surround_view_segbev/plugins/__pycache__/
 surround_view_segbev/scripts/__pycache__/
 surround_view_segbev/scripts/BEVFormer/__pycache__/

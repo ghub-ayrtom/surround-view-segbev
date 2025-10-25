@@ -11,12 +11,12 @@ from webots_ros2_driver.webots_controller import WebotsController
 from webots_ros2_driver.webots_launcher import WebotsLauncher
 from launch_ros.descriptions import ParameterFile
 from nav2_common.launch import RewrittenYaml
+from surround_view_segbev.configs import global_settings
 
 
 USE_SIM_TIME = True
-PACKAGE_NAME = 'surround_view_segbev'
 
-package_dir = get_package_share_directory(PACKAGE_NAME)
+package_dir = get_package_share_directory(global_settings.PACKAGE_NAME)
 
 ego_vehicle_urdf = os.path.join(
     package_dir, 
@@ -56,7 +56,7 @@ def get_ros2_nodes():
 
     ego_vehicle_odometry_node = Node(
         executable='ego_vehicle_odometry_node', 
-        package=PACKAGE_NAME, 
+        package=global_settings.PACKAGE_NAME, 
         name='ego_vehicle_odometry_node', 
         parameters=[{'use_sim_time': USE_SIM_TIME}], 
         output='screen', 
@@ -64,7 +64,7 @@ def get_ros2_nodes():
 
     gps_path_planning_node = Node(
         executable='gps_path_planning_node', 
-        package=PACKAGE_NAME, 
+        package=global_settings.PACKAGE_NAME, 
         name='gps_path_planning_node', 
         parameters=[configured_params], 
         output='screen', 
@@ -72,7 +72,7 @@ def get_ros2_nodes():
 
     surround_view_node = Node(
         executable='surround_view_node', 
-        package=PACKAGE_NAME, 
+        package=global_settings.PACKAGE_NAME, 
         name='surround_view_node', 
         parameters=[{'use_sim_time': USE_SIM_TIME}], 
         output='screen', 
@@ -86,8 +86,8 @@ def get_ros2_nodes():
 
     for transform in static_transforms:
         static_transform_nodes.append(Node(
-            package='tf2_ros', 
             executable='static_transform_publisher', 
+            package='tf2_ros', 
             name='static_transform_publisher', 
             parameters=[{'use_sim_time': USE_SIM_TIME}], 
             arguments=[
@@ -121,7 +121,10 @@ def generate_launch_description():
 
     ego_vehicle_controller = WebotsController(
         respawn=True, 
-        parameters=[{'robot_description': ego_vehicle_urdf}], 
+        parameters=[{
+            'use_sim_time': USE_SIM_TIME, 
+            'robot_description': ego_vehicle_urdf, 
+        }], 
         robot_name='ego_vehicle', 
     )
 

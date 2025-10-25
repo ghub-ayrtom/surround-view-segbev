@@ -3,6 +3,8 @@ from .utils import *
 import cv2
 import yaml
 import traceback
+from ament_index_python.packages import get_package_share_directory
+from surround_view_segbev.configs import global_settings
 
 
 # Координаты области изображения, занимаемой автомобилем: [(xl, yt), (xr, yb)]
@@ -50,8 +52,8 @@ class BirdsEyeView():
         self.masks = None
 
         with open(os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-            'scripts/BEVFormer/bev_parameters.yaml', 
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+            'src/surround-view-segbev/surround_view_segbev/scripts/BEVFormer/bev_parameters.yaml', 
         )) as bev_parameters_yaml:
             try:
                 self.bev_parameters = yaml.safe_load(bev_parameters_yaml)
@@ -86,12 +88,12 @@ class BirdsEyeView():
 
     def load_weights_and_masks(self):
         weights_file_path = os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-            'scripts/BEVFormer/weights.npy', 
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+            'src/surround-view-segbev/surround_view_segbev/scripts/BEVFormer/weights.npy', 
         )
         masks_file_path = os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)), 
-            'scripts/BEVFormer/masks.npy', 
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+            'src/surround-view-segbev/surround_view_segbev/scripts/BEVFormer/masks.npy', 
         )
 
         Gmat = np.load(weights_file_path)
@@ -103,39 +105,39 @@ class BirdsEyeView():
     def extract_frames(self):
         front_left = self.frames['camera_front_left'][0]
         front = self.frames['camera_front'][0]
-        front_blind = self.frames['camera_front_blind'][0]
+        # front_blind = self.frames['camera_front_blind'][0]
         front_right = self.frames['camera_front_right'][0]
         back = self.frames['camera_rear'][0]
 
-        return front_left, front, front_blind, front_right, back
-        # return front_left, front, front_right, back
+        # return front_left, front, front_blind, front_right, back
+        return front_left, front, front_right, back
 
     def get_weights_and_masks(self):
         if self.frames:
-            left, front, front_blind, right, back = self.extract_frames()
+            # left, front, front_blind, right, back = self.extract_frames()
 
-            G0, M0 = get_weight_mask_matrix(get_left_part(front), get_upper_part(left))
-            G1, M1 = get_weight_mask_matrix(f_get_central_part_blind(front), f_get_central_part_blind(front_blind))
-            G2, M2 = get_weight_mask_matrix(get_right_part(front), get_upper_part(right))
-            G3, M3 = get_weight_mask_matrix(get_left_part(back), get_lower_part(left))
-            G4, M4 = get_weight_mask_matrix(get_right_part(back), get_lower_part(right))
+            # G0, M0 = get_weight_mask_matrix(get_left_part(front), get_upper_part(left))
+            # G1, M1 = get_weight_mask_matrix(f_get_central_part_blind(front), f_get_central_part_blind(front_blind))
+            # G2, M2 = get_weight_mask_matrix(get_right_part(front), get_upper_part(right))
+            # G3, M3 = get_weight_mask_matrix(get_left_part(back), get_lower_part(left))
+            # G4, M4 = get_weight_mask_matrix(get_right_part(back), get_lower_part(right))
 
-            self.weights = [np.stack((G, G, G), axis=2) for G in (G0, G1, G2, G3, G4)]
-            self.masks = [(M / 255.0).astype(int) for M in (M0, M1, M2, M3, M4)]
+            # self.weights = [np.stack((G, G, G), axis=2) for G in (G0, G1, G2, G3, G4)]
+            # self.masks = [(M / 255.0).astype(int) for M in (M0, M1, M2, M3, M4)]
 
-            return np.stack((G0, G1, G2, G3, G4), axis=2), np.stack((M0, M1, M2, M3, M4), axis=2)
+            # return np.stack((G0, G1, G2, G3, G4), axis=2), np.stack((M0, M1, M2, M3, M4), axis=2)
 
-            # left, front, right, back = self.extract_frames()
+            left, front, right, back = self.extract_frames()
 
-            # G0, M0 = get_weight_mask_matrix(get_left_part(front), get_upper_part(left), ['front_left_part', 'left_upper_part'])
-            # G1, M1 = get_weight_mask_matrix(get_right_part(front), get_upper_part(right), ['front_right_part', 'right_upper_part'])
-            # G2, M2 = get_weight_mask_matrix(get_left_part(back), get_lower_part(left), ['back_left_part', 'left_lower_part'])
-            # G3, M3 = get_weight_mask_matrix(get_right_part(back), get_lower_part(right), ['back_right_part', 'right_lower_part'])
+            G0, M0 = get_weight_mask_matrix(get_left_part(front), get_upper_part(left), ['front_left_part', 'left_upper_part'])
+            G1, M1 = get_weight_mask_matrix(get_right_part(front), get_upper_part(right), ['front_right_part', 'right_upper_part'])
+            G2, M2 = get_weight_mask_matrix(get_left_part(back), get_lower_part(left), ['back_left_part', 'left_lower_part'])
+            G3, M3 = get_weight_mask_matrix(get_right_part(back), get_lower_part(right), ['back_right_part', 'right_lower_part'])
 
-            # self.weights = [np.stack((G, G, G), axis=2) for G in (G0, G1, G2, G3)]
-            # self.masks = [(M / 255.0).astype(int) for M in (M0, M1, M2, M3)]
+            self.weights = [np.stack((G, G, G), axis=2) for G in (G0, G1, G2, G3)]
+            self.masks = [(M / 255.0).astype(int) for M in (M0, M1, M2, M3)]
 
-            # return np.stack((G0, G1, G2, G3), axis=2), np.stack((M0, M1, M2, M3), axis=2)
+            return np.stack((G0, G1, G2, G3), axis=2), np.stack((M0, M1, M2, M3), axis=2)
 
     def luminance_balance(self):
         def tune(x):
@@ -145,41 +147,41 @@ class BirdsEyeView():
                 return x * np.exp((1 - x) * 0.8)
 
         if self.frames:
-            left, front, front_blind, right, back = self.extract_frames()
-            M0, M1, M2, M3, M4 = self.masks
+            # left, front, front_blind, right, back = self.extract_frames()
+            # M0, M1, M2, M3, M4 = self.masks
 
-            # left, front, right, back = self.extract_frames()
-            # M0, M1, M2, M3 = self.masks
+            left, front, right, back = self.extract_frames()
+            M0, M1, M2, M3 = self.masks
 
             left_B, left_G, left_R = cv2.split(left)
             front_B, front_G, front_R = cv2.split(front)
-            front_blind_B, front_blind_G, front_blind_R = cv2.split(front_blind)
+            # front_blind_B, front_blind_G, front_blind_R = cv2.split(front_blind)
             right_B, right_G, right_R = cv2.split(right)
             back_B, back_G, back_R = cv2.split(back)
 
-            a1 = mean_luminance_ratio(get_upper_part(right_B), get_right_part(front_B), M2)
-            a2 = mean_luminance_ratio(get_upper_part(right_G), get_right_part(front_G), M2)
-            a3 = mean_luminance_ratio(get_upper_part(right_R), get_right_part(front_R), M2)
+            # a1 = mean_luminance_ratio(get_upper_part(right_B), get_right_part(front_B), M2)
+            # a2 = mean_luminance_ratio(get_upper_part(right_G), get_right_part(front_G), M2)
+            # a3 = mean_luminance_ratio(get_upper_part(right_R), get_right_part(front_R), M2)
 
-            b1 = mean_luminance_ratio(get_right_part(back_B), get_lower_part(right_B), M4)
-            b2 = mean_luminance_ratio(get_right_part(back_G), get_lower_part(right_G), M4)
-            b3 = mean_luminance_ratio(get_right_part(back_R), get_lower_part(right_R), M4)
+            # b1 = mean_luminance_ratio(get_right_part(back_B), get_lower_part(right_B), M4)
+            # b2 = mean_luminance_ratio(get_right_part(back_G), get_lower_part(right_G), M4)
+            # b3 = mean_luminance_ratio(get_right_part(back_R), get_lower_part(right_R), M4)
 
-            c1 = mean_luminance_ratio(get_lower_part(left_B), get_left_part(back_B), M3)
-            c2 = mean_luminance_ratio(get_lower_part(left_G), get_left_part(back_G), M3)
-            c3 = mean_luminance_ratio(get_lower_part(left_R), get_left_part(back_R), M3)
+            # c1 = mean_luminance_ratio(get_lower_part(left_B), get_left_part(back_B), M3)
+            # c2 = mean_luminance_ratio(get_lower_part(left_G), get_left_part(back_G), M3)
+            # c3 = mean_luminance_ratio(get_lower_part(left_R), get_left_part(back_R), M3)
 
-            d1 = mean_luminance_ratio(get_left_part(front_B), get_upper_part(left_B), M0)
-            d2 = mean_luminance_ratio(get_left_part(front_G), get_upper_part(left_G), M0)
-            d3 = mean_luminance_ratio(get_left_part(front_R), get_upper_part(left_R), M0)
+            # d1 = mean_luminance_ratio(get_left_part(front_B), get_upper_part(left_B), M0)
+            # d2 = mean_luminance_ratio(get_left_part(front_G), get_upper_part(left_G), M0)
+            # d3 = mean_luminance_ratio(get_left_part(front_R), get_upper_part(left_R), M0)
 
-            e1 = mean_luminance_ratio(f_get_central_part_blind(front_B), f_get_central_part_blind(front_blind_B), M1)
-            e2 = mean_luminance_ratio(f_get_central_part_blind(front_G), f_get_central_part_blind(front_blind_G), M1)
-            e3 = mean_luminance_ratio(f_get_central_part_blind(front_R), f_get_central_part_blind(front_blind_R), M1)
+            # e1 = mean_luminance_ratio(f_get_central_part_blind(front_B), f_get_central_part_blind(front_blind_B), M1)
+            # e2 = mean_luminance_ratio(f_get_central_part_blind(front_G), f_get_central_part_blind(front_blind_G), M1)
+            # e3 = mean_luminance_ratio(f_get_central_part_blind(front_R), f_get_central_part_blind(front_blind_R), M1)
 
-            t1 = (a1 * b1 * c1 * d1 * e1)**0.25
-            t2 = (a2 * b2 * c2 * d2 * e2)**0.25
-            t3 = (a3 * b3 * c3 * d3 * e3)**0.25
+            # t1 = (a1 * b1 * c1 * d1 * e1)**0.25
+            # t2 = (a2 * b2 * c2 * d2 * e2)**0.25
+            # t3 = (a3 * b3 * c3 * d3 * e3)**0.25
 
             a1 = mean_luminance_ratio(get_upper_part(right_B), get_right_part(front_B), M1)
             a2 = mean_luminance_ratio(get_upper_part(right_G), get_right_part(front_G), M1)
@@ -231,17 +233,17 @@ class BirdsEyeView():
 
             ###
 
-            ec1 = t1 / (e1 / c1)**0.1
-            ec2 = t2 / (e2 / c2)**0.1
-            ec3 = t3 / (e3 / c3)**0.1
+            # ec1 = t1 / (e1 / c1)**0.1
+            # ec2 = t2 / (e2 / c2)**0.1
+            # ec3 = t3 / (e3 / c3)**0.1
 
-            ec1 = tune(ec1)
-            ec2 = tune(ec2)
-            ec3 = tune(ec3)
+            # ec1 = tune(ec1)
+            # ec2 = tune(ec2)
+            # ec3 = tune(ec3)
 
-            front_blind_B = adjust_luminance(front_blind_B, ec1)
-            front_blind_G = adjust_luminance(front_blind_G, ec2)
-            front_blind_R = adjust_luminance(front_blind_R, ec3)
+            # front_blind_B = adjust_luminance(front_blind_B, ec1)
+            # front_blind_G = adjust_luminance(front_blind_G, ec2)
+            # front_blind_R = adjust_luminance(front_blind_R, ec3)
 
             ###
 
@@ -275,7 +277,7 @@ class BirdsEyeView():
 
             self.frames['camera_front_left'][0] = cv2.merge((left_B, left_G, left_R))
             self.frames['camera_front'][0] = cv2.merge((front_B, front_G, front_R))
-            self.frames['camera_front_blind'][0] = cv2.merge((front_blind_B, front_blind_G, front_blind_R))
+            # self.frames['camera_front_blind'][0] = cv2.merge((front_blind_B, front_blind_G, front_blind_R))
             self.frames['camera_front_right'][0] = cv2.merge((right_B, right_G, right_R))
             self.frames['camera_rear'][0] = cv2.merge((back_B, back_G, back_R))
 
@@ -309,8 +311,8 @@ class BirdsEyeView():
 
     def stitch(self):
         if self.frames:
-            left, front, front_blind, right, back = self.extract_frames()
-            # left, front, right, back = self.extract_frames()
+            # left, front, front_blind, right, back = self.extract_frames()
+            left, front, right, back = self.extract_frames()
 
             np.copyto(self.back_central, b_get_central_part(back))
 
@@ -318,56 +320,56 @@ class BirdsEyeView():
             np.copyto(self.right_central, lr_get_central_part(right))
 
             np.copyto(self.front_left, self.merge(get_left_part(front), get_upper_part(left), 0))
-            np.copyto(self.front_right, self.merge(get_right_part(front), get_upper_part(right), 2))  # 1
+            np.copyto(self.front_right, self.merge(get_right_part(front), get_upper_part(right), 1))  # 2
 
             np.copyto(self.front_central, f_get_central_part(front))
 
-            np.copyto(
-                self.front_central_blind, 
-                self.merge(
-                    f_get_central_part_blind(front), 
-                    f_get_central_part_blind(front_blind), 
-                    1
-                )[295 : - 13, 103 : - 100]
-            )
+            # np.copyto(
+            #     self.front_central_blind, 
+            #     self.merge(
+            #         f_get_central_part_blind(front), 
+            #         f_get_central_part_blind(front_blind), 
+            #         1
+            #     )[295 : - 13, 103 : - 100]
+            # )
 
-            np.copyto(self.back_left, self.merge(get_left_part(back), get_lower_part(left), 3))       # 2
-            np.copyto(self.back_right, self.merge(get_right_part(back), get_lower_part(right), 4))    # 3
+            np.copyto(self.back_left, self.merge(get_left_part(back), get_lower_part(left), 2))       # 3
+            np.copyto(self.back_right, self.merge(get_right_part(back), get_lower_part(right), 3))    # 4
 
     def white_balance(self):
         self.image = make_white_balance(self.image)
     
     def add_ego_vehicle_and_track_obstacles(self):
-        blind_area_mask_image = cv2.imread(os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-            'resource/images/blind_area_mask.png'
-        ), cv2.IMREAD_UNCHANGED)  # RGBA
+        # blind_area_mask_image = cv2.imread(os.path.join(
+        #     os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+        #     'src/surround-view-segbev/resource/images/blind_area_mask.png', 
+        # ), cv2.IMREAD_UNCHANGED)  # RGBA
         ego_vehicle_image = cv2.imread(os.path.join(
-            os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)), 
-            'resource/images/ego_vehicle.png'
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(get_package_share_directory(global_settings.PACKAGE_NAME))))), 
+            'src/surround-view-segbev/resource/images/buggy.png',  # ego_vehicle.png
         ))
 
-        if blind_area_mask_image.shape[2] == 4:
-            mask_image_rgb = blind_area_mask_image[:, :, :3]
-            mask_image_alpha = blind_area_mask_image[:, :, 3] / 255.0
+        # if blind_area_mask_image.shape[2] == 4:
+        #     mask_image_rgb = blind_area_mask_image[:, :, :3]
+        #     mask_image_alpha = blind_area_mask_image[:, :, 3] / 255.0
 
-            center_y, center_x = self.bev_total_height // 2, self.bev_total_width // 2
+        #     center_y, center_x = self.bev_total_height // 2, self.bev_total_width // 2
 
-            start_y = center_y - blind_area_mask_image.shape[0] // 2
-            end_y = start_y + blind_area_mask_image.shape[0]
-            start_x = center_x - blind_area_mask_image.shape[1] // 2
-            end_x = start_x + blind_area_mask_image.shape[1]
+        #     start_y = center_y - blind_area_mask_image.shape[0] // 2
+        #     end_y = start_y + blind_area_mask_image.shape[0]
+        #     start_x = center_x - blind_area_mask_image.shape[1] // 2
+        #     end_x = start_x + blind_area_mask_image.shape[1]
 
-            blind_area = self.image[start_y:end_y, start_x:end_x]
+        #     blind_area = self.image[start_y:end_y, start_x:end_x]
 
-            for channel in range(3):
-                blind_area[:, :, channel] = (
-                    mask_image_alpha * mask_image_rgb[:, :, channel] + (1 - mask_image_alpha) * blind_area[:, :, channel]
-                )
+        #     for channel in range(3):
+        #         blind_area[:, :, channel] = (
+        #             mask_image_alpha * mask_image_rgb[:, :, channel] + (1 - mask_image_alpha) * blind_area[:, :, channel]
+        #         )
             
-            self.image[start_y:end_y, start_x:end_x] = blind_area
+        #     self.image[start_y:end_y, start_x:end_x] = blind_area
 
-        np.copyto(self.central, cv2.resize(ego_vehicle_image, (xr - xl, (yb + 5) - (yt - 10))))
+        np.copyto(self.central, cv2.resize(cv2.cvtColor(ego_vehicle_image, cv2.COLOR_BGR2RGB), (xr - xl, (yb + 5) - (yt - 10))))
 
         if self.frames:
             for camera_name in self.frames:
