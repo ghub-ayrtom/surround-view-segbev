@@ -1,0 +1,45 @@
+near_shift_width: 200
+near_shift_height: 200
+far_shift_width: 100
+far_shift_height: 100
+total_width_base: 778
+total_height_base: 798
+vehicle_leftside_edges_x_inc: 25
+vehicle_topside_edges_y_inc: 25
+src_keypoints:
+  camera_front_left:
+  - - 456.0
+    - 352.0
+  - - 861.0
+    - 355.0
+  - - 335.0
+    - 718.0
+  - - 1001.0
+    - 718.0
+  camera_front:
+  - - 453.0
+    - 221.0
+  - - 831.0
+    - 227.0
+  - - 381.0
+    - 548.0
+  - - 898.0
+    - 544.0
+  camera_front_right:
+  - - 466.0
+    - 320.0
+  - - 889.0
+    - 316.0
+  - - 398.0
+    - 718.0
+  - - 995.0
+    - 717.0
+  camera_rear:
+  - - 476.0
+    - 207.0
+  - - 843.0
+    - 205.0
+  - - 429.0
+    - 515.0
+  - - 891.0
+    - 518.0
